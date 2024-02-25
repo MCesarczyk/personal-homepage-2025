@@ -15,8 +15,10 @@ describe("AppController", () => {
   });
 
   describe("root", () => {
-    it('should return "Hello World!"', () => {
-      expect(appController.getHello()).toBe("Hello World!");
+    it("should return proper message", () => {
+      expect(appController.getHello()).toBe(
+        '<h1>Backend for <a href="https://cesarczyk.dev" >cesarczyk.dev</a> portfolio up and running 🚀</h1>',
+      );
     });
   });
 });
