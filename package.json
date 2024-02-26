@@ -50,6 +50,7 @@
     "madge": "^6.1.0",
     "prettier": "^3.0.0",
     "pretty-quick": "^4.0.0",
+    "prisma": "^5.10.2",
     "source-map-support": "^0.5.21",
     "standard-version": "^9.5.0",
     "supertest": "^6.3.3",
