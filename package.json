@@ -11,7 +11,7 @@
     "commit": "cz",
     "release": "standard-version",
     "build": "nest build",
-    "build:prod": "prisma migrate dev && prisma generate && prisma db seed && nest build",
+    "build:prod": "prisma migrate dev && prisma generate && nest build",
     "start": "nest start",
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
