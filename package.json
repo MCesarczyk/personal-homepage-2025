@@ -8,6 +8,7 @@
   "scripts": {
     "postinstall": "husky install",
     "commit": "cz",
+    "release": "standard-version",
     "build": "nest build",
     "start": "nest start",
     "start:dev": "nest start --watch",
@@ -50,6 +51,7 @@
     "prettier": "^3.0.0",
     "pretty-quick": "^4.0.0",
     "source-map-support": "^0.5.21",
+    "standard-version": "^9.5.0",
     "supertest": "^6.3.3",
     "ts-jest": "^29.1.0",
     "ts-loader": "^9.4.3",
