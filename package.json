@@ -11,6 +11,7 @@
     "commit": "cz",
     "release": "standard-version",
     "build": "nest build",
+    "build:prod": "prisma migrate dev && nest build",
     "start": "nest start",
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
@@ -22,11 +23,7 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./test/jest-e2e.json",
-    "prisma:migrate": "prisma migrate dev --schema=./prisma/schema.prisma",
-    "prisma:unmigrate": "prisma migrate down --schema=./prisma/schema.prisma --experimental",
-    "prisma:introspect": "prisma introspect --schema=./prisma/schema.prisma",
-    "prisma:generate": "prisma generate --schema=./prisma/schema.prisma"
+    "test:e2e": "jest --config ./test/jest-e2e.json"
   },
   "dependencies": {
     "@nestjs/common": "^10.0.0",
