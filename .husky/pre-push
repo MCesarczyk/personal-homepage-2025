@@ -1,0 +1,10 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+node .husky/lint-message.js
+
+pnpm lint
+pnpm check:circular
+pnpm test
+pnpm format
+pnpm build
