@@ -1,8 +1,8 @@
-import { Body, Controller, Get, Post } from "@nestjs/common";
-import { User as UserModel } from "@prisma/client";
-import { UserService } from "src/user/user.service";
+import { Body, Controller, Get, Post } from '@nestjs/common';
+import { User as UserModel } from '@prisma/client';
+import { UserService } from 'src/user/user.service';
 
-@Controller("users")
+@Controller('users')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
