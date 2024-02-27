@@ -8,7 +8,7 @@ export class UserController {
 
   @Get()
   async getAllUsers(): Promise<UserModel[]> {
-    return this.userService.users({});
+    return this.userService.getUsersList({});
   }
 
   @Post()
