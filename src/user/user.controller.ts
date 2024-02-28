@@ -1,6 +1,10 @@
 import { Body, Controller, Get, Post } from '@nestjs/common';
 import { User as UserModel } from '@prisma/client';
 import { UserService } from '../user/user.service';
+import bcrypt from 'bcrypt';
+import { Public } from 'src/auth/decorators/public.decorator';
+
+const saltRounds = 10;
 
 @Controller('users')
 export class UserController {
@@ -11,6 +15,7 @@ export class UserController {
     return this.userService.getUsersList({});
   }
 
+  @Public()
   @Post()
   async signupUser(
     @Body()
@@ -22,6 +27,18 @@ export class UserController {
       introduction: string;
     },
   ): Promise<UserModel> {
+    bcrypt.hash(
+      userData.password,
+      saltRounds,
+      function (err: Error, hash: string) {
+        if (err) {
+          throw err;
+        }
+
+        userData.password = hash;
+      },
+    );
+
     return this.userService.createUser(userData);
   }
 }
