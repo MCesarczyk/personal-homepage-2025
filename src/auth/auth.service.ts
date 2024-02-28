@@ -20,4 +20,8 @@ export class AuthService {
 
     return { access_token: await this.jwtService.signAsync(payload) };
   }
+
+  async getProfile(userId: string) {
+    return await this.userService.getUser({ id: userId });
+  }
 }
