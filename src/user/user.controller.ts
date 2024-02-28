@@ -1,8 +1,8 @@
 import { Body, Controller, Get, Post } from '@nestjs/common';
 import { User as UserModel } from '@prisma/client';
-import { UserService } from '../user/user.service';
 import { hash } from 'bcrypt';
-import { Public } from 'src/auth/decorators/public.decorator';
+import { UserService } from '../user/user.service';
+import { Public } from '../auth/decorators/public.decorator';
 
 const saltRounds = 10;
 

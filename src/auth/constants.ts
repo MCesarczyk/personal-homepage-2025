@@ -1,3 +1,5 @@
 export const jwtConstants = {
-  secret: 'lorem-ipsum-dolor-sit-amet-consectetur-adipiscing-elit',
+  secret: process.env.JWT_SECRET,
 };
+
+export const JWT_EXPIRATION = '600s';
