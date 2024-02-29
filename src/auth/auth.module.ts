@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
-import { JWT_EXPIRATION, jwtConstants } from '../auth/constants';
 import { AuthController } from './auth.controller';
 import { AuthService } from '../auth/auth.service';
 import { AuthGuard } from '../auth/auth.guard';
 import { UserModule } from '../user/user.module';
+import { jwtConstants } from 'src/auth/constants';
 
 @Module({
   imports: [
@@ -12,7 +12,7 @@ import { UserModule } from '../user/user.module';
     JwtModule.register({
       global: true,
       secret: jwtConstants.secret,
-      signOptions: { expiresIn: JWT_EXPIRATION },
+      signOptions: { expiresIn: jwtConstants.accessExpiration },
     }),
   ],
   controllers: [AuthController],

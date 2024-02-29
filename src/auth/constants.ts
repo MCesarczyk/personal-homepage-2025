@@ -1,5 +1,5 @@
 export const jwtConstants = {
-  secret: process.env.JWT_SECRET,
+  secret: `${process.env.JWT_SECRET}`,
+  accessExpiration: '15m',
+  refreshExpiration: '7d',
 };
-
-export const JWT_EXPIRATION = '600s';

@@ -7,7 +7,10 @@ import {
   UseGuards,
   Get,
   Request,
+  Res,
 } from '@nestjs/common';
+import { Response } from 'express';
+
 import { AuthService } from './auth.service';
 import { AuthGuard } from '../auth/auth.guard';
 import { Public } from '../auth/decorators/public.decorator';
@@ -19,8 +22,16 @@ export class AuthController {
   @Public()
   @HttpCode(HttpStatus.OK)
   @Post('login')
-  signIn(@Body() signInDto: Record<string, any>) {
-    return this.authService.signIn(signInDto.email, signInDto.password);
+  async login(@Res() res: Response, @Body() signInDto: Record<string, any>) {
+    const { userId } = await this.authService.login(
+      signInDto.email,
+      signInDto.password,
+    );
+
+    const accessToken = await this.authService.createAccessToken(userId);
+    const refreshToken = await this.authService.createRefreshToken(userId);
+
+    return res.send({ access_token: accessToken, refresh_token: refreshToken });
   }
 
   @UseGuards(AuthGuard)
