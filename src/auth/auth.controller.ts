@@ -33,13 +33,10 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   @Post('login')
   async login(@Res() res: Response, @Body() signInDto: Record<string, any>) {
-    const { userId } = await this.authService.login(
+    const { accessToken, refreshToken } = await this.authService.login(
       signInDto.email,
       signInDto.password,
     );
-
-    const accessToken = await this.authService.createAccessToken(userId);
-    const refreshToken = await this.authService.createRefreshToken(userId);
 
     return res.send({ access_token: accessToken, refresh_token: refreshToken });
   }

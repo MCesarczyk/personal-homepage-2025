@@ -22,6 +22,7 @@ model User {
   introduction String
   skills       Skill[]
   projects     Project[]
+  refreshToken String?
 }
 
 enum SkillState {

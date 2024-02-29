@@ -1,75 +1,108 @@
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient } from '@prisma/client';
+import { hash } from 'bcrypt';
+import { securityConstants } from '../src/auth/constants';
+
 const prisma = new PrismaClient();
 async function main() {
+  const alicePass = await hash('alice123', securityConstants.saltRounds);
+
   const alice = await prisma.user.upsert({
-    where: { email: "alice@prisma.io" },
+    where: { email: 'alice@prisma.io' },
     update: {},
     create: {
-      email: "alice@prisma.io",
-      name: "Alice",
-      occupation: "Engineer",
+      email: 'alice@prisma.io',
+      name: 'Alice',
+      occupation: 'Engineer',
       introduction: "I'm an engineer at Prisma",
-      password: "password",
+      password: alicePass,
       skills: {
         create: [
           {
-            content: "TypeScript",
-            state: "COMPLETED",
+            content: 'TypeScript',
+            state: 'COMPLETED',
           },
           {
-            content: "GraphQL",
-            state: "RUNNING",
+            content: 'GraphQL',
+            state: 'RUNNING',
           },
         ],
       },
       projects: {
         create: [
           {
-            title: "Prisma",
-            codeUrl: "https://github.com/prisma/prisma",
-            demoUrl: "https://www.prisma.io",
-            description: "Next-generation ORM for Node.js and TypeScript",
+            title: 'Prisma',
+            codeUrl: 'https://github.com/prisma/prisma',
+            demoUrl: 'https://www.prisma.io',
+            description: 'Next-generation ORM for Node.js and TypeScript',
             images: {
               create: [
                 {
-                  url: "https://www.prisma.io/assets/images/prisma-logo.svg",
+                  url: 'https://www.prisma.io/assets/images/prisma-logo.svg',
                 },
               ],
             },
           },
           {
-            title: "Nexus",
-            codeUrl: "https://github.com/graphql-nexus/nexus",
-            demoUrl: "https://nexusjs.org",
-            description: "The Missing Piece to the GraphQL Ecosystem",
+            title: 'Nexus',
+            codeUrl: 'https://github.com/graphql-nexus/nexus',
+            demoUrl: 'https://nexusjs.org',
+            description: 'The Missing Piece to the GraphQL Ecosystem',
+            images: {
+              create: [
+                {
+                  url: 'https://nexusjs.org/img/logo.svg',
+                },
+              ],
+            },
           },
         ],
       },
     },
   });
+
+  const bobPass = await hash('bob123', securityConstants.saltRounds);
+
   const bob = await prisma.user.upsert({
-    where: { email: "bob@prisma.io" },
+    where: { email: 'bob@prisma.io' },
     update: {},
     create: {
-      email: "bob@prisma.io",
-      name: "Bob",
-      occupation: "Designer",
+      email: 'bob@prisma.io',
+      name: 'Bob',
+      occupation: 'Designer',
       introduction: "I'm a designer at Prisma",
-      password: "password",
+      password: bobPass,
       skills: {
         create: [
           {
-            content: "Figma",
-            state: "COMPLETED",
+            content: 'Figma',
+            state: 'COMPLETED',
           },
           {
-            content: "Sketch",
-            state: "RUNNING",
+            content: 'Sketch',
+            state: 'RUNNING',
+          },
+        ],
+      },
+      projects: {
+        create: [
+          {
+            title: 'Prisma',
+            codeUrl: 'https://github.com/typeorm/typeorm',
+            demoUrl: 'https://www.typeorm.io',
+            description: 'TypeORM is an ORM that can run in NodeJS and others',
+            images: {
+              create: [
+                {
+                  url: 'https://www.typeorm.io/images/logo_big.png',
+                },
+              ],
+            },
           },
         ],
       },
     },
   });
+
   console.log({ alice, bob });
 }
 main()

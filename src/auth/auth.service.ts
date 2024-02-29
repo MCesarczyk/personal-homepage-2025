@@ -40,7 +40,10 @@ export class AuthService {
     return this.userService.createUser(userData);
   }
 
-  async login(email: string, password: string): Promise<{ userId: string }> {
+  async login(
+    email: string,
+    password: string,
+  ): Promise<{ accessToken: string; refreshToken: string }> {
     const user = await this.userService.getUser({
       email: email,
     });
@@ -55,7 +58,17 @@ export class AuthService {
       throw new UnauthorizedException();
     }
 
-    return { userId: user.id };
+    const accessToken = await this.createAccessToken(user.id);
+    const refreshToken = await this.createRefreshToken(user.id);
+
+    const { email: userEmail } = await this.userService.updateUser({
+      where: { id: user.id },
+      data: { refreshToken },
+    });
+
+    console.log(`${userEmail} has been logged in`);
+
+    return { accessToken, refreshToken };
   }
 
   async getProfile(userId: string) {
