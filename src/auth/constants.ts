@@ -3,3 +3,7 @@ export const jwtConstants = {
   accessExpiration: '15m',
   refreshExpiration: '7d',
 };
+
+export const securityConstants = {
+  saltRounds: 10,
+};

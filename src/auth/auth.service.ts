@@ -1,10 +1,11 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { randomUUID } from 'crypto';
-import { compare } from 'bcrypt';
+import { compare, hash } from 'bcrypt';
 
 import { UserService } from '../user/user.service';
-import { jwtConstants } from '../auth/constants';
+import { jwtConstants, securityConstants } from '../auth/constants';
+import { UserData } from 'src/user/types';
 
 @Injectable()
 export class AuthService {
@@ -26,6 +27,17 @@ export class AuthService {
       { id: userId, tokenId },
       { expiresIn: jwtConstants.refreshExpiration },
     );
+  }
+
+  async signup(userData: UserData) {
+    const hashedPass = await hash(
+      userData.password,
+      securityConstants.saltRounds,
+    );
+
+    userData.password = hashedPass;
+
+    return this.userService.createUser(userData);
   }
 
   async login(email: string, password: string): Promise<{ userId: string }> {

@@ -14,10 +14,20 @@ import { Response } from 'express';
 import { AuthService } from './auth.service';
 import { AuthGuard } from '../auth/auth.guard';
 import { Public } from '../auth/decorators/public.decorator';
+import { UserData } from '../user/types';
 
 @Controller('auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
+
+  @Public()
+  @Post('signup')
+  async signup(
+    @Body()
+    userData: UserData,
+  ) {
+    return this.authService.signup(userData);
+  }
 
   @Public()
   @HttpCode(HttpStatus.OK)
