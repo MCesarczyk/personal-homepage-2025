@@ -4,15 +4,13 @@ import {
   Post,
   HttpCode,
   HttpStatus,
-  UseGuards,
   Get,
-  Request,
   Res,
+  Req,
 } from '@nestjs/common';
-import { Response } from 'express';
+import { Request, Response } from 'express';
 
 import { AuthService } from './auth.service';
-import { AuthGuard } from '../auth/auth.guard';
 import { Public } from '../auth/decorators/public.decorator';
 import { UserData } from '../user/types';
 
@@ -41,9 +39,28 @@ export class AuthController {
     return res.send({ access_token: accessToken, refresh_token: refreshToken });
   }
 
-  @UseGuards(AuthGuard)
   @Get('profile')
-  getProfile(@Request() req: any) {
+  getProfile(@Req() req: any) {
     return req.user;
+  }
+
+  @Post('refresh')
+  async refresh(@Res() res: Response, @Body() body: Record<string, any>) {
+    const { accessToken, refreshToken } = await this.authService.refresh(
+      body.refreshToken,
+    );
+
+    return res.send({ access_token: accessToken, refresh_token: refreshToken });
+  }
+
+  @Post('logout')
+  async logout(@Req() req: Request, @Res() res: Response) {
+    const accessToken = req.headers.authorization?.split(' ')[1];
+
+    const user = await this.authService.logout(accessToken);
+
+    return res.send({
+      message: `${user?.email} has been logged out successfully`,
+    });
   }
 }
