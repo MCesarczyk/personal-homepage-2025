@@ -44,6 +44,7 @@ export class AuthController {
     return req.user;
   }
 
+  @Public()
   @Post('refresh')
   async refresh(@Res() res: Response, @Body() body: Record<string, any>) {
     const { accessToken, refreshToken } = await this.authService.refresh(
