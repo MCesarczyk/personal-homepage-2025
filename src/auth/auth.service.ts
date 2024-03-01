@@ -106,7 +106,7 @@ export class AuthService {
 
     const user = await this.userService.getUser({ id });
 
-    if (!user) {
+    if (!user || !user.refreshToken) {
       throw new UnauthorizedException();
     }
 
