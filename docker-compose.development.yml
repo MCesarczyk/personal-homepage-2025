@@ -1,0 +1,33 @@
+version: '3.8'
+services:
+  personal-homepage-db:
+    restart: always
+    image: postgres:13
+    container_name: personal-homepageter-db-dev
+    env_file:
+      - .env
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    ports:
+      - 5600:5432
+    expose:
+      - 5600
+
+  personal-homepage-pgadmin:
+    image: dpage/pgadmin4
+    restart: always
+    container_name: personal-homepage-pgadmin4
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=${PGADMIN_DEFAULT_EMAIL}
+      - PGADMIN_DEFAULT_PASSWORD=${PGADMIN_DEFAULT_PASSWORD}
+    ports:
+      - '8888:80'
+    volumes:
+      - pgadmin-data:/var/lib/pgadmin
+    depends_on:
+      - personal-homepage-db
+
+volumes:
+  db-data:
+  pgadmin-data:
+    driver: local
