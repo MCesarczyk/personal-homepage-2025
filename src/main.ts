@@ -12,7 +12,7 @@ async function bootstrap() {
   const developmentOptions = new DocumentBuilder()
     .setTitle('Personal Homepage API - development')
     .setDescription(
-      'Backend for Personal Homepage website. Available on: http://localhost:5000. This API is used to manage the content of the homepage.',
+      `Backend for Personal Homepage website. Available on: http://localhost:${process.env.PORT}/. This API is used to manage the content of the homepage.`,
     )
     .setVersion('1.0')
     .addServer(`http://localhost:${process.env.PORT}/`, 'Development')
@@ -22,7 +22,7 @@ async function bootstrap() {
   const productionOptions = new DocumentBuilder()
     .setTitle('Personal Homepage API - production')
     .setDescription(
-      `Backend for Personal Homepage website. Available on: ${process.env.PRODUCTION_URL || 'PRODUCTION_API URL'}. This API is used to manage the content of the homepage.`,
+      `Backend for Personal Homepage website. Available on: ${process.env.PUBLIC_URL || process.env.PRODUCTION_URL}. This API is used to manage the content of the homepage.`,
     )
     .setVersion('1.0')
     .addServer(`${process.env.PRODUCTION_URL}`, 'Production')
