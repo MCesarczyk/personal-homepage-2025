@@ -17,11 +17,7 @@ async function bootstrap() {
     .setVersion('1.0')
     .addServer(`http://localhost:${process.env.PORT}/`, 'Development')
     .addServer(`${process.env.PRODUCTION_URL}`, 'Production')
-    .addSecurity('bearer', {
-      type: 'http',
-      scheme: 'bearer',
-      bearerFormat: 'JWT',
-    })
+    .addBearerAuth()
     .build();
 
   const productionOptions = new DocumentBuilder()
@@ -31,6 +27,7 @@ async function bootstrap() {
     )
     .setVersion('1.0')
     .addServer(`${process.env.PRODUCTION_URL}`, 'Production')
+    .addBearerAuth()
     .build();
 
   const options =

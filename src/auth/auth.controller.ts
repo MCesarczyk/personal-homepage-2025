@@ -9,9 +9,9 @@ import {
 } from '@nestjs/common';
 import { Request, Response } from 'express';
 import {
+  ApiBearerAuth,
   ApiOperation,
   ApiResponse,
-  ApiSecurity,
   ApiTags,
 } from '@nestjs/swagger';
 
@@ -22,7 +22,7 @@ import { TokensResponse } from '../auth/entities/tokensResponse.entity';
 import { RefreshTokenDto } from '../auth/dto/refreshToken.dto';
 import { FeedbackMessage } from '../auth/entities/feedbackMessage.entity';
 
-@ApiSecurity('bearer')
+@ApiBearerAuth()
 @ApiTags('auth')
 @Controller('auth')
 export class AuthController {

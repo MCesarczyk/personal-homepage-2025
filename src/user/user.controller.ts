@@ -1,8 +1,8 @@
 import { Body, Controller, Get, HttpStatus, Patch, Req } from '@nestjs/common';
 import {
+  ApiBearerAuth,
   ApiOperation,
   ApiResponse,
-  ApiSecurity,
   ApiTags,
 } from '@nestjs/swagger';
 import { Request } from 'express';
@@ -10,7 +10,7 @@ import { Request } from 'express';
 import { UserService } from '../user/user.service';
 import { UserData } from '../user/entities/userData.entity';
 
-@ApiSecurity('bearer')
+@ApiBearerAuth()
 @ApiTags('user')
 @Controller('user')
 export class UserController {
