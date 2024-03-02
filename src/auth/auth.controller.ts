@@ -12,32 +12,26 @@ import { Request, Response } from 'express';
 
 import { AuthService } from './auth.service';
 import { Public } from '../auth/decorators/public.decorator';
-// import { UserData } from '../user/types';
+import { UserData } from '../user/types';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { SignInDto } from 'src/auth/dto/signIn.dto';
 import { TokensResponse } from 'src/auth/entities/tokensResponse.entity';
-// import { LoginResponse } from 'src/auth/entities/loginResponse.entity';
 
 @ApiTags('auth')
 @Controller('auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
 
-  // @Public()
-  // @Post('signup')
-  // async signup(
-  //   @Body()
-  //   userData: UserData,
-  // ) {
-  //   return this.authService.signup(userData);
-  // }
-
   @Public()
   @HttpCode(HttpStatus.OK)
   @Post('login')
   @ApiOperation({ summary: 'Login' })
-  @ApiResponse({ status: HttpStatus.OK, description: 'Login' })
-  @ApiResponse({ status: 403, description: 'Forbidden' })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Login',
+    type: TokensResponse,
+  })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
   async login(
     @Res() res: Response,
     @Body() signInDto: SignInDto,
@@ -59,8 +53,15 @@ export class AuthController {
   @Public()
   @Post('refresh')
   @ApiOperation({ summary: 'Refresh' })
-  @ApiResponse({ status: HttpStatus.OK, description: 'Refresh' })
-  @ApiResponse({ status: 403, description: 'Forbidden' })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Refresh',
+    type: TokensResponse,
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'Unauthorized',
+  })
   async refresh(
     @Res() res: Response,
     @Body() body: Record<string, any>,
