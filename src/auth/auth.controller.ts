@@ -17,6 +17,7 @@ import { SignInDto } from '../auth/dto/signIn.dto';
 import { TokensResponse } from '../auth/entities/tokensResponse.entity';
 import { RefreshTokenDto } from '../auth/dto/refreshToken.dto';
 import { UserData } from '../user/entities/userData.entity';
+import { FeedbackMessage } from 'src/auth/entities/feedbackMessage.entity';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -81,7 +82,17 @@ export class AuthController {
   }
 
   @Post('logout')
-  async logout(@Req() req: Request, @Res() res: Response) {
+  @ApiOperation({ summary: 'Logout' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Logout',
+    type: FeedbackMessage,
+  })
+  async logout(
+    @Req() req: Request,
+    @Res() res: Response,
+  ): Promise<Response<FeedbackMessage>> {
     const accessToken = req.headers.authorization?.split(' ')[1];
 
     const user = await this.authService.logout(accessToken);
