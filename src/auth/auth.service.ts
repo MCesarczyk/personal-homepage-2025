@@ -3,10 +3,10 @@ import { JwtService } from '@nestjs/jwt';
 import { randomUUID } from 'crypto';
 import { compare } from 'bcrypt';
 
-import { UserService } from '../user/user.service';
 import { jwtConstants } from '../auth/constants';
 import { LoginResponse } from '../auth/entities/loginResponse.entity';
 import { SignInDto } from '../auth/dto/signIn.dto';
+import { UserService } from '../user/user.service';
 import { UserData } from '../user/entities/userData.entity';
 
 @Injectable()
@@ -57,24 +57,6 @@ export class AuthService {
     console.log(`${userEmail} has been logged in`);
 
     return { accessToken, refreshToken };
-  }
-
-  async getProfile(
-    accessToken: string | undefined,
-  ): Promise<UserData | undefined> {
-    if (!accessToken) {
-      throw new UnauthorizedException();
-    }
-
-    const { id } = this.jwtService.verify(accessToken);
-
-    const user = await this.userService.getUser({ id });
-
-    if (!user) {
-      throw new UnauthorizedException();
-    }
-
-    return (await this.userService.getUser({ id: user.id })) || undefined;
   }
 
   async refresh(

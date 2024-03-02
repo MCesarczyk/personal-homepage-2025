@@ -4,7 +4,6 @@ import {
   Post,
   HttpCode,
   HttpStatus,
-  Get,
   Res,
   Req,
 } from '@nestjs/common';
@@ -17,7 +16,6 @@ import { SignInDto } from '../auth/dto/signIn.dto';
 import { TokensResponse } from '../auth/entities/tokensResponse.entity';
 import { RefreshTokenDto } from '../auth/dto/refreshToken.dto';
 import { FeedbackMessage } from '../auth/entities/feedbackMessage.entity';
-import { UserData } from '../user/entities/userData.entity';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -42,20 +40,6 @@ export class AuthController {
       await this.authService.login(signInDto);
 
     return res.send({ access_token: accessToken, refresh_token: refreshToken });
-  }
-
-  @Get('profile')
-  @ApiOperation({ summary: 'Get profile' })
-  @ApiResponse({
-    status: HttpStatus.OK,
-    description: 'Get profile',
-    type: UserData,
-  })
-  @ApiResponse({ status: 401, description: 'Unauthorized' })
-  getProfile(@Req() req: Request): Promise<UserData | undefined> {
-    return this.authService.getProfile(
-      req.headers.authorization?.split(' ')[1],
-    );
   }
 
   @Public()
@@ -93,7 +77,7 @@ export class AuthController {
     @Req() req: Request,
     @Res() res: Response,
   ): Promise<Response<FeedbackMessage>> {
-    const accessToken = req.headers.authorization?.split(' ')[1];
+    const accessToken = req.headers['authorization']?.split(' ')[1];
 
     const user = await this.authService.logout(accessToken);
 
