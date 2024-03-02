@@ -14,7 +14,6 @@ async function bootstrap() {
     .setVersion('1.0')
     .addServer(`http://localhost:${process.env.PORT}/`, 'Development')
     .addServer(`${process.env.PRODUCTION_URL}`, 'Production')
-    .addTag('Your API Tag')
     .build();
 
   const document = SwaggerModule.createDocument(app, options);

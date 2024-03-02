@@ -9,15 +9,15 @@ import {
   Req,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 import { AuthService } from './auth.service';
 import { Public } from '../auth/decorators/public.decorator';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { SignInDto } from '../auth/dto/signIn.dto';
 import { TokensResponse } from '../auth/entities/tokensResponse.entity';
 import { RefreshTokenDto } from '../auth/dto/refreshToken.dto';
+import { FeedbackMessage } from '../auth/entities/feedbackMessage.entity';
 import { UserData } from '../user/entities/userData.entity';
-import { FeedbackMessage } from 'src/auth/entities/feedbackMessage.entity';
 
 @ApiTags('auth')
 @Controller('auth')
