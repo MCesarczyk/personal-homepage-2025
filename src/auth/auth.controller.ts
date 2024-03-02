@@ -8,7 +8,12 @@ import {
   Req,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiOperation,
+  ApiResponse,
+  ApiSecurity,
+  ApiTags,
+} from '@nestjs/swagger';
 
 import { AuthService } from './auth.service';
 import { Public } from '../auth/decorators/public.decorator';
@@ -17,6 +22,7 @@ import { TokensResponse } from '../auth/entities/tokensResponse.entity';
 import { RefreshTokenDto } from '../auth/dto/refreshToken.dto';
 import { FeedbackMessage } from '../auth/entities/feedbackMessage.entity';
 
+@ApiSecurity('bearer')
 @ApiTags('auth')
 @Controller('auth')
 export class AuthController {
