@@ -1,11 +1,13 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { randomUUID } from 'crypto';
-import { compare, hash } from 'bcrypt';
+import { compare } from 'bcrypt';
 
+import { jwtConstants } from '../auth/constants';
+import { LoginResponse } from '../auth/entities/loginResponse.entity';
+import { SignInDto } from '../auth/dto/signIn.dto';
 import { UserService } from '../user/user.service';
-import { jwtConstants, securityConstants } from '../auth/constants';
-import { UserData } from 'src/user/types';
+import { UserData } from '../user/entities/userData.entity';
 
 @Injectable()
 export class AuthService {
@@ -29,30 +31,16 @@ export class AuthService {
     );
   }
 
-  async signup(userData: UserData): Promise<UserData> {
-    const hashedPass = await hash(
-      userData.password,
-      securityConstants.saltRounds,
-    );
-
-    userData.password = hashedPass;
-
-    return this.userService.createUser(userData);
-  }
-
-  async login(
-    email: string,
-    password: string,
-  ): Promise<{ accessToken: string; refreshToken: string }> {
+  async login(signInDto: SignInDto): Promise<LoginResponse> {
     const user = await this.userService.getUser({
-      email: email,
+      email: signInDto.email,
     });
 
     if (!user) {
       throw new UnauthorizedException();
     }
 
-    const isMatch = await compare(password, user?.password);
+    const isMatch = await compare(signInDto.password, user?.password);
 
     if (!isMatch) {
       throw new UnauthorizedException();
@@ -69,10 +57,6 @@ export class AuthService {
     console.log(`${userEmail} has been logged in`);
 
     return { accessToken, refreshToken };
-  }
-
-  async getProfile(userId: string): Promise<UserData | null> {
-    return await this.userService.getUser({ id: userId });
   }
 
   async refresh(
