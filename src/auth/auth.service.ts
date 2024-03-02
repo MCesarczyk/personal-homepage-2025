@@ -5,9 +5,9 @@ import { compare, hash } from 'bcrypt';
 
 import { UserService } from '../user/user.service';
 import { jwtConstants, securityConstants } from '../auth/constants';
-import { UserData } from 'src/user/types';
-import { LoginResponse } from 'src/auth/entities/loginResponse.entity';
-import { SignInDto } from 'src/auth/dto/signIn.dto';
+import { LoginResponse } from '../auth/entities/loginResponse.entity';
+import { SignInDto } from '../auth/dto/signIn.dto';
+import { UserData } from '../user/entities/userData.entity';
 
 @Injectable()
 export class AuthService {
@@ -70,8 +70,22 @@ export class AuthService {
     return { accessToken, refreshToken };
   }
 
-  async getProfile(userId: string): Promise<UserData | null> {
-    return await this.userService.getUser({ id: userId });
+  async getProfile(
+    accessToken: string | undefined,
+  ): Promise<UserData | undefined> {
+    if (!accessToken) {
+      throw new UnauthorizedException();
+    }
+
+    const { id } = this.jwtService.verify(accessToken);
+
+    const user = await this.userService.getUser({ id });
+
+    if (!user) {
+      throw new UnauthorizedException();
+    }
+
+    return (await this.userService.getUser({ id: user.id })) || undefined;
   }
 
   async refresh(

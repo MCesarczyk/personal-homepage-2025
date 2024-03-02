@@ -12,11 +12,11 @@ import { Request, Response } from 'express';
 
 import { AuthService } from './auth.service';
 import { Public } from '../auth/decorators/public.decorator';
-import { UserData } from '../user/types';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { SignInDto } from 'src/auth/dto/signIn.dto';
-import { TokensResponse } from 'src/auth/entities/tokensResponse.entity';
-import { RefreshTokenDto } from 'src/auth/dto/refreshToken.dto';
+import { SignInDto } from '../auth/dto/signIn.dto';
+import { TokensResponse } from '../auth/entities/tokensResponse.entity';
+import { RefreshTokenDto } from '../auth/dto/refreshToken.dto';
+import { UserData } from '../user/entities/userData.entity';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -45,10 +45,16 @@ export class AuthController {
 
   @Get('profile')
   @ApiOperation({ summary: 'Get profile' })
-  @ApiResponse({ status: HttpStatus.OK, description: 'Get profile' })
-  @ApiResponse({ status: 403, description: 'Forbidden' })
-  getProfile(@Req() req: any) {
-    return req.user;
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Get profile',
+    type: UserData,
+  })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  getProfile(@Req() req: Request): Promise<UserData | undefined> {
+    return this.authService.getProfile(
+      req.headers.authorization?.split(' ')[1],
+    );
   }
 
   @Public()
