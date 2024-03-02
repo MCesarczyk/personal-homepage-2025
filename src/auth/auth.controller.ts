@@ -12,41 +12,59 @@ import { Request, Response } from 'express';
 
 import { AuthService } from './auth.service';
 import { Public } from '../auth/decorators/public.decorator';
-import { UserData } from '../user/types';
+// import { UserData } from '../user/types';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { SignInDto } from 'src/auth/dto/signIn.dto';
+import { TokensResponse } from 'src/auth/entities/tokensResponse.entity';
+// import { LoginResponse } from 'src/auth/entities/loginResponse.entity';
 
+@ApiTags('auth')
 @Controller('auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
 
-  @Public()
-  @Post('signup')
-  async signup(
-    @Body()
-    userData: UserData,
-  ) {
-    return this.authService.signup(userData);
-  }
+  // @Public()
+  // @Post('signup')
+  // async signup(
+  //   @Body()
+  //   userData: UserData,
+  // ) {
+  //   return this.authService.signup(userData);
+  // }
 
   @Public()
   @HttpCode(HttpStatus.OK)
   @Post('login')
-  async login(@Res() res: Response, @Body() signInDto: Record<string, any>) {
-    const { accessToken, refreshToken } = await this.authService.login(
-      signInDto.email,
-      signInDto.password,
-    );
+  @ApiOperation({ summary: 'Login' })
+  @ApiResponse({ status: HttpStatus.OK, description: 'Login' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  async login(
+    @Res() res: Response,
+    @Body() signInDto: SignInDto,
+  ): Promise<Response<TokensResponse>> {
+    const { accessToken, refreshToken } =
+      await this.authService.login(signInDto);
 
     return res.send({ access_token: accessToken, refresh_token: refreshToken });
   }
 
   @Get('profile')
+  @ApiOperation({ summary: 'Get profile' })
+  @ApiResponse({ status: HttpStatus.OK, description: 'Get profile' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   getProfile(@Req() req: any) {
     return req.user;
   }
 
   @Public()
   @Post('refresh')
-  async refresh(@Res() res: Response, @Body() body: Record<string, any>) {
+  @ApiOperation({ summary: 'Refresh' })
+  @ApiResponse({ status: HttpStatus.OK, description: 'Refresh' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  async refresh(
+    @Res() res: Response,
+    @Body() body: Record<string, any>,
+  ): Promise<Response<TokensResponse>> {
     const { accessToken, refreshToken } = await this.authService.refresh(
       body.refreshToken,
     );

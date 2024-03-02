@@ -6,6 +6,8 @@ import { compare, hash } from 'bcrypt';
 import { UserService } from '../user/user.service';
 import { jwtConstants, securityConstants } from '../auth/constants';
 import { UserData } from 'src/user/types';
+import { LoginResponse } from 'src/auth/entities/loginResponse.entity';
+import { SignInDto } from 'src/auth/dto/signIn.dto';
 
 @Injectable()
 export class AuthService {
@@ -40,19 +42,16 @@ export class AuthService {
     return this.userService.createUser(userData);
   }
 
-  async login(
-    email: string,
-    password: string,
-  ): Promise<{ accessToken: string; refreshToken: string }> {
+  async login(signInDto: SignInDto): Promise<LoginResponse> {
     const user = await this.userService.getUser({
-      email: email,
+      email: signInDto.email,
     });
 
     if (!user) {
       throw new UnauthorizedException();
     }
 
-    const isMatch = await compare(password, user?.password);
+    const isMatch = await compare(signInDto.password, user?.password);
 
     if (!isMatch) {
       throw new UnauthorizedException();
