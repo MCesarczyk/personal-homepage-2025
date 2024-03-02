@@ -16,6 +16,7 @@ import { UserData } from '../user/types';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { SignInDto } from 'src/auth/dto/signIn.dto';
 import { TokensResponse } from 'src/auth/entities/tokensResponse.entity';
+import { RefreshTokenDto } from 'src/auth/dto/refreshToken.dto';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -64,7 +65,7 @@ export class AuthController {
   })
   async refresh(
     @Res() res: Response,
-    @Body() body: Record<string, any>,
+    @Body() body: RefreshTokenDto,
   ): Promise<Response<TokensResponse>> {
     const { accessToken, refreshToken } = await this.authService.refresh(
       body.refreshToken,
