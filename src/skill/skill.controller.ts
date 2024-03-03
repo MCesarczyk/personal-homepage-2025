@@ -7,16 +7,17 @@ import {
   Param,
   Delete,
 } from '@nestjs/common';
-import { SkillService } from './skill.service';
-import { CreateSkillDto } from './dto/create-skill.dto';
-import { UpdateSkillDto } from './dto/update-skill.dto';
 import {
   ApiBearerAuth,
   ApiOperation,
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
-import { Skill } from 'src/skill/entities/skill.entity';
+
+import { SkillService } from './skill.service';
+import { CreateSkillDto } from './dto/create-skill.dto';
+import { UpdateSkillDto } from './dto/update-skill.dto';
+import { Skill } from '../skill/entities/skill.entity';
 
 @ApiBearerAuth()
 @ApiTags('skill')
