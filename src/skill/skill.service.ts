@@ -8,7 +8,7 @@ import { PrismaService } from '../prisma.service';
 export class SkillService {
   constructor(private prisma: PrismaService) {}
 
-  async create(createSkillDto: CreateSkillDto): Promise<Skill> {
+  create(createSkillDto: CreateSkillDto): Promise<Skill> {
     return this.prisma.skill.create({
       data: createSkillDto,
     });
