@@ -7,12 +7,12 @@ import {
   Param,
   Delete,
 } from '@nestjs/common';
+import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 import { ProjectImageService } from './project-image.service';
 import { CreateProjectImageDto } from './dto/create-project-image.dto';
 import { UpdateProjectImageDto } from './dto/update-project-image.dto';
-import { ProjectImage } from 'src/project-image/entities/project-image.entity';
-import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ProjectImage } from './entities/project-image.entity';
 
 @ApiBearerAuth()
 @ApiTags('project-image')
