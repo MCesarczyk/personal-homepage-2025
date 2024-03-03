@@ -4,9 +4,17 @@ import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
 import { SkillModule } from './skill/skill.module';
+import { ProjectModule } from './project/project.module';
+import { ProjectImageModule } from './project-image/project-image.module';
 
 @Module({
-  imports: [AuthModule, UserModule, SkillModule],
+  imports: [
+    AuthModule,
+    UserModule,
+    SkillModule,
+    ProjectModule,
+    ProjectImageModule,
+  ],
   controllers: [AppController],
   providers: [AppService],
 })
