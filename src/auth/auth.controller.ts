@@ -45,7 +45,13 @@ export class AuthController {
     const { accessToken, refreshToken } =
       await this.authService.login(signInDto);
 
-    return res.send({ access_token: accessToken, refresh_token: refreshToken });
+    res.cookie('refreshToken', refreshToken, {
+      httpOnly: true,
+      secure: true,
+      sameSite: 'strict',
+    });
+
+    return res.send({ accessToken });
   }
 
   @Public()
@@ -68,7 +74,13 @@ export class AuthController {
       body.refreshToken,
     );
 
-    return res.send({ access_token: accessToken, refresh_token: refreshToken });
+    res.cookie('refreshToken', refreshToken, {
+      httpOnly: true,
+      secure: true,
+      sameSite: 'strict',
+    });
+
+    return res.send({ accessToken });
   }
 
   @Post('logout')
