@@ -47,7 +47,9 @@ export class AuthController {
     res.cookie('refreshToken', refreshToken, {
       httpOnly: true,
       secure: true,
-      sameSite: 'none',
+      sameSite: 'lax',
+      domain:
+        process.env.NODE_ENV === 'production' ? process.env.PRODUCTION_URL : '',
     });
 
     console.log('User has been logged in', refreshToken);
@@ -79,6 +81,8 @@ export class AuthController {
       httpOnly: true,
       secure: true,
       sameSite: 'lax',
+      domain:
+        process.env.NODE_ENV === 'production' ? process.env.PRODUCTION_URL : '',
     });
 
     console.log('Token has been refreshed', refreshToken);
