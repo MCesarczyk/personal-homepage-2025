@@ -46,7 +46,7 @@ export class AuthController {
 
     res.cookie('refreshToken', refreshToken, {
       httpOnly: true,
-      secure: process.env.NODE_ENV !== 'development',
+      secure: true,
       sameSite: 'lax',
     });
 
@@ -77,7 +77,7 @@ export class AuthController {
 
     res.cookie('refreshToken', refreshToken, {
       httpOnly: true,
-      secure: process.env.NODE_ENV !== 'development',
+      secure: true,
       sameSite: 'lax',
     });
 
