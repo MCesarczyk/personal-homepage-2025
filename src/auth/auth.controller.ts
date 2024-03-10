@@ -19,7 +19,6 @@ import { AuthService } from './auth.service';
 import { Public } from '../auth/decorators/public.decorator';
 import { SignInDto } from '../auth/dto/signIn.dto';
 import { TokensResponse } from '../auth/entities/tokensResponse.entity';
-import { RefreshTokenDto } from '../auth/dto/refreshToken.dto';
 import { FeedbackMessage } from '../auth/entities/feedbackMessage.entity';
 
 @ApiBearerAuth()
@@ -47,9 +46,11 @@ export class AuthController {
 
     res.cookie('refreshToken', refreshToken, {
       httpOnly: true,
-      secure: true,
-      sameSite: 'strict',
+      secure: process.env.NODE_ENV !== 'development',
+      sameSite: 'lax',
     });
+
+    console.log('User has been logged in', refreshToken);
 
     return res.send({ accessToken });
   }
@@ -67,18 +68,20 @@ export class AuthController {
     description: 'Unauthorized',
   })
   async refresh(
+    @Req() req: Request,
     @Res() res: Response,
-    @Body() body: RefreshTokenDto,
   ): Promise<Response<TokensResponse>> {
     const { accessToken, refreshToken } = await this.authService.refresh(
-      body.refreshToken,
+      req.cookies.refreshToken,
     );
 
     res.cookie('refreshToken', refreshToken, {
       httpOnly: true,
-      secure: true,
-      sameSite: 'strict',
+      secure: process.env.NODE_ENV !== 'development',
+      sameSite: 'lax',
     });
+
+    console.log('Token has been refreshed', refreshToken);
 
     return res.send({ accessToken });
   }

@@ -81,7 +81,9 @@ export class AuthService {
     return { accessToken, refreshToken: newRefreshToken };
   }
 
-  async logout(accessToken: string | undefined): Promise<UserData | undefined> {
+  async logout(
+    accessToken: string | undefined,
+  ): Promise<Omit<UserData, 'refreshToken'> | undefined> {
     if (!accessToken) {
       throw new UnauthorizedException();
     }
@@ -99,6 +101,12 @@ export class AuthService {
       data: { refreshToken: null },
     });
 
-    return user;
+    return {
+      name: user.name,
+      email: user.email,
+      password: user.password,
+      occupation: user.occupation,
+      introduction: user.introduction,
+    };
   }
 }

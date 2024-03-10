@@ -23,7 +23,7 @@ export class UserService {
   async updateUser(params: {
     where: Prisma.UserWhereUniqueInput;
     data: Prisma.UserUpdateInput;
-  }): Promise<User> {
+  }): Promise<Omit<User, 'refreshToken'>> {
     const { where, data } = params;
     return this.prisma.user.update({
       data,
@@ -33,7 +33,7 @@ export class UserService {
 
   async getProfile(
     accessToken: string | undefined,
-  ): Promise<UserData | undefined> {
+  ): Promise<Omit<UserData, 'refreshToken'> | undefined> {
     if (!accessToken) {
       throw new UnauthorizedException();
     }
@@ -46,19 +46,36 @@ export class UserService {
       throw new UnauthorizedException();
     }
 
-    return user || undefined;
+    return (
+      {
+        email: user.email,
+        name: user.name,
+        password: user.password,
+        occupation: user.occupation,
+        introduction: user.introduction,
+      } || undefined
+    );
   }
 
   async updateProfile(
     accessToken: string | undefined,
     data: Prisma.UserUpdateInput,
-  ): Promise<User> {
+  ): Promise<Omit<User, 'refreshToken'>> {
     if (!accessToken) {
       throw new UnauthorizedException();
     }
 
     const { id } = this.jwtService.verify(accessToken);
 
-    return this.updateUser({ where: { id }, data });
+    const updatedUser = await this.updateUser({ where: { id }, data });
+
+    return {
+      id: updatedUser.id,
+      email: updatedUser.email,
+      name: updatedUser.name,
+      password: updatedUser.password,
+      occupation: updatedUser.occupation,
+      introduction: updatedUser.introduction,
+    };
   }
 }
