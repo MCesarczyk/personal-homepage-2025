@@ -49,7 +49,9 @@ export class AuthController {
       secure: true,
       sameSite: 'lax',
       domain:
-        process.env.NODE_ENV === 'production' ? process.env.PRODUCTION_URL : '',
+        process.env.NODE_ENV === 'production'
+          ? process.env.PRODUCTION_URL?.replace('https://', '')
+          : '',
     });
 
     console.log('User has been logged in', refreshToken);
@@ -82,7 +84,9 @@ export class AuthController {
       secure: true,
       sameSite: 'lax',
       domain:
-        process.env.NODE_ENV === 'production' ? process.env.PRODUCTION_URL : '',
+        process.env.NODE_ENV === 'production'
+          ? process.env.PRODUCTION_URL?.replace('https://', '')
+          : '',
     });
 
     console.log('Token has been refreshed', refreshToken);
