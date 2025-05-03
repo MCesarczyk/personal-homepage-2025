@@ -17,10 +17,10 @@ async function bootstrap() {
   const swaggerOptions = new DocumentBuilder()
     .setTitle('Personal Homepage API - development')
     .setDescription(
-      `Backend for Personal Homepage website. Available on: http://localhost:4600/. This API is used to manage the content of the homepage.`,
+      `Backend for Personal Homepage website. Available on: ${process.env.PUBLIC_URL}. This API is used to manage the content of the homepage.`,
     )
     .setVersion('1.0')
-    .addServer(`http://localhost:4600/`, 'Development')
+    .addServer(`${process.env.PUBLIC_URL}`, 'Development')
     .addBearerAuth()
     .build();
 

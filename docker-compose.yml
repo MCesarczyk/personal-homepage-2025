@@ -3,7 +3,6 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-      target: development
     container_name: personal-homepage-backend
     restart: always
     env_file:
@@ -24,7 +23,7 @@ services:
     image: postgres:13
     container_name: personal-homepage-db
     env_file:
-      - .env
+      - .env.development.local
     volumes:
       - ph24-db-data:/var/lib/postgresql/data
     networks:
