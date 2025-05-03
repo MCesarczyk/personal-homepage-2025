@@ -1,7 +1,7 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { randomUUID } from 'crypto';
-import { compare } from 'bcrypt';
+import { compare } from 'bcryptjs';
 
 import { jwtConstants } from '../auth/constants';
 import { LoginResponse } from '../auth/entities/loginResponse.entity';

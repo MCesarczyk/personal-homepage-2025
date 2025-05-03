@@ -1,0 +1,59 @@
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: personal-homepage-backend
+    restart: always
+    env_file:
+      - .env
+    volumes:
+      - ph24-backend-data:/app
+    ports:
+      - 4600:5000
+    networks:
+      - personal-homepage-2024
+    depends_on:
+      - db
+    expose:
+      - 4600
+
+  db:
+    restart: always
+    image: postgres:13
+    container_name: personal-homepage-db
+    env_file:
+      - .env.development.local
+    volumes:
+      - ph24-db-data:/var/lib/postgresql/data
+    networks:
+      - personal-homepage-2024
+    ports:
+      - 5600:5432
+
+  pgadmin:
+    image: dpage/pgadmin4
+    restart: always
+    container_name: personal-homepage-pgadmin4
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=${PGADMIN_DEFAULT_EMAIL}
+      - PGADMIN_DEFAULT_PASSWORD=${PGADMIN_DEFAULT_PASSWORD}
+    ports:
+      - '8600:80'
+    volumes:
+      - ph24-pgadmin-data:/var/lib/pgadmin
+    networks:
+      - personal-homepage-2024
+    depends_on:
+      - db
+
+volumes:
+  ph24-backend-data:
+  ph24-db-data:
+  ph24-pgadmin-data:
+    driver: local
+
+networks:
+  personal-homepage-2024:
+    external: true
+    name: personal-homepage-2024
