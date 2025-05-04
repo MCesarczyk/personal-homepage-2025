@@ -4,11 +4,11 @@ pnpm lint
 node .husky/circular-message.js
 pnpm check:circular
 
-# node .husky/test-message.js
-# pnpm test
+node .husky/test-message.js
+pnpm test
 
 node .husky/format-message.js
 pnpm format
 
-# node .husky/build-message.js
-# pnpm build
+node .husky/build-message.js
+pnpm build
