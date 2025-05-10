@@ -1,0 +1,6 @@
+graph LR
+    Client -->|Request| API_Gateway[API Gateway]
+    API_Gateway --> Users_Service[Users Service]
+    API_Gateway --> Projects_Service[Projects Service]
+    API_Gateway --> Tasks_Service[Tasks Service]
+    API_Gateway --> Auth_Service[Auth Service]

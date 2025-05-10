@@ -1,0 +1,17 @@
+sequenceDiagram
+    participant Client
+    participant Auth_Service
+    participant Users_MS
+    participant Projects_MS
+    participant Tasks_MS
+
+    Client->>Auth_Service: Login (credentials)
+    Auth_Service-->>Client: JWT token
+
+    Client->>Users_MS: Request with JWT
+    Users_MS->>Users_MS: Validate JWT and authorize
+    Users_MS-->>Client: Response
+
+    Client->>Projects_MS: Request with JWT
+    Projects_MS->>Projects_MS: Validate JWT and authorize
+    Projects_MS-->>Client: Response

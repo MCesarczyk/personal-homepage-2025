@@ -1,0 +1,18 @@
+sequenceDiagram
+    participant Client
+    participant API_Gateway
+    participant Auth_Service
+    participant Users_MS
+    participant Projects_MS
+    participant Tasks_MS
+
+    Client->>API_Gateway: Login (credentials)
+    API_Gateway->>Auth_Service: Authenticate user
+    Auth_Service-->>API_Gateway: JWT token
+    API_Gateway-->>Client: JWT token
+
+    Client->>API_Gateway: Request with JWT
+    API_Gateway->>Users_MS: Forward request with validated JWT
+    Users_MS->>Users_MS: (Optional) Validate JWT
+    Users_MS-->>API_Gateway: Response
+    API_Gateway-->>Client: Response

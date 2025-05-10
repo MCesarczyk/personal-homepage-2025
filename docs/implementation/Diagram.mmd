@@ -1,0 +1,18 @@
+sequenceDiagram
+    participant SPA as Frontend SPA
+    participant Auth as Auth Service (NestJS)
+    participant MS1 as Projects Service (NestJS)
+    participant MS2 as Task Logger Service (NestJS)
+    participant MS3 as Expense Tracker Service (Django)
+
+    SPA->>Auth: POST /auth/login (username, password)
+    Auth-->>SPA: 200 OK (JWT token)
+    SPA->>MS1: GET /projects (Authorization: Bearer JWT)
+    MS1->>Auth: (optional) Validate JWT or verify locally
+    MS1-->>SPA: 200 OK (projects data)
+    SPA->>MS2: GET /tasks (Authorization: Bearer JWT)
+    MS2->>Auth: (optional) Validate JWT or verify locally
+    MS2-->>SPA: 200 OK (tasks data)
+    SPA->>MS3: GET /expenses (Authorization: Bearer JWT)
+    MS3->>Auth: (optional) Validate JWT or verify locally
+    MS3-->>SPA: 200 OK (expenses data)
