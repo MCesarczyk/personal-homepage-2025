@@ -4,10 +4,10 @@ import { randomUUID } from 'crypto';
 import { compare } from 'bcryptjs';
 
 import { jwtConstants } from '../auth/constants';
-import { LoginResponse } from '../auth/entities/loginResponse.entity';
-import { SignInDto } from '../auth/dto/signIn.dto';
+import { LoginResponse } from './entities/login-response.entity';
+import { SignInDto } from './dto/sign-in.dto';
 import { UserService } from '../user/user.service';
-import { UserData } from '../user/entities/userData.entity';
+import { UserData } from '../user/entities/user-data.entity';
 
 @Injectable()
 export class AuthService {

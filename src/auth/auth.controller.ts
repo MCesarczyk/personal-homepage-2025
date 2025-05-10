@@ -17,13 +17,13 @@ import {
 
 import { AuthService } from './auth.service';
 import { Public } from '../auth/decorators/public.decorator';
-import { SignInDto } from '../auth/dto/signIn.dto';
-import { RefreshTokenDto } from '../auth/dto/refreshToken.dto';
-import { FeedbackMessage } from '../auth/entities/feedbackMessage.entity';
+import { SignInDto } from './dto/sign-in.dto';
+import { RefreshTokenDto } from './dto/refresh-token.dto';
+import { FeedbackMessage } from './entities/feedback-message.entity';
 import { SignedRequest } from '../auth/types';
-import { LoginResponse } from '../auth/entities/loginResponse.entity';
-import { RefreshResponse } from '../auth/entities/refreshResponse.entity';
-import { ChangePasswordDto } from '../auth/dto/changePassword.dto';
+import { LoginResponse } from './entities/login-response.entity';
+import { RefreshResponse } from './entities/refresh-response.entity';
+import { ChangePasswordDto } from './dto/change-password.dto';
 
 @ApiBearerAuth()
 @ApiTags('auth')

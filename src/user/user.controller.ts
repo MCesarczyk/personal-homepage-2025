@@ -15,7 +15,7 @@ import {
 } from '@nestjs/swagger';
 
 import { UserService } from '../user/user.service';
-import { UserData } from '../user/entities/userData.entity';
+import { UserData } from './entities/user-data.entity';
 import { SignedRequest } from '../../src/auth/types';
 import { CreateUserDto } from 'src/user/dto/create-user.dto';
 import { Public } from 'src/auth/decorators/public.decorator';
