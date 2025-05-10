@@ -5,10 +5,10 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
-import { Request } from 'express';
 
 import { UserService } from '../user/user.service';
 import { UserData } from '../user/entities/userData.entity';
+import { SignedRequest } from '../../src/auth/types';
 
 @ApiBearerAuth()
 @ApiTags('user')
@@ -24,10 +24,8 @@ export class UserController {
     type: UserData,
   })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
-  getProfile(@Req() req: Request): Promise<UserData | undefined> {
-    return this.userService.getProfile(
-      req.headers['authorization']?.split(' ')[1],
-    );
+  getProfile(@Req() req: SignedRequest): Promise<UserData | undefined> {
+    return this.userService.getUserById(req.user.id);
   }
 
   @Patch('profile')
@@ -39,12 +37,9 @@ export class UserController {
   })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   updateProfile(
-    @Req() req: Request,
+    @Req() req: SignedRequest,
     @Body() data: UserData,
   ): Promise<UserData | undefined> {
-    return this.userService.updateProfile(
-      req.headers['authorization']?.split(' ')[1],
-      data,
-    );
+    return this.userService.updateUser(req.user.id, data);
   }
 }

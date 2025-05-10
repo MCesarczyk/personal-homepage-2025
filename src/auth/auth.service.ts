@@ -32,9 +32,7 @@ export class AuthService {
   }
 
   async login(signInDto: SignInDto): Promise<LoginResponse> {
-    const user = await this.userService.getUser({
-      email: signInDto.email,
-    });
+    const user = await this.userService.getUserByEmail(signInDto.email);
 
     if (!user) {
       throw new UnauthorizedException();
@@ -49,9 +47,8 @@ export class AuthService {
     const accessToken = await this.createAccessToken(user.id);
     const refreshToken = await this.createRefreshToken(user.id);
 
-    const { email: userEmail } = await this.userService.updateUser({
-      where: { id: user.id },
-      data: { refreshToken },
+    const { email: userEmail } = await this.userService.updateUser(user.id, {
+      refreshToken,
     });
 
     console.log(`${userEmail} has been logged in`);
@@ -64,7 +61,7 @@ export class AuthService {
   ): Promise<{ accessToken: string; refreshToken: string }> {
     const { id } = this.jwtService.verify(refreshToken);
 
-    const user = await this.userService.getUser({ id });
+    const user = await this.userService.getUserById(id);
 
     if (user?.refreshToken !== refreshToken) {
       throw new UnauthorizedException();
@@ -73,31 +70,21 @@ export class AuthService {
     const accessToken = await this.createAccessToken(user.id);
     const newRefreshToken = await this.createRefreshToken(user.id);
 
-    await this.userService.updateUser({
-      where: { id: user.id },
-      data: { refreshToken: newRefreshToken },
+    await this.userService.updateUser(user.id, {
+      refreshToken: newRefreshToken,
     });
 
     return { accessToken, refreshToken: newRefreshToken };
   }
 
-  async logout(accessToken: string | undefined): Promise<UserData | undefined> {
-    if (!accessToken) {
-      throw new UnauthorizedException();
-    }
-
-    const { id } = this.jwtService.verify(accessToken);
-
-    const user = await this.userService.getUser({ id });
+  async logout(userId: string): Promise<UserData | undefined> {
+    const user = await this.userService.getUserById(userId);
 
     if (!user || !user.refreshToken) {
       throw new UnauthorizedException();
     }
 
-    await this.userService.updateUser({
-      where: { id: user.id },
-      data: { refreshToken: null },
-    });
+    await this.userService.updateUser(user.id, { refreshToken: null });
 
     return user;
   }

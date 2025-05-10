@@ -7,7 +7,7 @@ import {
   Res,
   Req,
 } from '@nestjs/common';
-import { Request, Response } from 'express';
+import { Response } from 'express';
 import {
   ApiBearerAuth,
   ApiOperation,
@@ -21,6 +21,7 @@ import { SignInDto } from '../auth/dto/signIn.dto';
 import { TokensResponse } from '../auth/entities/tokensResponse.entity';
 import { RefreshTokenDto } from '../auth/dto/refreshToken.dto';
 import { FeedbackMessage } from '../auth/entities/feedbackMessage.entity';
+import { SignedRequest } from '../../src/auth/types';
 
 @ApiBearerAuth()
 @ApiTags('auth')
@@ -92,12 +93,10 @@ export class AuthController {
     type: FeedbackMessage,
   })
   async logout(
-    @Req() req: Request,
+    @Req() req: SignedRequest,
     @Res() res: Response,
   ): Promise<Response<FeedbackMessage>> {
-    const accessToken = req.headers['authorization']?.split(' ')[1];
-
-    const user = await this.authService.logout(accessToken);
+    const user = await this.authService.logout(req.user.id);
 
     return res.send({
       message: `${user?.email} has been logged out successfully`,
