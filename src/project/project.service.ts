@@ -15,26 +15,32 @@ export class ProjectService {
     });
   }
 
-  findAll(): Promise<Project[]> {
-    return this.prisma.project.findMany();
-  }
-
-  findOne(id: string): Promise<Project | null> {
-    return this.prisma.project.findUnique({
-      where: { id },
+  findAll(userId: string): Promise<Project[]> {
+    return this.prisma.project.findMany({
+      where: { userId },
     });
   }
 
-  update(id: string, updateProjectDto: UpdateProjectDto): Promise<Project> {
+  findOne(id: string, userId: string): Promise<Project | null> {
+    return this.prisma.project.findUnique({
+      where: { id, userId },
+    });
+  }
+
+  update(
+    id: string,
+    updateProjectDto: UpdateProjectDto,
+    userId: string,
+  ): Promise<Project> {
     return this.prisma.project.update({
-      where: { id },
+      where: { id, userId },
       data: updateProjectDto,
     });
   }
 
-  remove(id: string): Promise<Project> {
+  remove(id: string, userId: string): Promise<Project> {
     return this.prisma.project.delete({
-      where: { id },
+      where: { id, userId },
     });
   }
 }

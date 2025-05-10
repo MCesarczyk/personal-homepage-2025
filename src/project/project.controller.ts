@@ -6,11 +6,13 @@ import {
   Patch,
   Param,
   Delete,
+  Req,
 } from '@nestjs/common';
 import { ProjectService } from './project.service';
 import { CreateProjectDto } from './dto/create-project.dto';
 import { UpdateProjectDto } from './dto/update-project.dto';
 import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { SignedResponse } from 'src/auth/types';
 
 @ApiBearerAuth()
 @ApiTags('project')
@@ -36,8 +38,8 @@ export class ProjectController {
     type: [CreateProjectDto],
   })
   @ApiResponse({ status: 401, description: 'Unauthorized.' })
-  findAll() {
-    return this.projectService.findAll();
+  findAll(@Req() request: SignedResponse) {
+    return this.projectService.findAll(request.user.id);
   }
 
   @Get(':id')
@@ -47,8 +49,8 @@ export class ProjectController {
     type: CreateProjectDto,
   })
   @ApiResponse({ status: 401, description: 'Unauthorized.' })
-  findOne(@Param('id') id: string) {
-    return this.projectService.findOne(id);
+  findOne(@Param('id') id: string, @Req() request: SignedResponse) {
+    return this.projectService.findOne(id, request.user.id);
   }
 
   @Patch(':id')
@@ -58,8 +60,12 @@ export class ProjectController {
     type: CreateProjectDto,
   })
   @ApiResponse({ status: 401, description: 'Unauthorized.' })
-  update(@Param('id') id: string, @Body() updateProjectDto: UpdateProjectDto) {
-    return this.projectService.update(id, updateProjectDto);
+  update(
+    @Param('id') id: string,
+    @Body() updateProjectDto: UpdateProjectDto,
+    @Req() request: SignedResponse,
+  ) {
+    return this.projectService.update(id, updateProjectDto, request.user.id);
   }
 
   @Delete(':id')
@@ -69,7 +75,7 @@ export class ProjectController {
     type: CreateProjectDto,
   })
   @ApiResponse({ status: 401, description: 'Unauthorized.' })
-  remove(@Param('id') id: string) {
-    return this.projectService.remove(id);
+  remove(@Param('id') id: string, @Req() request: SignedResponse) {
+    return this.projectService.remove(id, request.user.id);
   }
 }
