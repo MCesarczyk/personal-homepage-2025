@@ -18,10 +18,11 @@ import {
 import { AuthService } from './auth.service';
 import { Public } from '../auth/decorators/public.decorator';
 import { SignInDto } from '../auth/dto/signIn.dto';
-import { TokensResponse } from '../auth/entities/tokensResponse.entity';
 import { RefreshTokenDto } from '../auth/dto/refreshToken.dto';
 import { FeedbackMessage } from '../auth/entities/feedbackMessage.entity';
 import { SignedRequest } from '../../src/auth/types';
+import { LoginResponse } from 'src/auth/entities/loginResponse.entity';
+import { RefreshResponse } from 'src/auth/entities/refreshResponse.entity';
 
 @ApiBearerAuth()
 @ApiTags('auth')
@@ -36,13 +37,13 @@ export class AuthController {
   @ApiResponse({
     status: HttpStatus.OK,
     description: 'Login',
-    type: TokensResponse,
+    type: LoginResponse,
   })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   async login(
     @Res() res: Response,
     @Body() signInDto: SignInDto,
-  ): Promise<Response<TokensResponse>> {
+  ): Promise<Response<LoginResponse>> {
     const { accessToken, refreshToken } =
       await this.authService.login(signInDto);
 
@@ -52,7 +53,7 @@ export class AuthController {
       sameSite: 'strict',
     });
 
-    return res.send({ accessToken });
+    return res.send({ accessToken, refreshToken });
   }
 
   @Public()
@@ -61,7 +62,7 @@ export class AuthController {
   @ApiResponse({
     status: HttpStatus.OK,
     description: 'Refresh',
-    type: TokensResponse,
+    type: RefreshResponse,
   })
   @ApiResponse({
     status: 401,
@@ -70,7 +71,7 @@ export class AuthController {
   async refresh(
     @Res() res: Response,
     @Body() body: RefreshTokenDto,
-  ): Promise<Response<TokensResponse>> {
+  ): Promise<Response<RefreshResponse>> {
     const { accessToken, refreshToken } = await this.authService.refresh(
       body.refreshToken,
     );
