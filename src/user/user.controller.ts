@@ -17,9 +17,9 @@ import {
 import { UserService } from '../user/user.service';
 import { UserData } from './entities/user-data.entity';
 import { SignedRequest } from '../../src/auth/types';
-import { CreateUserDto } from 'src/user/dto/create-user.dto';
-import { Public } from 'src/auth/decorators/public.decorator';
-import { UpdateUserDto } from 'src/user/dto/update-user.dto';
+import { CreateUserDto } from '../user/dto/create-user.dto';
+import { Public } from '../auth/decorators/public.decorator';
+import { UpdateUserDto } from '../user/dto/update-user.dto';
 
 @ApiBearerAuth()
 @ApiTags('user')

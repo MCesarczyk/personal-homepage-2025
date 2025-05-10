@@ -1,12 +1,13 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
-import { User } from 'src/user/entities/user.entity';
+
+import { User } from '../../user/entities/user.entity';
 
 export class CreateUserDto
+  // eslint-disable-next-line
   implements
     Pick<User, 'name' | 'email' | 'password' | 'occupation' | 'introduction'>
 {
-  // eslint-disable-line
   @IsString()
   @IsNotEmpty()
   @ApiProperty({
