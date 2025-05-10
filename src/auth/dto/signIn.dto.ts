@@ -10,7 +10,7 @@ export class SignInDto {
   readonly email: string;
 
   @ApiProperty({
-    example: 'password',
+    example: 'password123',
     required: true,
   })
   @IsString()

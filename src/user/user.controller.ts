@@ -1,4 +1,12 @@
-import { Body, Controller, Get, HttpStatus, Patch, Req } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  HttpStatus,
+  Patch,
+  Post,
+  Req,
+} from '@nestjs/common';
 import {
   ApiBearerAuth,
   ApiOperation,
@@ -9,12 +17,34 @@ import {
 import { UserService } from '../user/user.service';
 import { UserData } from '../user/entities/userData.entity';
 import { SignedRequest } from '../../src/auth/types';
+import { CreateUserDto } from 'src/user/dto/create-user.dto';
+import { Public } from 'src/auth/decorators/public.decorator';
+import { UpdateUserDto } from 'src/user/dto/update-user.dto';
 
 @ApiBearerAuth()
 @ApiTags('user')
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
+
+  @Public()
+  @Post('register')
+  @ApiOperation({ summary: 'Register user' })
+  @ApiResponse({
+    status: HttpStatus.CREATED,
+    description: 'Register user',
+    type: UserData,
+  })
+  async createProfile(
+    @Body() createUserDto: CreateUserDto,
+  ): Promise<UserData | undefined> {
+    const response = await this.userService.createUser(createUserDto);
+    if (!response) {
+      return undefined;
+    }
+    const { id, password, refreshToken, ...user } = response;
+    return user;
+  }
 
   @Get('profile')
   @ApiOperation({ summary: 'Get profile' })
@@ -43,9 +73,12 @@ export class UserController {
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   async updateProfile(
     @Req() req: SignedRequest,
-    @Body() data: UserData,
+    @Body() updateUserDto: UpdateUserDto,
   ): Promise<UserData | undefined> {
-    const response = await this.userService.updateUser(req.user.id, data);
+    const response = await this.userService.updateUser(
+      req.user.id,
+      updateUserDto,
+    );
     if (!response) {
       return undefined;
     }
