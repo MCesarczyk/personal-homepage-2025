@@ -2,7 +2,7 @@ import { Controller, Get } from '@nestjs/common';
 import { HealthCheckService } from './health-check.service';
 import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { Status } from './entities/status.entity';
-import { Public } from 'src/auth/decorators/public.decorator';
+import { Public } from '../../src/auth/decorators/public.decorator';
 
 @Controller({ version: '1', path: 'health' })
 @ApiTags('health')
