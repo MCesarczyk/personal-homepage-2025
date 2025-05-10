@@ -14,12 +14,6 @@ export class UserData {
   email: string;
 
   @ApiProperty({
-    example: 'password123',
-    description: 'The password of the user',
-  })
-  password: string;
-
-  @ApiProperty({
     example: 'Software Engineer',
     description: 'The occupation of the user',
   })

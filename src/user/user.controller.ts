@@ -24,8 +24,13 @@ export class UserController {
     type: UserData,
   })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
-  getProfile(@Req() req: SignedRequest): Promise<UserData | undefined> {
-    return this.userService.getUserById(req.user.id);
+  async getProfile(@Req() req: SignedRequest): Promise<UserData | undefined> {
+    const response = await this.userService.getUserById(req.user.id);
+    if (!response) {
+      return undefined;
+    }
+    const { id, password, refreshToken, ...user } = response;
+    return user;
   }
 
   @Patch('profile')
@@ -36,10 +41,15 @@ export class UserController {
     type: UserData,
   })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
-  updateProfile(
+  async updateProfile(
     @Req() req: SignedRequest,
     @Body() data: UserData,
   ): Promise<UserData | undefined> {
-    return this.userService.updateUser(req.user.id, data);
+    const response = await this.userService.updateUser(req.user.id, data);
+    if (!response) {
+      return undefined;
+    }
+    const { id, password, refreshToken, ...user } = response;
+    return user;
   }
 }
