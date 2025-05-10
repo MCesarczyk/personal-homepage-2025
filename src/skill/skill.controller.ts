@@ -6,6 +6,7 @@ import {
   Patch,
   Param,
   Delete,
+  Req,
 } from '@nestjs/common';
 import {
   ApiBearerAuth,
@@ -18,6 +19,7 @@ import { SkillService } from './skill.service';
 import { CreateSkillDto } from './dto/create-skill.dto';
 import { UpdateSkillDto } from './dto/update-skill.dto';
 import { Skill } from '../skill/entities/skill.entity';
+import { SignedResponse } from 'src/auth/types';
 
 @ApiBearerAuth()
 @ApiTags('skill')
@@ -45,8 +47,8 @@ export class SkillController {
     type: [Skill],
   })
   @ApiResponse({ status: 401, description: 'Unauthorized.' })
-  findAll(): Promise<Skill[]> {
-    return this.skillService.findAll();
+  findAll(@Req() request: SignedResponse): Promise<Skill[]> {
+    return this.skillService.findAll(request.user.id);
   }
 
   @Get(':id')
@@ -57,8 +59,11 @@ export class SkillController {
     type: Skill,
   })
   @ApiResponse({ status: 401, description: 'Unauthorized.' })
-  findOne(@Param('id') id: string): Promise<Skill | null> {
-    return this.skillService.findOne(id);
+  findOne(
+    @Param('id') id: string,
+    @Req() request: SignedResponse,
+  ): Promise<Skill | null> {
+    return this.skillService.findOne(id, request.user.id);
   }
 
   @Patch(':id')
@@ -72,8 +77,9 @@ export class SkillController {
   update(
     @Param('id') id: string,
     @Body() updateSkillDto: UpdateSkillDto,
+    @Req() request: SignedResponse,
   ): Promise<Skill> {
-    return this.skillService.update(id, updateSkillDto);
+    return this.skillService.update(id, updateSkillDto, request.user.id);
   }
 
   @Delete(':id')
@@ -84,7 +90,10 @@ export class SkillController {
     type: Skill,
   })
   @ApiResponse({ status: 401, description: 'Unauthorized.' })
-  remove(@Param('id') id: string): Promise<Skill> {
-    return this.skillService.remove(id);
+  remove(
+    @Param('id') id: string,
+    @Req() request: SignedResponse,
+  ): Promise<Skill> {
+    return this.skillService.remove(id, request.user.id);
   }
 }

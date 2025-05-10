@@ -14,26 +14,32 @@ export class SkillService {
     });
   }
 
-  findAll(): Promise<Skill[]> {
-    return this.prisma.skill.findMany();
-  }
-
-  findOne(id: string): Promise<Skill | null> {
-    return this.prisma.skill.findUnique({
-      where: { id },
+  findAll(userId: string): Promise<Skill[]> {
+    return this.prisma.skill.findMany({
+      where: { userId },
     });
   }
 
-  update(id: string, updateSkillDto: UpdateSkillDto): Promise<Skill> {
+  findOne(id: string, userId: string): Promise<Skill | null> {
+    return this.prisma.skill.findUnique({
+      where: { id, userId },
+    });
+  }
+
+  update(
+    id: string,
+    updateSkillDto: UpdateSkillDto,
+    userId: string,
+  ): Promise<Skill> {
     return this.prisma.skill.update({
-      where: { id },
+      where: { id, userId },
       data: updateSkillDto,
     });
   }
 
-  remove(id: string): Promise<Skill> {
+  remove(id: string, userId: string): Promise<Skill> {
     return this.prisma.skill.delete({
-      where: { id },
+      where: { id, userId },
     });
   }
 }
