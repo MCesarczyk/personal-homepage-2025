@@ -52,18 +52,18 @@ export class UserService {
     userId: string,
     updateUserDto: UpdateUserDto,
   ): Promise<User> {
-    if ('password' in updateUserDto && updateUserDto.password) {
-      const password = await bcrypt.hash(updateUserDto.password, 10);
-
-      return this.prisma.user.update({
-        where: { id: userId },
-        data: { ...updateUserDto, password },
-      });
-    }
-
     return this.prisma.user.update({
       where: { id: userId },
       data: updateUserDto,
+    });
+  }
+
+  async updateUserPassword(userId: string, password: string): Promise<User> {
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    return this.prisma.user.update({
+      where: { id: userId },
+      data: { password: hashedPassword },
     });
   }
 }

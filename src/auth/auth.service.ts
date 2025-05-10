@@ -77,6 +77,24 @@ export class AuthService {
     return { accessToken, refreshToken: newRefreshToken };
   }
 
+  async changePassword(
+    userId: string,
+    password: string,
+  ): Promise<UserData | undefined> {
+    const user = await this.userService.getUserById(userId);
+
+    if (!user) {
+      throw new UnauthorizedException();
+    }
+
+    const updatedUser = await this.userService.updateUserPassword(
+      user.id,
+      password,
+    );
+
+    return updatedUser;
+  }
+
   async logout(userId: string): Promise<UserData | undefined> {
     const user = await this.userService.getUserById(userId);
 

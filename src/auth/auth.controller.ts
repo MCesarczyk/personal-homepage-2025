@@ -20,9 +20,10 @@ import { Public } from '../auth/decorators/public.decorator';
 import { SignInDto } from '../auth/dto/signIn.dto';
 import { RefreshTokenDto } from '../auth/dto/refreshToken.dto';
 import { FeedbackMessage } from '../auth/entities/feedbackMessage.entity';
-import { SignedRequest } from '../../src/auth/types';
-import { LoginResponse } from 'src/auth/entities/loginResponse.entity';
-import { RefreshResponse } from 'src/auth/entities/refreshResponse.entity';
+import { SignedRequest } from '../auth/types';
+import { LoginResponse } from '../auth/entities/loginResponse.entity';
+import { RefreshResponse } from '../auth/entities/refreshResponse.entity';
+import { ChangePasswordDto } from '../auth/dto/changePassword.dto';
 
 @ApiBearerAuth()
 @ApiTags('auth')
@@ -83,6 +84,29 @@ export class AuthController {
     });
 
     return res.send({ accessToken });
+  }
+
+  @Post('password-change')
+  @ApiOperation({ summary: 'Change password' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Change password',
+    type: FeedbackMessage,
+  })
+  async changePassword(
+    @Req() req: SignedRequest,
+    @Body() body: ChangePasswordDto,
+    @Res() res: Response,
+  ): Promise<Response<FeedbackMessage>> {
+    const user = await this.authService.changePassword(
+      req.user.id,
+      body.password,
+    );
+
+    return res.send({
+      message: `${user?.email} password has been updated successfully`,
+    });
   }
 
   @Post('logout')
