@@ -8,11 +8,12 @@ import {
   Delete,
   Req,
 } from '@nestjs/common';
+import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
+
 import { ProjectService } from './project.service';
 import { CreateProjectDto } from './dto/create-project.dto';
 import { UpdateProjectDto } from './dto/update-project.dto';
-import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { SignedResponse } from 'src/auth/types';
+import { SignedRequest } from '../../src/auth/types';
 
 @ApiBearerAuth()
 @ApiTags('project')
@@ -38,7 +39,7 @@ export class ProjectController {
     type: [CreateProjectDto],
   })
   @ApiResponse({ status: 401, description: 'Unauthorized.' })
-  findAll(@Req() request: SignedResponse) {
+  findAll(@Req() request: SignedRequest) {
     return this.projectService.findAll(request.user.id);
   }
 
@@ -49,7 +50,7 @@ export class ProjectController {
     type: CreateProjectDto,
   })
   @ApiResponse({ status: 401, description: 'Unauthorized.' })
-  findOne(@Param('id') id: string, @Req() request: SignedResponse) {
+  findOne(@Param('id') id: string, @Req() request: SignedRequest) {
     return this.projectService.findOne(id, request.user.id);
   }
 
@@ -63,7 +64,7 @@ export class ProjectController {
   update(
     @Param('id') id: string,
     @Body() updateProjectDto: UpdateProjectDto,
-    @Req() request: SignedResponse,
+    @Req() request: SignedRequest,
   ) {
     return this.projectService.update(id, updateProjectDto, request.user.id);
   }
@@ -75,7 +76,7 @@ export class ProjectController {
     type: CreateProjectDto,
   })
   @ApiResponse({ status: 401, description: 'Unauthorized.' })
-  remove(@Param('id') id: string, @Req() request: SignedResponse) {
+  remove(@Param('id') id: string, @Req() request: SignedRequest) {
     return this.projectService.remove(id, request.user.id);
   }
 }

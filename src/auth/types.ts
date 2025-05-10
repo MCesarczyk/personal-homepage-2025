@@ -1,1 +1,1 @@
-export type SignedResponse = Request & { user: { id: string } };
+export type SignedRequest = Request & { user: { id: string } };
