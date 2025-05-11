@@ -8,7 +8,12 @@ import {
   Delete,
   Req,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 
 import { ProjectService } from './project.service';
 import { CreateProjectDto } from './dto/create-project.dto';
@@ -23,6 +28,7 @@ export class ProjectController {
   constructor(private readonly projectService: ProjectService) {}
 
   @Post()
+  @ApiOperation({ summary: 'Create project' })
   @ApiResponse({
     status: 201,
     description: 'The record has been successfully created.',
@@ -37,6 +43,7 @@ export class ProjectController {
   }
 
   @Get()
+  @ApiOperation({ summary: 'Get all projects' })
   @ApiResponse({
     status: 200,
     description: 'The records has been successfully retrieved.',
@@ -48,6 +55,7 @@ export class ProjectController {
   }
 
   @Get(':id')
+  @ApiOperation({ summary: 'Get project by id' })
   @ApiResponse({
     status: 200,
     description: 'The record has been successfully retrieved.',
@@ -59,6 +67,7 @@ export class ProjectController {
   }
 
   @Patch(':id')
+  @ApiOperation({ summary: 'Update project by id' })
   @ApiResponse({
     status: 200,
     description: 'The record has been successfully updated.',
@@ -74,6 +83,7 @@ export class ProjectController {
   }
 
   @Delete(':id')
+  @ApiOperation({ summary: 'Delete project by id' })
   @ApiResponse({
     status: 200,
     description: 'The record has been successfully deleted.',
