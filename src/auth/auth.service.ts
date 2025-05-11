@@ -4,10 +4,10 @@ import { randomUUID } from 'crypto';
 import { compare } from 'bcryptjs';
 
 import { jwtConstants } from '../auth/constants';
-import { LoginResponse } from './entities/login-response.entity';
-import { SignInDto } from './dto/sign-in.dto';
+import { LoginPayloadDto } from './dto/login-payload.dto';
 import { UserService } from '../user/user.service';
-import { UserData } from '../user/entities/user-data.entity';
+import { UserDataDto } from '../user/dto/user-data.dto';
+import { LoginResponseDto } from 'src/auth/dto/login-response.dto';
 
 @Injectable()
 export class AuthService {
@@ -31,7 +31,7 @@ export class AuthService {
     );
   }
 
-  async login(signInDto: SignInDto): Promise<LoginResponse> {
+  async login(signInDto: LoginPayloadDto): Promise<LoginResponseDto> {
     const user = await this.userService.getUserByEmail(signInDto.email);
 
     if (!user) {
@@ -80,7 +80,7 @@ export class AuthService {
   async changePassword(
     userId: string,
     password: string,
-  ): Promise<UserData | undefined> {
+  ): Promise<UserDataDto | undefined> {
     const user = await this.userService.getUserById(userId);
 
     if (!user) {
@@ -95,7 +95,7 @@ export class AuthService {
     return updatedUser;
   }
 
-  async logout(userId: string): Promise<UserData | undefined> {
+  async logout(userId: string): Promise<UserDataDto | undefined> {
     const user = await this.userService.getUserById(userId);
 
     if (!user || !user.refreshToken) {

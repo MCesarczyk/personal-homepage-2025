@@ -17,13 +17,13 @@ import {
 
 import { AuthService } from './auth.service';
 import { Public } from '../auth/decorators/public.decorator';
-import { SignInDto } from './dto/sign-in.dto';
-import { RefreshTokenDto } from './dto/refresh-token.dto';
+import { LoginPayloadDto } from './dto/login-payload.dto';
+import { TokenRefreshResponseDto } from './dto/token-refresh-response.dto';
 import { FeedbackMessage } from './entities/feedback-message.entity';
 import { SignedRequest } from '../auth/types';
-import { LoginResponse } from './entities/login-response.entity';
-import { RefreshResponse } from './entities/refresh-response.entity';
-import { ChangePasswordDto } from './dto/change-password.dto';
+import { ChangePasswordPayloadDto } from './dto/change-password-payload.dto';
+import { LoginResponseDto } from '../auth/dto/login-response.dto';
+import { TokenRefreshPayloadDto } from '../auth/dto/token-refresh-payload.dto';
 
 @ApiBearerAuth()
 @ApiTags('auth')
@@ -38,13 +38,13 @@ export class AuthController {
   @ApiResponse({
     status: HttpStatus.OK,
     description: 'Login',
-    type: LoginResponse,
+    type: LoginResponseDto,
   })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   async login(
     @Res() res: Response,
-    @Body() signInDto: SignInDto,
-  ): Promise<Response<LoginResponse>> {
+    @Body() signInDto: LoginPayloadDto,
+  ): Promise<Response<LoginResponseDto>> {
     const { accessToken, refreshToken } =
       await this.authService.login(signInDto);
 
@@ -63,7 +63,7 @@ export class AuthController {
   @ApiResponse({
     status: HttpStatus.OK,
     description: 'Refresh',
-    type: RefreshResponse,
+    type: TokenRefreshResponseDto,
   })
   @ApiResponse({
     status: 401,
@@ -71,8 +71,8 @@ export class AuthController {
   })
   async refresh(
     @Res() res: Response,
-    @Body() body: RefreshTokenDto,
-  ): Promise<Response<RefreshResponse>> {
+    @Body() body: TokenRefreshPayloadDto,
+  ): Promise<Response<TokenRefreshResponseDto>> {
     const { accessToken, refreshToken } = await this.authService.refresh(
       body.refreshToken,
     );
@@ -96,7 +96,7 @@ export class AuthController {
   })
   async changePassword(
     @Req() req: SignedRequest,
-    @Body() body: ChangePasswordDto,
+    @Body() body: ChangePasswordPayloadDto,
     @Res() res: Response,
   ): Promise<Response<FeedbackMessage>> {
     const user = await this.authService.changePassword(

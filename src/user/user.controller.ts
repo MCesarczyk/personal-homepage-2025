@@ -15,7 +15,7 @@ import {
 } from '@nestjs/swagger';
 
 import { UserService } from '../user/user.service';
-import { UserData } from './entities/user-data.entity';
+import { UserDataDto } from './dto/user-data.dto';
 import { SignedRequest } from '../../src/auth/types';
 import { CreateUserDto } from '../user/dto/create-user.dto';
 import { Public } from '../auth/decorators/public.decorator';
@@ -33,11 +33,11 @@ export class UserController {
   @ApiResponse({
     status: HttpStatus.CREATED,
     description: 'Register user',
-    type: UserData,
+    type: UserDataDto,
   })
   async createProfile(
     @Body() createUserDto: CreateUserDto,
-  ): Promise<UserData | undefined> {
+  ): Promise<UserDataDto | undefined> {
     const response = await this.userService.createUser(createUserDto);
     if (!response) {
       return undefined;
@@ -51,10 +51,12 @@ export class UserController {
   @ApiResponse({
     status: HttpStatus.OK,
     description: 'Get profile',
-    type: UserData,
+    type: UserDataDto,
   })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
-  async getProfile(@Req() req: SignedRequest): Promise<UserData | undefined> {
+  async getProfile(
+    @Req() req: SignedRequest,
+  ): Promise<UserDataDto | undefined> {
     const response = await this.userService.getUserById(req.user.id);
     if (!response) {
       return undefined;
@@ -68,13 +70,13 @@ export class UserController {
   @ApiResponse({
     status: HttpStatus.OK,
     description: 'Update profile',
-    type: UserData,
+    type: UserDataDto,
   })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   async updateProfile(
     @Req() req: SignedRequest,
     @Body() updateUserDto: UpdateUserDto,
-  ): Promise<UserData | undefined> {
+  ): Promise<UserDataDto | undefined> {
     const response = await this.userService.updateUser(
       req.user.id,
       updateUserDto,

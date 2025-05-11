@@ -1,5 +1,6 @@
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { ValidationPipe } from '@nestjs/common';
 import * as cookieParser from 'cookie-parser';
 
 import { AppModule } from './app.module';
@@ -14,6 +15,8 @@ async function bootstrap() {
     credentials: true,
   });
   app.use(cookieParser());
+
+  app.useGlobalPipes(new ValidationPipe({ transform: true }));
 
   const swaggerOptions = new DocumentBuilder()
     .setTitle('Personal Homepage API - development')
