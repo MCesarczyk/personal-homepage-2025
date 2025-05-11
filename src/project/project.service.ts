@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 
 import { CreateProjectDto } from './dto/create-project.dto';
 import { UpdateProjectDto } from './dto/update-project.dto';
@@ -15,35 +15,72 @@ export class ProjectService {
   ): Promise<ProjectDataDto> {
     return this.prisma.project.create({
       data: { ...createProjectDto, userId },
+      omit: {
+        userId: true,
+      },
     });
   }
 
   findAll(userId: string): Promise<ProjectDataDto[]> {
     return this.prisma.project.findMany({
       where: { userId },
+      omit: {
+        userId: true,
+      },
     });
   }
 
-  findOne(id: string, userId: string): Promise<ProjectDataDto | null> {
-    return this.prisma.project.findUnique({
+  async findOne(id: string, userId: string): Promise<ProjectDataDto> {
+    const matchedProject = await this.prisma.project.findUnique({
       where: { id, userId },
+      omit: {
+        userId: true,
+      },
     });
+
+    if (!matchedProject) {
+      throw new NotFoundException('Project not found');
+    }
+
+    return matchedProject;
   }
 
-  update(
+  async update(
     id: string,
     updateProjectDto: UpdateProjectDto,
     userId: string,
   ): Promise<ProjectDataDto> {
-    return this.prisma.project.update({
+    const updatedProject = await this.prisma.project.findUnique({
       where: { id, userId },
+    });
+
+    if (!updatedProject) {
+      throw new NotFoundException('Project not found');
+    }
+
+    return this.prisma.project.update({
+      where: { id: updatedProject.id },
       data: updateProjectDto,
+      omit: {
+        userId: true,
+      },
     });
   }
 
-  remove(id: string, userId: string): Promise<ProjectDataDto> {
-    return this.prisma.project.delete({
+  async remove(id: string, userId: string): Promise<ProjectDataDto> {
+    const deletedProject = await this.prisma.project.findUnique({
       where: { id, userId },
+    });
+
+    if (!deletedProject) {
+      throw new NotFoundException('Project not found');
+    }
+
+    return this.prisma.project.delete({
+      where: { id: deletedProject.id },
+      omit: {
+        userId: true,
+      },
     });
   }
 }
