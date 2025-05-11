@@ -19,7 +19,7 @@ import { SkillService } from './skill.service';
 import { CreateSkillDto } from './dto/create-skill.dto';
 import { UpdateSkillDto } from './dto/update-skill.dto';
 import { SignedRequest } from '../../src/auth/types';
-import { SkillDataDto } from 'src/skill/dto/skill-data.dto';
+import { SkillDataDto } from '../skill/dto/skill-data.dto';
 
 @ApiBearerAuth()
 @ApiTags('skill')

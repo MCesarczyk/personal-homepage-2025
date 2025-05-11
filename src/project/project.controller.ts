@@ -19,7 +19,7 @@ import { ProjectService } from './project.service';
 import { CreateProjectDto } from './dto/create-project.dto';
 import { UpdateProjectDto } from './dto/update-project.dto';
 import { SignedRequest } from '../../src/auth/types';
-import { ProjectDataDto } from 'src/project/dto/project-data.dto';
+import { ProjectDataDto } from '../project/dto/project-data.dto';
 
 @ApiBearerAuth()
 @ApiTags('project')
