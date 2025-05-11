@@ -14,6 +14,7 @@ import { ProjectService } from './project.service';
 import { CreateProjectDto } from './dto/create-project.dto';
 import { UpdateProjectDto } from './dto/update-project.dto';
 import { SignedRequest } from '../../src/auth/types';
+import { ProjectDataDto } from 'src/project/dto/project-data.dto';
 
 @ApiBearerAuth()
 @ApiTags('project')
@@ -25,18 +26,21 @@ export class ProjectController {
   @ApiResponse({
     status: 201,
     description: 'The record has been successfully created.',
-    type: CreateProjectDto,
+    type: ProjectDataDto,
   })
   @ApiResponse({ status: 401, description: 'Unauthorized.' })
-  create(@Body() createProjectDto: CreateProjectDto) {
-    return this.projectService.create(createProjectDto);
+  create(
+    @Req() request: SignedRequest,
+    @Body() createProjectDto: CreateProjectDto,
+  ) {
+    return this.projectService.create(createProjectDto, request.user.id);
   }
 
   @Get()
   @ApiResponse({
     status: 200,
     description: 'The records has been successfully retrieved.',
-    type: [CreateProjectDto],
+    type: [ProjectDataDto],
   })
   @ApiResponse({ status: 401, description: 'Unauthorized.' })
   findAll(@Req() request: SignedRequest) {
@@ -47,7 +51,7 @@ export class ProjectController {
   @ApiResponse({
     status: 200,
     description: 'The record has been successfully retrieved.',
-    type: CreateProjectDto,
+    type: ProjectDataDto,
   })
   @ApiResponse({ status: 401, description: 'Unauthorized.' })
   findOne(@Param('id') id: string, @Req() request: SignedRequest) {
@@ -58,7 +62,7 @@ export class ProjectController {
   @ApiResponse({
     status: 200,
     description: 'The record has been successfully updated.',
-    type: CreateProjectDto,
+    type: ProjectDataDto,
   })
   @ApiResponse({ status: 401, description: 'Unauthorized.' })
   update(
@@ -73,7 +77,7 @@ export class ProjectController {
   @ApiResponse({
     status: 200,
     description: 'The record has been successfully deleted.',
-    type: CreateProjectDto,
+    type: ProjectDataDto,
   })
   @ApiResponse({ status: 401, description: 'Unauthorized.' })
   remove(@Param('id') id: string, @Req() request: SignedRequest) {
