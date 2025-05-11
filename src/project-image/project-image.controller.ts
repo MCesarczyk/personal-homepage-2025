@@ -6,13 +6,20 @@ import {
   Patch,
   Param,
   Delete,
+  Req,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 
 import { ProjectImageService } from './project-image.service';
 import { CreateProjectImageDto } from './dto/create-project-image.dto';
 import { UpdateProjectImageDto } from './dto/update-project-image.dto';
 import { ProjectImage } from './entities/project-image.entity';
+import { SignedRequest } from '../auth/types';
 
 @ApiBearerAuth()
 @ApiTags('project-image')
@@ -21,6 +28,7 @@ export class ProjectImageController {
   constructor(private readonly projectImageService: ProjectImageService) {}
 
   @Post()
+  @ApiOperation({ summary: 'Add image to project' })
   @ApiResponse({
     status: 201,
     description: 'Added image to project.',
@@ -29,11 +37,13 @@ export class ProjectImageController {
   @ApiResponse({ status: 401, description: 'Unauthorized.' })
   create(
     @Body() createProjectImageDto: CreateProjectImageDto,
+    @Req() req: SignedRequest,
   ): Promise<ProjectImage> {
-    return this.projectImageService.create(createProjectImageDto);
+    return this.projectImageService.create(createProjectImageDto, req.user.id);
   }
 
   @Get()
+  @ApiOperation({ summary: 'Get all project images' })
   @ApiResponse({
     status: 200,
     description: 'Retrieved all project images.',
@@ -45,6 +55,7 @@ export class ProjectImageController {
   }
 
   @Get(':id')
+  @ApiOperation({ summary: 'Get project image by ID' })
   @ApiResponse({
     status: 200,
     description: 'Retrieved a project image.',
@@ -56,6 +67,7 @@ export class ProjectImageController {
   }
 
   @Patch(':id')
+  @ApiOperation({ summary: 'Update project image by ID' })
   @ApiResponse({
     status: 200,
     description: 'Updated a project image.',
@@ -70,6 +82,7 @@ export class ProjectImageController {
   }
 
   @Delete(':id')
+  @ApiOperation({ summary: 'Remove project iamge by ID' })
   @ApiResponse({
     status: 200,
     description: 'Removed a project image.',
