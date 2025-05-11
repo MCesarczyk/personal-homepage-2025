@@ -1,15 +1,5 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { OmitType } from '@nestjs/swagger';
 
-export class CreateProjectImageDto {
-  @ApiProperty({
-    example: 'https://example.com/image.png',
-    description: 'The url of the project image',
-  })
-  url: string;
+import { ProjectImage } from '../../project-image/entities/project-image.entity';
 
-  @ApiProperty({
-    example: '9abf6400-1ce4-4fc8-a80a-05c0c2c697d7',
-    description: 'The id of the project',
-  })
-  projectId: string;
-}
+export class CreateProjectImageDto extends OmitType(ProjectImage, ['id']) {}

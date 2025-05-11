@@ -1,39 +1,95 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateSkillDto } from './dto/create-skill.dto';
 import { UpdateSkillDto } from './dto/update-skill.dto';
-import { Skill } from './entities/skill.entity';
 import { PrismaService } from '../prisma.service';
+import { SkillDataDto } from 'src/skill/dto/skill-data.dto';
 
 @Injectable()
 export class SkillService {
   constructor(private prisma: PrismaService) {}
 
-  create(createSkillDto: CreateSkillDto): Promise<Skill> {
+  create(
+    createSkillDto: CreateSkillDto,
+    userId: string,
+  ): Promise<SkillDataDto> {
     return this.prisma.skill.create({
-      data: createSkillDto,
+      data: { ...createSkillDto, userId },
+      select: {
+        id: true,
+        content: true,
+        state: true,
+      },
     });
   }
 
-  findAll(): Promise<Skill[]> {
-    return this.prisma.skill.findMany();
-  }
-
-  findOne(id: string): Promise<Skill | null> {
-    return this.prisma.skill.findUnique({
-      where: { id },
+  findAll(userId: string): Promise<SkillDataDto[]> {
+    return this.prisma.skill.findMany({
+      where: { userId },
+      select: {
+        id: true,
+        content: true,
+        state: true,
+      },
     });
   }
 
-  update(id: string, updateSkillDto: UpdateSkillDto): Promise<Skill> {
+  async findOne(id: string, userId: string): Promise<SkillDataDto | null> {
+    const matchedSkill = await this.prisma.skill.findUnique({
+      where: { id, userId },
+      select: {
+        id: true,
+        content: true,
+        state: true,
+      },
+    });
+
+    if (!matchedSkill) {
+      throw new NotFoundException('Skill not found');
+    }
+
+    return matchedSkill;
+  }
+
+  async update(
+    id: string,
+    updateSkillDto: UpdateSkillDto,
+    userId: string,
+  ): Promise<SkillDataDto> {
+    const updatedSkill = await this.prisma.skill.findUnique({
+      where: { id, userId },
+    });
+
+    if (!updatedSkill) {
+      throw new NotFoundException('Skill not found');
+    }
+
     return this.prisma.skill.update({
-      where: { id },
+      where: { id, userId },
       data: updateSkillDto,
+      select: {
+        id: true,
+        content: true,
+        state: true,
+      },
     });
   }
 
-  remove(id: string): Promise<Skill> {
+  async remove(id: string, userId: string): Promise<SkillDataDto> {
+    const deletedSkill = await this.prisma.skill.findUnique({
+      where: { id, userId },
+    });
+
+    if (!deletedSkill) {
+      throw new NotFoundException('Skill not found');
+    }
+
     return this.prisma.skill.delete({
-      where: { id },
+      where: { id: deletedSkill?.id },
+      select: {
+        id: true,
+        content: true,
+        state: true,
+      },
     });
   }
 }

@@ -1,0 +1,324 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Markmap</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+      }
+      #mindmap {
+        display: block;
+        width: 100vw;
+        height: 100vh;
+      }
+    </style>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/markmap-toolbar@0.18.10/dist/style.css"
+    />
+  </head>
+  <body>
+    <svg id="mindmap"></svg>
+    <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/markmap-view@0.18.10/dist/browser/index.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/markmap-toolbar@0.18.10/dist/index.js"></script>
+    <script>
+      ((r) => {
+        setTimeout(r);
+      })(function renderToolbar() {
+        const { markmap, mm } = window;
+        const { el } = markmap.Toolbar.create(mm);
+        el.setAttribute('style', 'position:absolute;bottom:20px;right:20px');
+        document.body.append(el);
+      });
+    </script>
+    <script>
+      ((getMarkmap, getOptions, root2, jsonOptions) => {
+        const markmap = getMarkmap();
+        window.mm = markmap.Markmap.create(
+          'svg#mindmap',
+          (getOptions || markmap.deriveOptions)(jsonOptions),
+          root2,
+        );
+      })(
+        () => window.markmap,
+        null,
+        {
+          content: 'Auth Flow in MSE',
+          children: [
+            {
+              content: 'Token management',
+              children: [
+                {
+                  content:
+                    'User Login<!-- The client sends credentials (e.g., username/password) to an authentication service. -->',
+                  children: [],
+                  payload: { tag: 'li', lines: '6,8' },
+                },
+                {
+                  content:
+                    'Token Issuance<!-- The authentication service validates credentials and issues a signed JWT containing user identity and claims (roles, permissions, expiry). -->',
+                  children: [],
+                  payload: { tag: 'li', lines: '8,10' },
+                },
+                {
+                  content:
+                    'Token Storing<!-- The client stores the JWT (e.g., in local storage or memory) and includes it in the Authorization header (Bearer <token>) of subsequent API requests. -->',
+                  children: [],
+                  payload: { tag: 'li', lines: '10,12' },
+                },
+                {
+                  content:
+                    'Token Validation<!-- Each microservice or API Gateway validates the JWT signature and expiry independently, without needing to query a centralized session store. -->',
+                  children: [],
+                  payload: { tag: 'li', lines: '12,14' },
+                },
+                {
+                  content:
+                    'Authorization<!-- Services use the claims inside the JWT to enforce access control. -->',
+                  children: [],
+                  payload: { tag: 'li', lines: '14,16' },
+                },
+                {
+                  content: 'Token Expiry &amp; Refresh',
+                  children: [],
+                  payload: { tag: 'li', lines: '16,18' },
+                },
+              ],
+              payload: { tag: 'h2', lines: '2,3' },
+            },
+            {
+              content: 'Common Authentication Methods',
+              children: [
+                {
+                  content: 'JWT (JSON Web Token)',
+                  children: [],
+                  payload: { tag: 'h3', lines: '22,23' },
+                },
+                {
+                  content: 'OAuth 2.0',
+                  children: [],
+                  payload: { tag: 'h3', lines: '28,29' },
+                },
+                {
+                  content: 'API Key',
+                  children: [],
+                  payload: { tag: 'h3', lines: '34,35' },
+                },
+                {
+                  content: 'Basic Authentication',
+                  children: [],
+                  payload: { tag: 'h3', lines: '40,41' },
+                },
+                {
+                  content: 'mTLS (Mutual TLS)',
+                  children: [],
+                  payload: { tag: 'h3', lines: '46,47' },
+                },
+                {
+                  content: 'OpenID Connect',
+                  children: [],
+                  payload: { tag: 'h3', lines: '52,53' },
+                },
+              ],
+              payload: { tag: 'h2', lines: '18,19' },
+            },
+            {
+              content: 'Strategies',
+              children: [
+                {
+                  content: 'Authentication in Each Microservice',
+                  children: [],
+                  payload: { tag: 'h3', lines: '62,63' },
+                },
+                {
+                  content: 'Shared Auth Library',
+                  children: [],
+                  payload: { tag: 'h3', lines: '68,69' },
+                },
+                {
+                  content: 'Dedicated Auth/Authorization Svc',
+                  children: [
+                    {
+                      content: '\n<p data-lines="80,81">With Api gateway</p>',
+                      children: [
+                        {
+                          content: 'API Gateway as entry point',
+                          children: [],
+                          payload: { tag: 'li', lines: '82,83' },
+                        },
+                        {
+                          content: 'Gateway validates tokens',
+                          children: [],
+                          payload: { tag: 'li', lines: '83,84' },
+                        },
+                        {
+                          content:
+                            'Microservices trust requests from the gateway',
+                          children: [],
+                          payload: { tag: 'li', lines: '84,85' },
+                        },
+                        {
+                          content:
+                            'optional lightweight token validation for zero-trust models',
+                          children: [],
+                          payload: { tag: 'li', lines: '85,86' },
+                        },
+                      ],
+                      payload: { tag: 'li', lines: '80,92' },
+                    },
+                    {
+                      content:
+                        '\n<p data-lines="92,93">Direct Authentication</p>',
+                      children: [
+                        {
+                          content:
+                            'Clients send JWT tokens directly to microservices',
+                          children: [],
+                          payload: { tag: 'li', lines: '94,95' },
+                        },
+                        {
+                          content:
+                            'Each microservice independently validates tokens',
+                          children: [],
+                          payload: { tag: 'li', lines: '95,96' },
+                        },
+                        {
+                          content: 'No centralized gateway for authentication',
+                          children: [],
+                          payload: { tag: 'li', lines: '96,97' },
+                        },
+                      ],
+                      payload: { tag: 'li', lines: '92,103' },
+                    },
+                    {
+                      content:
+                        '\n<p data-lines="103,104">Hybrid: API Gateway + Authorization Service</p>\n <!-- Flow: API Gateway handles initial authentication. Microservices call a dedicated Authorization Service for complex permissions.\n Best For: Systems with dynamic or hierarchical authorization needs.\n Usecase: Complex permissions\n Pros: Fine-grained control\n Cons: Latency from auth checks-->',
+                      children: [],
+                      payload: { tag: 'li', lines: '103,110' },
+                    },
+                    {
+                      content:
+                        '\n<p data-lines="110,111">Event-Driven Data Replication</p>\n <!-- Flow: CAS publishes user/permission data to a message broker (e.g., Kafka). Microservices cache this data locally for authorization decisions.\n Best For: High-performance systems needing local authorization.\n Usecase: High-performance systems\n Pros: Local decisions, decoupled\n Cons: Sync complexity, eventual consistency-->',
+                      children: [],
+                      payload: { tag: 'li', lines: '110,117' },
+                    },
+                  ],
+                  payload: { tag: 'h3', lines: '74,75' },
+                },
+                {
+                  content: 'API Gateway Authentication',
+                  children: [
+                    {
+                      content:
+                        'Request Routing<!-- Routes incoming requests to appropriate microservices based on path, headers, or parameters. -->\n<!-- Ensures correct service handles each request, supports load balancing and failover. -->',
+                      children: [],
+                      payload: { tag: 'li', lines: '125,128' },
+                    },
+                    {
+                      content:
+                        'Authentication &amp; Authorization<!-- Validates user identity and access rights before forwarding requests. -->\n<!-- Centralizes security, reduces burden on individual services. -->',
+                      children: [],
+                      payload: { tag: 'li', lines: '128,131' },
+                    },
+                    {
+                      content:
+                        'Rate Limiting &amp; Throttling<!-- Controls the number of requests per client or user to prevent abuse. -->\n<!-- Protects backend services from overload and denial-of-service attacks. -->',
+                      children: [],
+                      payload: { tag: 'li', lines: '131,134' },
+                    },
+                    {
+                      content:
+                        'Protocol Translation<!-- Converts between protocols (e.g., HTTP to gRPC) if needed. -->\n<!-- Enables heterogeneous communication between clients and services. -->',
+                      children: [],
+                      payload: { tag: 'li', lines: '134,137' },
+                    },
+                    {
+                      content:
+                        'Request Aggregation/Composition<!-- Combines multiple service calls into a single response to reduce client requests. -->\n<!-- Improves performance by minimizing round-trips. -->',
+                      children: [],
+                      payload: { tag: 'li', lines: '137,140' },
+                    },
+                    {
+                      content:
+                        'Caching<!-- Caches responses to reduce load on backend services and improve latency. -->\n<!-- Enhances performance and scalability. -->',
+                      children: [],
+                      payload: { tag: 'li', lines: '140,143' },
+                    },
+                    {
+                      content:
+                        'Load Balancing<!-- Distributes requests across multiple instances of a service. -->\n<!-- Improves availability and fault tolerance. -->',
+                      children: [],
+                      payload: { tag: 'li', lines: '143,146' },
+                    },
+                    {
+                      content:
+                        'Monitoring &amp; Logging<!-- Tracks API usage, response times, errors, and health metrics. -->\n<!-- Enables proactive issue detection and performance optimization. -->',
+                      children: [],
+                      payload: { tag: 'li', lines: '146,149' },
+                    },
+                    {
+                      content:
+                        'Security (SSL/TLS Termination)<!-- Manages SSL certificates and encrypts traffic between clients and gateway. -->\n<!-- Ensures secure communication and offloads encryption from backend services. -->',
+                      children: [],
+                      payload: { tag: 'li', lines: '149,152' },
+                    },
+                    {
+                      content:
+                        'API Versioning &amp; Management<!-- Supports multiple API versions and lifecycle management. -->\n<!-- Facilitates backward compatibility and smooth upgrades. -->',
+                      children: [],
+                      payload: { tag: 'li', lines: '152,156' },
+                    },
+                  ],
+                  payload: { tag: 'h3', lines: '117,118' },
+                },
+                {
+                  content: 'Data Replication',
+                  children: [],
+                  payload: { tag: 'h3', lines: '156,157' },
+                },
+              ],
+              payload: { tag: 'h2', lines: '58,59' },
+            },
+            {
+              content: 'Models',
+              children: [
+                {
+                  content:
+                    '\n<p data-lines="165,166">Role-based access control (RBAC)</p>',
+                  children: [],
+                  payload: { tag: 'li', lines: '165,167' },
+                },
+                {
+                  content:
+                    '\n<p data-lines="167,168">Relationship-based access control (ReBAC)</p>',
+                  children: [],
+                  payload: { tag: 'li', lines: '167,169' },
+                },
+                {
+                  content:
+                    '\n<p data-lines="169,170">Attribute-based access control (ABAC)</p>',
+                  children: [],
+                  payload: { tag: 'li', lines: '169,171' },
+                },
+                {
+                  content:
+                    '\n<p data-lines="171,172">Combining RBAC, ReBAC and ABAC</p>',
+                  children: [],
+                  payload: { tag: 'li', lines: '171,172' },
+                },
+              ],
+              payload: { tag: 'h2', lines: '161,162' },
+            },
+          ],
+          payload: { tag: 'h1', lines: '0,1' },
+        },
+        {},
+      );
+    </script>
+  </body>
+</html>

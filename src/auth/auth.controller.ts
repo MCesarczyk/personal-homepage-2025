@@ -7,7 +7,7 @@ import {
   Res,
   Req,
 } from '@nestjs/common';
-import { Request, Response } from 'express';
+import { Response } from 'express';
 import {
   ApiBearerAuth,
   ApiOperation,
@@ -17,10 +17,13 @@ import {
 
 import { AuthService } from './auth.service';
 import { Public } from '../auth/decorators/public.decorator';
-import { SignInDto } from '../auth/dto/signIn.dto';
-import { TokensResponse } from '../auth/entities/tokensResponse.entity';
-import { RefreshTokenDto } from '../auth/dto/refreshToken.dto';
-import { FeedbackMessage } from '../auth/entities/feedbackMessage.entity';
+import { LoginPayloadDto } from './dto/login-payload.dto';
+import { TokenRefreshResponseDto } from './dto/token-refresh-response.dto';
+import { FeedbackMessage } from './entities/feedback-message.entity';
+import { SignedRequest } from '../auth/types';
+import { ChangePasswordPayloadDto } from './dto/change-password-payload.dto';
+import { LoginResponseDto } from '../auth/dto/login-response.dto';
+import { TokenRefreshPayloadDto } from '../auth/dto/token-refresh-payload.dto';
 
 @ApiBearerAuth()
 @ApiTags('auth')
@@ -35,13 +38,13 @@ export class AuthController {
   @ApiResponse({
     status: HttpStatus.OK,
     description: 'Login',
-    type: TokensResponse,
+    type: LoginResponseDto,
   })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   async login(
     @Res() res: Response,
-    @Body() signInDto: SignInDto,
-  ): Promise<Response<TokensResponse>> {
+    @Body() signInDto: LoginPayloadDto,
+  ): Promise<Response<LoginResponseDto>> {
     const { accessToken, refreshToken } =
       await this.authService.login(signInDto);
 
@@ -51,7 +54,7 @@ export class AuthController {
       sameSite: 'strict',
     });
 
-    return res.send({ accessToken });
+    return res.send({ accessToken, refreshToken });
   }
 
   @Public()
@@ -60,7 +63,7 @@ export class AuthController {
   @ApiResponse({
     status: HttpStatus.OK,
     description: 'Refresh',
-    type: TokensResponse,
+    type: TokenRefreshResponseDto,
   })
   @ApiResponse({
     status: 401,
@@ -68,8 +71,8 @@ export class AuthController {
   })
   async refresh(
     @Res() res: Response,
-    @Body() body: RefreshTokenDto,
-  ): Promise<Response<TokensResponse>> {
+    @Body() body: TokenRefreshPayloadDto,
+  ): Promise<Response<TokenRefreshResponseDto>> {
     const { accessToken, refreshToken } = await this.authService.refresh(
       body.refreshToken,
     );
@@ -83,6 +86,29 @@ export class AuthController {
     return res.send({ accessToken });
   }
 
+  @Post('password-change')
+  @ApiOperation({ summary: 'Change password' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Change password',
+    type: FeedbackMessage,
+  })
+  async changePassword(
+    @Req() req: SignedRequest,
+    @Body() body: ChangePasswordPayloadDto,
+    @Res() res: Response,
+  ): Promise<Response<FeedbackMessage>> {
+    const user = await this.authService.changePassword(
+      req.user.id,
+      body.password,
+    );
+
+    return res.send({
+      message: `${user?.email} password has been updated successfully`,
+    });
+  }
+
   @Post('logout')
   @ApiOperation({ summary: 'Logout' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
@@ -92,12 +118,10 @@ export class AuthController {
     type: FeedbackMessage,
   })
   async logout(
-    @Req() req: Request,
+    @Req() req: SignedRequest,
     @Res() res: Response,
   ): Promise<Response<FeedbackMessage>> {
-    const accessToken = req.headers['authorization']?.split(' ')[1];
-
-    const user = await this.authService.logout(accessToken);
+    const user = await this.authService.logout(req.user.id);
 
     return res.send({
       message: `${user?.email} has been logged out successfully`,

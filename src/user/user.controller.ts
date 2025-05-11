@@ -1,14 +1,25 @@
-import { Body, Controller, Get, HttpStatus, Patch, Req } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  HttpStatus,
+  Patch,
+  Post,
+  Req,
+} from '@nestjs/common';
 import {
   ApiBearerAuth,
   ApiOperation,
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
-import { Request } from 'express';
 
 import { UserService } from '../user/user.service';
-import { UserData } from '../user/entities/userData.entity';
+import { UserDataDto } from './dto/user-data.dto';
+import { SignedRequest } from '../../src/auth/types';
+import { CreateUserDto } from '../user/dto/create-user.dto';
+import { Public } from '../auth/decorators/public.decorator';
+import { UpdateUserDto } from '../user/dto/update-user.dto';
 
 @ApiBearerAuth()
 @ApiTags('user')
@@ -16,18 +27,42 @@ import { UserData } from '../user/entities/userData.entity';
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
+  @Public()
+  @Post('register')
+  @ApiOperation({ summary: 'Register user' })
+  @ApiResponse({
+    status: HttpStatus.CREATED,
+    description: 'Register user',
+    type: UserDataDto,
+  })
+  async createProfile(
+    @Body() createUserDto: CreateUserDto,
+  ): Promise<UserDataDto | undefined> {
+    const response = await this.userService.createUser(createUserDto);
+    if (!response) {
+      return undefined;
+    }
+    const { id, password, refreshToken, ...user } = response;
+    return user;
+  }
+
   @Get('profile')
   @ApiOperation({ summary: 'Get profile' })
   @ApiResponse({
     status: HttpStatus.OK,
     description: 'Get profile',
-    type: UserData,
+    type: UserDataDto,
   })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
-  getProfile(@Req() req: Request): Promise<UserData | undefined> {
-    return this.userService.getProfile(
-      req.headers['authorization']?.split(' ')[1],
-    );
+  async getProfile(
+    @Req() req: SignedRequest,
+  ): Promise<UserDataDto | undefined> {
+    const response = await this.userService.getUserById(req.user.id);
+    if (!response) {
+      return undefined;
+    }
+    const { id, password, refreshToken, ...user } = response;
+    return user;
   }
 
   @Patch('profile')
@@ -35,16 +70,21 @@ export class UserController {
   @ApiResponse({
     status: HttpStatus.OK,
     description: 'Update profile',
-    type: UserData,
+    type: UserDataDto,
   })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
-  updateProfile(
-    @Req() req: Request,
-    @Body() data: UserData,
-  ): Promise<UserData | undefined> {
-    return this.userService.updateProfile(
-      req.headers['authorization']?.split(' ')[1],
-      data,
+  async updateProfile(
+    @Req() req: SignedRequest,
+    @Body() updateUserDto: UpdateUserDto,
+  ): Promise<UserDataDto | undefined> {
+    const response = await this.userService.updateUser(
+      req.user.id,
+      updateUserDto,
     );
+    if (!response) {
+      return undefined;
+    }
+    const { id, password, refreshToken, ...user } = response;
+    return user;
   }
 }

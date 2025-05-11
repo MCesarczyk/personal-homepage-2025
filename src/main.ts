@@ -1,7 +1,9 @@
 import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { ValidationPipe } from '@nestjs/common';
 import * as cookieParser from 'cookie-parser';
+
+import { AppModule } from './app.module';
 
 const port = process.env.PORT || 5000;
 
@@ -13,6 +15,8 @@ async function bootstrap() {
     credentials: true,
   });
   app.use(cookieParser());
+
+  app.useGlobalPipes(new ValidationPipe({ transform: true }));
 
   const swaggerOptions = new DocumentBuilder()
     .setTitle('Personal Homepage API - development')
@@ -27,6 +31,8 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, swaggerOptions);
   SwaggerModule.setup('docs', app, document);
 
-  await app.listen(port, '0.0.0.0');
+  await app.listen(port, '0.0.0.0', () => {
+    console.log(`API listening on port ${port} 🚀`);
+  });
 }
 bootstrap();
