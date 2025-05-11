@@ -15,7 +15,7 @@ export class Skill {
   content: string;
 
   @ApiProperty({
-    example: 'PLANNED',
+    example: 'PLANNED | RUNNING | COMPLETED',
     required: true,
   })
   state: SkillState;

@@ -1,4 +1,4 @@
 import { OmitType } from '@nestjs/swagger';
 import { Skill } from 'src/skill/entities/skill.entity';
 
-export class CreateSkillDto extends OmitType(Skill, ['id', 'userId']) {}
+export class SkillDataDto extends OmitType(Skill, ['userId']) {}

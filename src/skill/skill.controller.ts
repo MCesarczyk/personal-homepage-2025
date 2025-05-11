@@ -18,8 +18,8 @@ import {
 import { SkillService } from './skill.service';
 import { CreateSkillDto } from './dto/create-skill.dto';
 import { UpdateSkillDto } from './dto/update-skill.dto';
-import { Skill } from '../skill/entities/skill.entity';
 import { SignedRequest } from '../../src/auth/types';
+import { SkillDataDto } from 'src/skill/dto/skill-data.dto';
 
 @ApiBearerAuth()
 @ApiTags('skill')
@@ -32,11 +32,14 @@ export class SkillController {
   @ApiResponse({
     status: 201,
     description: 'The skill has been successfully created.',
-    type: Skill,
+    type: SkillDataDto,
   })
   @ApiResponse({ status: 401, description: 'Unauthorized.' })
-  create(@Body() createSkillDto: CreateSkillDto): Promise<Skill> {
-    return this.skillService.create(createSkillDto);
+  create(
+    @Req() request: SignedRequest,
+    @Body() createSkillDto: CreateSkillDto,
+  ): Promise<SkillDataDto> {
+    return this.skillService.create(createSkillDto, request.user.id);
   }
 
   @Get()
@@ -44,10 +47,10 @@ export class SkillController {
   @ApiResponse({
     status: 200,
     description: 'Return all skills.',
-    type: [Skill],
+    type: [SkillDataDto],
   })
   @ApiResponse({ status: 401, description: 'Unauthorized.' })
-  findAll(@Req() request: SignedRequest): Promise<Skill[]> {
+  findAll(@Req() request: SignedRequest): Promise<SkillDataDto[]> {
     return this.skillService.findAll(request.user.id);
   }
 
@@ -56,13 +59,13 @@ export class SkillController {
   @ApiResponse({
     status: 200,
     description: 'Return skill by id.',
-    type: Skill,
+    type: SkillDataDto,
   })
   @ApiResponse({ status: 401, description: 'Unauthorized.' })
   findOne(
     @Param('id') id: string,
     @Req() request: SignedRequest,
-  ): Promise<Skill | null> {
+  ): Promise<SkillDataDto | null> {
     return this.skillService.findOne(id, request.user.id);
   }
 
@@ -71,14 +74,14 @@ export class SkillController {
   @ApiResponse({
     status: 200,
     description: 'Return skill updated.',
-    type: Skill,
+    type: SkillDataDto,
   })
   @ApiResponse({ status: 401, description: 'Unauthorized.' })
   update(
     @Param('id') id: string,
     @Body() updateSkillDto: UpdateSkillDto,
     @Req() request: SignedRequest,
-  ): Promise<Skill> {
+  ): Promise<SkillDataDto> {
     return this.skillService.update(id, updateSkillDto, request.user.id);
   }
 
@@ -87,13 +90,13 @@ export class SkillController {
   @ApiResponse({
     status: 200,
     description: 'Return skill deleted.',
-    type: Skill,
+    type: SkillDataDto,
   })
   @ApiResponse({ status: 401, description: 'Unauthorized.' })
   remove(
     @Param('id') id: string,
     @Req() request: SignedRequest,
-  ): Promise<Skill> {
+  ): Promise<SkillDataDto> {
     return this.skillService.remove(id, request.user.id);
   }
 }
