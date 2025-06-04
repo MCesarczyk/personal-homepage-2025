@@ -11,8 +11,13 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.setGlobalPrefix('api/v1', { exclude: ['/'] });
   app.enableCors({
-    origin: '*',
+    origin: [
+      process.env.FRONTEND_URL || 'http://localhost:3000',
+      process.env.ADMIN_URL || 'http://localhost:4200',
+    ],
     credentials: true,
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+    allowedHeaders: 'Content-Type,Authorization',
   });
   app.use(cookieParser());
 
@@ -24,7 +29,7 @@ async function bootstrap() {
       `Backend for Personal Homepage website. Available on: ${process.env.PUBLIC_URL}. This API is used to manage the content of the homepage.`,
     )
     .setVersion('1.0')
-    .addServer(`${process.env.PUBLIC_URL}`, 'Development')
+    .addServer(`${process.env.PUBLIC_URL}`)
     .addBearerAuth()
     .build();
 
