@@ -32,29 +32,11 @@ jobs:
           #   type=sha
           #   type=raw,value=latest
 
-      # - name: Extract Docker image metadata
-      #   id: meta
-      #   uses: docker/metadata-action@v5
-      #   with:
-      #     images: ${{ secrets.DOCKERHUB_USERNAME }}/ph-24-backend
-      #     tags: |
-      #       type=sha
-
       - name: Log in to Docker Hub
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-
-      # - name: Build and push Docker image
-      #   uses: docker/build-push-action@v6
-      #   with:
-      #     # push: ${{ github.event_name != 'pull_request' }}
-      #     push: true
-      #     tags: ${{ steps.meta.outputs.tags }}
-      #     annotations: ${{ steps.meta.outputs.annotations }}
-      #     provenance: true
-      #     sbom: true
 
       - name: Log in to the Container registry
         # uses: docker/login-action@65b78e6e13532edd9afa3aa52ac7964289d1a9c1
@@ -76,16 +58,16 @@ jobs:
         with:
           context: .
           push: true
+          # push: ${{ github.event_name != 'pull_request' }}
           tags: |
             ${{ env.DOCKERHUB_IMAGE }}:latest
             ${{ env.DOCKERHUB_IMAGE }}:${{ github.sha }}
             ${{ env.GHCR_IMAGE }}:latest
             ${{ env.GHCR_IMAGE }}:${{ github.sha }}
-          # ${{ env.DOCKERHUB_IMAGE }}
-          # ${{ env.GHCR_IMAGE }}
-          tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           annotations: ${{ steps.meta.outputs.annotations }}
+          provenance: true
+          sbom: true
 
       - name: Generate artifact attestation
         uses: actions/attest-build-provenance@v2
