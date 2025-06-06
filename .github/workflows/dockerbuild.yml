@@ -7,8 +7,6 @@ on:
   pull_request:
 
 env:
-  # REGISTRY: ghcr.io
-  # IMAGE_NAME: ${{ github.repository }}
   DOCKERHUB_IMAGE: ${{ secrets.DOCKERHUB_USERNAME }}/ph-24-backend
   GHCR_IMAGE: ghcr.io/mcesarczyk/personal-homepage-2024-backend
 
@@ -24,11 +22,15 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      # - name: Extract metadata (tags, labels) for Docker
-      #   id: meta
-      #   uses: docker/metadata-action@9ec57ed1fcdbf14dcef7dfbe97b2010124a938b7
-      # with:
-      #   images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        # uses: docker/metadata-action@9ec57ed1fcdbf14dcef7dfbe97b2010124a938b7
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          tags: |
+            type=sha
+            type=raw,value=latest
 
       # - name: Extract Docker image metadata
       #   id: meta
@@ -75,10 +77,12 @@ jobs:
           context: .
           push: true
           tags: |
-            ${{ env.DOCKERHUB_IMAGE }}:latest
-            ${{ env.DOCKERHUB_IMAGE }}:${{ github.sha }}
-            ${{ env.GHCR_IMAGE }}:latest
-            ${{ env.GHCR_IMAGE }}:${{ github.sha }}
+            ${{ env.DOCKERHUB_IMAGE }}
+            ${{ env.GHCR_IMAGE }}
+          #   ${{ env.DOCKERHUB_IMAGE }}:latest
+          #   ${{ env.DOCKERHUB_IMAGE }}:${{ github.sha }}
+          #   ${{ env.GHCR_IMAGE }}:latest
+          #   ${{ env.GHCR_IMAGE }}:${{ github.sha }}
           # tags: ${{ steps.meta.outputs.tags }}
           # labels: ${{ steps.meta.outputs.labels }}
           # annotations: ${{ steps.meta.outputs.annotations }}
