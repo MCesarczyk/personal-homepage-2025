@@ -17,6 +17,7 @@ jobs:
       contents: read
       packages: write
       id-token: write
+      attestation: write
 
     steps:
       - name: Checkout
@@ -65,7 +66,7 @@ jobs:
             ${{ env.GHCR_IMAGE }}:latest
             ${{ env.GHCR_IMAGE }}:${{ github.sha }}
           labels: ${{ steps.meta.outputs.labels }}
-          annotations: ${{ steps.meta.outputs.annotations }}
+          # annotations: ${{ steps.meta.outputs.annotations }}
           provenance: true
           sbom: true
 
