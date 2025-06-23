@@ -16,14 +16,14 @@ import {
 } from '@nestjs/swagger';
 
 import { AuthService } from './auth.service';
-import { Public } from '../auth/decorators/public.decorator';
+import { Public } from './decorators/public.decorator';
 import { LoginPayloadDto } from './dto/login-payload.dto';
 import { TokenRefreshResponseDto } from './dto/token-refresh-response.dto';
 import { FeedbackMessage } from './entities/feedback-message.entity';
-import { SignedRequest } from '../auth/types';
+import { SignedRequest } from './types';
 import { ChangePasswordPayloadDto } from './dto/change-password-payload.dto';
-import { LoginResponseDto } from '../auth/dto/login-response.dto';
-import { TokenRefreshPayloadDto } from '../auth/dto/token-refresh-payload.dto';
+import { LoginResponseDto } from './dto/login-response.dto';
+import { TokenRefreshPayloadDto } from './dto/token-refresh-payload.dto';
 
 @ApiBearerAuth()
 @ApiTags('auth')

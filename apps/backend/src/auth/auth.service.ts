@@ -3,7 +3,7 @@ import { JwtService } from '@nestjs/jwt';
 import { randomUUID } from 'crypto';
 import { compare } from 'bcryptjs';
 
-import { jwtConstants } from '../auth/constants';
+import { jwtConstants } from './constants';
 import { LoginPayloadDto } from './dto/login-payload.dto';
 import { UserService } from '../user/user.service';
 import { UserDataDto } from '../user/dto/user-data.dto';

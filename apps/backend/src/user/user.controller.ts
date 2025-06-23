@@ -14,12 +14,12 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 
-import { UserService } from '../user/user.service';
+import { UserService } from './user.service';
 import { UserDataDto } from './dto/user-data.dto';
-import { SignedRequest } from '../../src/auth/types';
-import { CreateUserDto } from '../user/dto/create-user.dto';
+import { SignedRequest } from '../auth/types';
+import { CreateUserDto } from './dto/create-user.dto';
 import { Public } from '../auth/decorators/public.decorator';
-import { UpdateUserDto } from '../user/dto/update-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
 
 @ApiBearerAuth()
 @ApiTags('user')
