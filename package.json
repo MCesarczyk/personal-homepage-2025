@@ -9,7 +9,8 @@
     "prepare": "husky",
     "db:prepare": "concurrently \"pnpm --filter backend db:prepare\"",
     "install": "cd apps/backend && pnpm install",
-    "dev": "concurrently \"pnpm --filter backend start:dev\""
+    "dev": "concurrently \"pnpm --filter backend start:dev\"",
+    "build": "concurrently \"pnpm --filter backend build\""
   },
   "keywords": [],
   "author": "Michał Cesarczyk",

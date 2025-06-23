@@ -1,8 +1,4 @@
-###################
-# BUILD FOR LOCAL DEVELOPMENT
-###################
-
-FROM node:23.11.0-bullseye AS development
+FROM node:23.11.1-bullseye AS base
 RUN npm install -g npm && npm install --g pnpm
 
 WORKDIR /usr/src/app
@@ -28,9 +24,32 @@ RUN chown -R node:node /usr/src/app
 
 USER node
 
-COPY --chown=node:node startup.sh ./startup.sh
-RUN chmod +x ./startup.sh
+COPY --chown=node:node prepare-db.sh ./prepare-db.sh
+RUN chmod +x ./prepare-db.sh
+
+RUN [ "./prepare-db.sh" ]
+
+FROM node:23.11.0-bullseye AS builder
+RUN npm install -g pnpm
+
+WORKDIR /usr/src/app
+
+COPY --from=base /usr/src/app/node_modules ./node_modules
+COPY --from=base /usr/src/app/prisma ./prisma
+COPY . .
+
+RUN pnpm build
+
+ENV NODE_ENV=production
+RUN pnpm install --offline
+
+FROM node:23.11.0-alpine3.21 AS runner
+
+COPY --chown=node:node --from=builder /usr/src/app/node_modules ./node_modules
+COPY --chown=node:node --from=builder /usr/src/app/dist ./dist
+
+USER node
 
 EXPOSE 5000
 
-CMD [ "./startup.sh", "pnpm", "start" ]
+CMD [ "node", "dist/src/main.js" ]
