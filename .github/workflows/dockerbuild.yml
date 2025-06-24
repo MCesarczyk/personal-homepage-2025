@@ -29,8 +29,9 @@ jobs:
         uses: AlexShukel/get-changed-workspaces-action@v2.0.0
 
   build_on_merge:
-    # if: github.event.pull_request.merged == true
     needs: [get-changed]
+    if: ${{ !fromJson(needs.get-changed.outputs.empty) }}
+    # if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     strategy:
       matrix:
