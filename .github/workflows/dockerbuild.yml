@@ -36,6 +36,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       matrix: ${{ steps.set-matrix.outputs.matrix }}
+      has_matrix: ${{ steps.set-matrix.outputs.has_matrix }}
     steps:
       - uses: actions/checkout@v4
       - name: Generate build matrix
@@ -63,10 +64,14 @@ jobs:
           # Format as valid JSON matrix
           matrix_json="{\"include\":[$(IFS=,; echo "${matrix_include[*]}")]}"
           echo "matrix=$matrix_json" >> $GITHUB_OUTPUT
+      - name: Debug matrix output
+        run: |
+          echo "Matrix JSON: ${{ steps.set-matrix.outputs.matrix }}"
+          echo "Has matrix: ${{ steps.set-matrix.outputs.has_matrix }}"
 
   build_on_merge:
     needs: [get-changed, prepare-matrix]
-    if: ${{ !fromJson(needs.get-changed.outputs.empty) }}
+    if: ${{ !fromJson(needs.get-changed.outputs.empty) || needs.prepare-matrix.outputs.has_matrix == 'true' }}
     # if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     strategy:
