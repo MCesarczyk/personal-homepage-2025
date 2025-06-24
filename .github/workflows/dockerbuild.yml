@@ -71,7 +71,7 @@ jobs:
 
   build_on_merge:
     needs: [get-changed, prepare-matrix]
-    if: ${{ !fromJson(needs.get-changed.outputs.empty) || needs.prepare-matrix.outputs.has_matrix == 'true' }}
+    if: ${{ !fromJson(needs.get-changed.outputs.empty) && needs.prepare-matrix.outputs.has_matrix == 'true' }}
     # if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     strategy:
