@@ -31,57 +31,14 @@ jobs:
           workspaces: |
             apps/*
 
-  prepare-matrix:
-    needs: get-changed
-    runs-on: ubuntu-latest
-    outputs:
-      matrix: ${{ steps.set-matrix.outputs.matrix }}
-    steps:
-      - uses: actions/checkout@v4
-      - name: Generate build matrix
-        id: set-matrix
-        env:
-          CHANGED_PACKAGES: ${{ needs.get-changed.outputs.packages }}
-        run: |
-          # Parse JSON array safely
-          matrix_include=()
-
-          # Get repository root path
-          REPO_ROOT="$GITHUB_WORKSPACE"
-
-          while IFS= read -r pkg; do
-            pkg_path=$(echo "$pkg" | jq -r '.path')
-            pkg_name=$(echo "$pkg" | jq -r '.name')
-
-            # Convert absolute path to relative path
-            relative_path="${pkg_path#$REPO_ROOT/}"
-
-            # Always include main image
-            matrix_include+=("{\"package_path\":\"$relative_path\",\"package_name\":\"$pkg_name\",\"dockerfile\":\"Dockerfile\",\"image_tag\":\"ghcr.io/MCesarczyk/$pkg_name\"}")
-
-            # Conditionally include migrator
-            if [ -f "$relative_path/Dockerfile.migrator" ]; then
-              matrix_include+=("{\"package_path\":\"$relative_path\",\"package_name\":\"$pkg_name\",\"dockerfile\":\"Dockerfile.migrator\",\"image_tag\":\"ghcr.io/MCesarczyk/$pkg_name-migrator\"}")
-            fi
-          done < <(echo "$CHANGED_PACKAGES" | jq -c '.[]')
-
-          # Format as valid JSON matrix
-          if [ ${#matrix_include[@]} -gt 0 ]; then
-            matrix_json="{\"include\":[$(IFS=,; echo "${matrix_include[*]}")]}"
-            echo "matrix=$matrix_json" >> $GITHUB_OUTPUT
-            echo "has_matrix=true" >> $GITHUB_OUTPUT
-          else
-            echo "matrix={\"include\":[]}" >> $GITHUB_OUTPUT
-            echo "has_matrix=false" >> $GITHUB_OUTPUT
-          fi
-
   build_on_merge:
-    needs: [get-changed, prepare-matrix]
-    if: ${{ !fromJson(needs.get-changed.outputs.empty) && needs.prepare-matrix.outputs.has_matrix == 'true' }}
+    needs: [get-changed]
+    if: ${{ !fromJson(needs.get-changed.outputs.empty) }}
     # if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     strategy:
-      matrix: ${{ fromJson(needs.prepare-matrix.outputs.matrix) }}
+      matrix:
+        package: ${{ fromJson(needs.get-changed.outputs.packages) }}
     permissions:
       contents: read
       packages: write
@@ -96,7 +53,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: ${{ env.REGISTRY }}/${{ matrix.image_tag }}
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}-${{ matrix.package.name }}
 
       - name: Log in to Docker Hub
         uses: docker/login-action@v3
@@ -116,25 +73,48 @@ jobs:
         with:
           driver-opts: "image=moby/buildkit:v0.11.6"
 
-      - name: Build and push Docker image
+      - name: Build and push Main Docker image
         id: push
         uses: docker/build-push-action@v4
         with:
-          context: ${{ matrix.package_path }}
-          file: ${{ matrix.package_path }}/${{ matrix.dockerfile }}
+          context: ./apps/${{ matrix.package.name }}
+          file: ./apps/${{ matrix.package.name }}/Dockerfile
           push: true
           tags: |
-            ${{ matrix.image_tag }}:latest
-            ${{ matrix.image_tag }}:${{ github.sha }}
-            ${{ env.REGISTRY }}/${{ matrix.image_tag }}:latest
-            ${{ env.REGISTRY }}/${{ matrix.image_tag }}:${{ github.sha }}
+            ${{ env.DOCKERHUB_IMAGE }}-${{ matrix.package.name }}:latest
+            ${{ env.DOCKERHUB_IMAGE }}-${{ matrix.package.name }}:${{ github.sha }}
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}-${{ matrix.package.name }}:latest
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}-${{ matrix.package.name }}:${{ github.sha }}
           labels: ${{ steps.meta.outputs.labels }}
           provenance: true
           sbom: true
 
-      - name: Generate artifact attestation
+      - name: Generate base artifact attestation
         uses: actions/attest-build-provenance@v2
         with:
-          subject-name: ${{ env.REGISTRY }}/${{ matrix.image_tag }}
+          subject-name: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}-${{ matrix.package.name }}
+          subject-digest: ${{ steps.push.outputs.digest }}
+          push-to-registry: true
+
+      - name: Build and push Migrator Docker image
+        id: push
+        uses: docker/build-push-action@v4
+        with:
+          context: ./apps/${{ matrix.package.name }}
+          file: ./apps/${{ matrix.package.name }}/Dockerfile.migrator
+          push: true
+          tags: |
+            ${{ env.DOCKERHUB_IMAGE }}-${{ matrix.package.name }}-migrator:latest
+            ${{ env.DOCKERHUB_IMAGE }}-${{ matrix.package.name }}-migrator:${{ github.sha }}
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}-${{ matrix.package.name }}-migrator:latest
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}-${{ matrix.package.name }}-migrator:${{ github.sha }}
+          labels: ${{ steps.meta.outputs.labels }}
+          provenance: true
+          sbom: true
+
+      - name: Generate migrator artifact attestation
+        uses: actions/attest-build-provenance@v2
+        with:
+          subject-name: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}-${{ matrix.package.name }}-migrator
           subject-digest: ${{ steps.push.outputs.digest }}
           push-to-registry: true
