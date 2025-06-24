@@ -96,7 +96,17 @@ jobs:
           subject-digest: ${{ steps.push.outputs.digest }}
           push-to-registry: true
 
+      - name: Check for Dockerfile.migrator
+        id: check-migrator
+        run: |
+          if [ -f "./apps/${{ matrix.package.name }}/Dockerfile.migrator" ]; then
+            echo "migrator_exists=true" >> $GITHUB_OUTPUT
+          else
+            echo "migrator_exists=false" >> $GITHUB_OUTPUT
+          fi
+
       - name: Build and push Migrator Docker image
+        if: ${{ steps.check-migrator.outputs.migrator_exists == 'true' }}
         id: push-migrator
         uses: docker/build-push-action@v4
         with:
@@ -113,6 +123,7 @@ jobs:
           sbom: true
 
       - name: Generate migrator artifact attestation
+        if: ${{ steps.check-migrator.outputs.migrator_exists == 'true' && steps.push-migrator.conclusion == 'success' }}
         uses: actions/attest-build-provenance@v2
         with:
           subject-name: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}-${{ matrix.package.name }}-migrator
