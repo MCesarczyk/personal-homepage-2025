@@ -97,7 +97,7 @@ jobs:
           push-to-registry: true
 
       - name: Build and push Migrator Docker image
-        id: push
+        id: push-migrator
         uses: docker/build-push-action@v4
         with:
           context: ./apps/${{ matrix.package.name }}
