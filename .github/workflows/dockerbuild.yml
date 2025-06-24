@@ -85,7 +85,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}-${{ matrix.package.name }}
+          images: ${{ env.REGISTRY }}/${{ matrix.image_tag }}
 
       - name: Log in to Docker Hub
         uses: docker/login-action@v3
@@ -109,14 +109,14 @@ jobs:
         id: push
         uses: docker/build-push-action@v4
         with:
-          context: ./apps/${{ matrix.package.name }}
-          file: ./apps/${{ matrix.package.name }}/Dockerfile
+          context: ${{ matrix.package_path }}
+          file: ${{ matrix.package_path }}/${{ matrix.dockerfile }}
           push: true
           tags: |
-            ${{ env.DOCKERHUB_IMAGE }}-${{ matrix.package.name }}:latest
-            ${{ env.DOCKERHUB_IMAGE }}-${{ matrix.package.name }}:${{ github.sha }}
-            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}-${{ matrix.package.name }}:latest
-            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}-${{ matrix.package.name }}:${{ github.sha }}
+            ${{ matrix.image_tag }}:latest
+            ${{ matrix.image_tag }}:${{ github.sha }}
+            ${{ env.REGISTRY }}/${{ matrix.image_tag }}:latest
+            ${{ env.REGISTRY }}/${{ matrix.image_tag }}:${{ github.sha }}
           labels: ${{ steps.meta.outputs.labels }}
           provenance: true
           sbom: true
@@ -124,6 +124,6 @@ jobs:
       - name: Generate artifact attestation
         uses: actions/attest-build-provenance@v2
         with:
-          subject-name: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}-${{ matrix.package.name }}
+          subject-name: ${{ env.REGISTRY }}/${{ matrix.image_tag }}
           subject-digest: ${{ steps.push.outputs.digest }}
           push-to-registry: true
