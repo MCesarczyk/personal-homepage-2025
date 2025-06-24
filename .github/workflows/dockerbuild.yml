@@ -42,7 +42,7 @@ jobs:
       - name: Generate build matrix
         id: set-matrix
         env:
-          CHANGED_PACKAGES: ${{ needs.get-changed.outputs.packages }}
+          CHANGED_PACKAGES: ${{ steps.get-changed.outputs.packages }}
         run: |
           # Parse JSON array safely
           matrix_include=()
@@ -71,11 +71,11 @@ jobs:
 
   build_on_merge:
     needs: [get-changed, prepare-matrix]
-    if: ${{ !fromJson(needs.get-changed.outputs.empty) && needs.prepare-matrix.outputs.has_matrix == 'true' }}
+    if: ${{ !fromJson(steps.get-changed.outputs.empty) && steps.prepare-matrix.outputs.has_matrix == 'true' }}
     # if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     strategy:
-      matrix: ${{ fromJson(needs.prepare-matrix.outputs.matrix) }}
+      matrix: ${{ fromJson(steps.prepare-matrix.outputs.matrix) }}
     permissions:
       contents: read
       packages: write
