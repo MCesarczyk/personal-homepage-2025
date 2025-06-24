@@ -24,7 +24,7 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe({ transform: true }));
 
   const swaggerOptions = new DocumentBuilder()
-    .setTitle('Personal Homepage API - development')
+    .setTitle('Personal Homepage API')
     .setDescription(
       `Backend for Personal Homepage website. Available on: ${process.env.PUBLIC_URL}. This API is used to manage the content of the homepage.`,
     )
