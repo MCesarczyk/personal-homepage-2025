@@ -43,20 +43,20 @@ jobs:
         env:
           CHANGED_PACKAGES: ${{ needs.get-changed.outputs.packages }}
         run: |
-          # Parse JSON array of changed packages
-          packages=$(echo '${{ toJson(needs.get-changed.outputs.packages) }}' | jq -c '.[]')
+          # Parse JSON array safely
           matrix_include=()
 
-          for pkg in $packages; do
+          # Use jq to iterate over packages
+          echo "$CHANGED_PACKAGES" | jq -c '.[]' | while read -r pkg; do
             pkg_path=$(echo "$pkg" | jq -r '.path')
             pkg_name=$(echo "$pkg" | jq -r '.name')
 
-            # Always include main app build
-            matrix_include+=("{\"package_path\":\"$pkg_path\",\"package_name\":\"$pkg_name\",\"dockerfile\":\"Dockerfile\",\"image_tag\":\"ghcr.io/${{ github.repository_owner }}/$pkg_name\"}")
+            # Always include main image
+            matrix_include+=("{\"package_path\":\"$pkg_path\",\"package_name\":\"$pkg_name\",\"dockerfile\":\"Dockerfile\",\"image_tag\":\"ghcr.io/MCesarczyk/$pkg_name\"}")
 
             # Conditionally include migrator
             if [ -f "$pkg_path/Dockerfile.migrator" ]; then
-              matrix_include+=("{\"package_path\":\"$pkg_path\",\"package_name\":\"$pkg_name\",\"dockerfile\":\"Dockerfile.migrator\",\"image_tag\":\"ghcr.io/${{ github.repository_owner }}/$pkg_name-migrator\"}")
+              matrix_include+=("{\"package_path\":\"$pkg_path\",\"package_name\":\"$pkg_name\",\"dockerfile\":\"Dockerfile.migrator\",\"image_tag\":\"ghcr.io/MCesarczyk/$pkg_name-migrator\"}")
             fi
           done
 
