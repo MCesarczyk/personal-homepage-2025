@@ -26,7 +26,7 @@ async function bootstrap() {
   const swaggerOptions = new DocumentBuilder()
     .setTitle('Personal Homepage API')
     .setDescription(
-      `Backend for Personal Homepage website. Available on: ${process.env.PUBLIC_URL}. This API is used to manage the content of the homepage.`,
+      `Backend for Personal Homepage website. Available on: ${process.env.PUBLIC_URL}.`,
     )
     .setVersion('1.0')
     .addServer(`${process.env.PUBLIC_URL}`)
