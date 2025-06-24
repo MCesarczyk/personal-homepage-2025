@@ -78,6 +78,7 @@ jobs:
         uses: docker/build-push-action@v4
         with:
           context: .
+          file: ./apps/${{ matrix.package.name }}/Dockerfile
           push: true
           tags: |
             ${{ env.DOCKERHUB_IMAGE }}-${{ matrix.package.name }}:latest
