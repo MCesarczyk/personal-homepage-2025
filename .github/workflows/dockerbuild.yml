@@ -31,14 +31,46 @@ jobs:
           workspaces: |
             apps/*
 
+  prepare-matrix:
+    needs: get-changed
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Generate build matrix
+        id: set-matrix
+        env:
+          CHANGED_PACKAGES: ${{ needs.get-changed.outputs.packages }}
+        run: |
+          # Parse JSON array of changed packages
+          packages=$(echo '${{ toJson(needs.get-changed.outputs.packages) }}' | jq -c '.[]')
+          matrix_include=()
+
+          for pkg in $packages; do
+            pkg_path=$(echo "$pkg" | jq -r '.path')
+            pkg_name=$(echo "$pkg" | jq -r '.name')
+
+            # Always include main app build
+            matrix_include+=("{\"package_path\":\"$pkg_path\",\"package_name\":\"$pkg_name\",\"dockerfile\":\"Dockerfile\",\"image_tag\":\"ghcr.io/${{ github.repository_owner }}/$pkg_name\"}")
+
+            # Conditionally include migrator
+            if [ -f "$pkg_path/Dockerfile.migrator" ]; then
+              matrix_include+=("{\"package_path\":\"$pkg_path\",\"package_name\":\"$pkg_name\",\"dockerfile\":\"Dockerfile.migrator\",\"image_tag\":\"ghcr.io/${{ github.repository_owner }}/$pkg_name-migrator\"}")
+            fi
+          done
+
+          # Format as valid JSON matrix
+          matrix_json="{\"include\":[$(IFS=,; echo "${matrix_include[*]}")]}"
+          echo "matrix=$matrix_json" >> $GITHUB_OUTPUT
+
   build_on_merge:
-    needs: [get-changed]
+    needs: [get-changed, prepare-matrix]
     if: ${{ !fromJson(needs.get-changed.outputs.empty) }}
     # if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     strategy:
-      matrix:
-        package: ${{ fromJson(needs.get-changed.outputs.packages) }}
+      matrix: ${{ fromJson(needs.prepare-matrix.outputs.matrix) }}
     permissions:
       contents: read
       packages: write

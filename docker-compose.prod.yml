@@ -15,7 +15,7 @@ services:
   migrator-prod:
     build:
       context: ./apps/backend
-      dockerfile: ./Dockerfile.migrator.prod
+      dockerfile: ./Dockerfile.migrator
     container_name: personal-homepage-migrator-prod
     env_file:
       - ./apps/backend/.env.prod
