@@ -11,33 +11,30 @@ env:
   DOCKERHUB_IMAGE: ${{ secrets.DOCKERHUB_USERNAME }}/personal-homepage
 
 jobs:
-  detect-changes:
+  get-changed:
     runs-on: ubuntu-latest
     outputs:
-      changed_apps: ${{ steps.detect.outputs.changed_apps }}
+      packages: ${{ steps.changed.outputs.packages }}
+      empty: ${{ steps.changed.outputs.empty }}
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - name: Get changed apps
-        id: detect
-        run: |
-          # Get apps with changed files
-          changed_apps=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} \
-            | grep -o 'apps/[^/]*' | sort | uniq | sed 's#apps/##')
-
-          # Convert to JSON array
-          json_array=$(echo "$changed_apps" | jq -R . | jq -s .)
-          echo "changed_apps=$json_array" >> $GITHUB_OUTPUT
+      - name: Detect changed workspaces
+        id: changed
+        uses: AlexShukel/get-changed-workspaces-action@v2.0.0
+        with:
+          workspaces: |
+            apps/*
 
   build_on_merge:
-    needs: detect-changes
-    if: ${{ github.event.pull_request.merged == true && needs.detect-changes.outputs.changed_apps != '[]' }}
+    needs: [get-changed]
+    if: ${{ github.event.pull_request.merged == true }}
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        package: ${{ fromJson(needs.detect-changes.outputs.changed_apps) }}
+        package: ${{ fromJson(needs.get-changed.outputs.packages) }}
     permissions:
       contents: read
       packages: write
