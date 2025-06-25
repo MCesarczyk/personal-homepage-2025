@@ -1,5 +1,0 @@
-import { OmitType } from '@nestjs/swagger';
-
-import { Project } from '../../project/entities/project.entity';
-
-export class CreateProjectDto extends OmitType(Project, ['id', 'userId']) {}

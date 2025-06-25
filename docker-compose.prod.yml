@@ -1,25 +1,17 @@
 services:
   backend-prod:
-    build:
-      context: .
-      dockerfile: Dockerfile.prod
+    image: ghcr.io/mcesarczyk/personal-homepage-backend:latest
     container_name: personal-homepage-backend-prod
     restart: always
     env_file:
-      - .env.production.local
-    volumes:
-      - ph24-backend-data-prod:/app
+      - ./apps/backend/.env.prod
     ports:
       - 6600:5000
-    networks:
-      - personal-homepage-2024
     expose:
       - 6600
 
-volumes:
-  ph24-backend-data-prod:
-
-networks:
-  personal-homepage-2024:
-    external: true
-    name: personal-homepage-2024
+  migrator-prod:
+    image: ghcr.io/mcesarczyk/personal-homepage-backend-migrator:latest
+    container_name: personal-homepage-migrator-prod
+    env_file:
+      - ./apps/backend/.env.prod
