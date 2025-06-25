@@ -30,7 +30,7 @@ jobs:
 
   build_on_merge:
     needs: [get-changed]
-    if: ${{ github.event.pull_request.merged == true && needs.get-changed.outputs.empty != 'true' }}
+    if: ${{ github.event.pull_request.merged == true && needs.get-changed.outputs.empty == false }}
     runs-on: ubuntu-latest
     strategy:
       matrix:
