@@ -1,8 +1,6 @@
 services:
   backend-prod:
-    build:
-      context: ./apps/backend
-      dockerfile: Dockerfile
+    image: ghcr.io/mcesarczyk/personal-homepage-backend:latest
     container_name: personal-homepage-backend-prod
     restart: always
     env_file:
@@ -13,9 +11,7 @@ services:
       - 6600
 
   migrator-prod:
-    build:
-      context: ./apps/backend
-      dockerfile: ./Dockerfile.migrator
+    image: ghcr.io/mcesarczyk/personal-homepage-backend-migrator:latest
     container_name: personal-homepage-migrator-prod
     env_file:
       - ./apps/backend/.env.prod
