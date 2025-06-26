@@ -1,0 +1,135 @@
+name: Build and Push Docker Image
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    types: [closed]
+    branches:
+      - main
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: mcesarczyk/personal-homepage
+  DOCKERHUB_IMAGE: ${{ secrets.DOCKERHUB_USERNAME }}/personal-homepage
+
+jobs:
+  get-changed:
+    runs-on: ubuntu-latest
+    outputs:
+      packages: ${{ steps.changed.outputs.packages }}
+      empty: ${{ steps.changed.outputs.empty }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Detect changed workspaces
+        id: changed
+        uses: AlexShukel/get-changed-workspaces-action@v2.0.0
+        with:
+          workspaces: |
+            apps/*
+
+      - name: Debug outputs
+        run: |
+          echo "Packages: ${{ steps.changed.outputs.packages }}"
+          echo "Empty: ${{ steps.changed.outputs.empty }}"
+
+  build_on_merge:
+    needs: [get-changed]
+    if: ${{ !fromJson(needs.get-changed.outputs.empty) && github.event.pull_request.merged == true }}
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        package: ${{ fromJson(needs.get-changed.outputs.packages) }}
+    permissions:
+      contents: read
+      packages: write
+      id-token: write
+      attestations: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}-${{ matrix.package.name }}
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Log in to the Container registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+        with:
+          driver-opts: "image=moby/buildkit:v0.11.6"
+
+      - name: Build and push Main Docker image
+        id: push
+        uses: docker/build-push-action@v4
+        with:
+          context: ./apps/${{ matrix.package.name }}
+          file: ./apps/${{ matrix.package.name }}/Dockerfile
+          push: true
+          tags: |
+            ${{ env.DOCKERHUB_IMAGE }}-${{ matrix.package.name }}:latest
+            ${{ env.DOCKERHUB_IMAGE }}-${{ matrix.package.name }}:${{ github.sha }}
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}-${{ matrix.package.name }}:latest
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}-${{ matrix.package.name }}:${{ github.sha }}
+          labels: ${{ steps.meta.outputs.labels }}
+          provenance: true
+          sbom: true
+
+      - name: Generate base artifact attestation
+        uses: actions/attest-build-provenance@v2
+        with:
+          subject-name: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}-${{ matrix.package.name }}
+          subject-digest: ${{ steps.push.outputs.digest }}
+          push-to-registry: true
+
+      - name: Check for Dockerfile.migrator
+        id: check-migrator
+        run: |
+          if [ -f "./apps/${{ matrix.package.name }}/Dockerfile.migrator" ]; then
+            echo "migrator_exists=true" >> $GITHUB_OUTPUT
+          else
+            echo "migrator_exists=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Build and push Migrator Docker image
+        if: ${{ steps.check-migrator.outputs.migrator_exists == 'true' }}
+        id: push-migrator
+        uses: docker/build-push-action@v4
+        with:
+          context: ./apps/${{ matrix.package.name }}
+          file: ./apps/${{ matrix.package.name }}/Dockerfile.migrator
+          push: true
+          tags: |
+            ${{ env.DOCKERHUB_IMAGE }}-${{ matrix.package.name }}-migrator:latest
+            ${{ env.DOCKERHUB_IMAGE }}-${{ matrix.package.name }}-migrator:${{ github.sha }}
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}-${{ matrix.package.name }}-migrator:latest
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}-${{ matrix.package.name }}-migrator:${{ github.sha }}
+          labels: ${{ steps.meta.outputs.labels }}
+          provenance: true
+          sbom: true
+
+      - name: Generate migrator artifact attestation
+        if: ${{ steps.check-migrator.outputs.migrator_exists == 'true' && steps.push-migrator.conclusion == 'success' }}
+        uses: actions/attest-build-provenance@v2
+        with:
+          subject-name: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}-${{ matrix.package.name }}-migrator
+          subject-digest: ${{ steps.push-migrator.outputs.digest }}
+          push-to-registry: true
