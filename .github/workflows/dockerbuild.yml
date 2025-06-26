@@ -1,6 +1,10 @@
 name: Build and Push Docker Image
+
 on:
-  pull_request_target:
+  push:
+    branches:
+      - main
+  pull_request:
     types: [closed]
     branches:
       - main
@@ -30,7 +34,7 @@ jobs:
 
   build_on_merge:
     needs: [get-changed]
-    if: ${{ github.event.pull_request.merged == true && needs.get-changed.outputs.empty == false }}
+    if: ${{ github.event.pull_request.merged == true && !fromJson(needs.generate_matrix.outputs.empty) }}
     runs-on: ubuntu-latest
     strategy:
       matrix:
