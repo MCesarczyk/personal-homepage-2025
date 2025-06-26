@@ -32,9 +32,14 @@ jobs:
           workspaces: |
             apps/*
 
+      - name: Debug outputs
+        run: |
+          echo "Packages: ${{ steps.changed.outputs.packages }}"
+          echo "Empty: ${{ steps.changed.outputs.empty }}"
+
   build_on_merge:
     needs: [get-changed]
-    if: ${{ github.event.pull_request.merged == true && !fromJson(needs.generate_matrix.outputs.empty) }}
+    if: ${{ github.event.pull_request.merged == true && needs.get-changed.outputs.empty == false }}
     runs-on: ubuntu-latest
     strategy:
       matrix:
