@@ -9,7 +9,7 @@ const meta: Meta<typeof Section> = {
   tags: ["autodocs"],
   argTypes: {
     title: { control: "text", description: "Section title" },
-    elements: { control: "array", description: "Section list items" },
+    elements: { control: "object", description: "Section list items" },
   },
 };
 export default meta;

@@ -12,7 +12,7 @@ const meta: Meta<typeof Footer> = {
     address: { control: "text", description: "Address" },
     cvFileLocation: { control: "text", description: "CV file location" },
     cvFileName: { control: "text", description: "CV file name" },
-    footerThumbnails: { control: "disabled", description: "Footer thumbnails" },
+    footerThumbnails: { control: { disabled: true }, description: "Footer thumbnails" },
   },
 };
 export default meta;

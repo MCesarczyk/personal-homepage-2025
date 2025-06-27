@@ -11,7 +11,7 @@ const meta: Meta<typeof Thumbnail> = {
   tags: ["autodocs"],
   argTypes: {
     id: { control: "text", description: "Thumbnail id" },
-    icon: { control: "disabled", description: "Thumbnail icon" },
+    icon: { control: { disabled: true }, description: "Thumbnail icon" },
     url: { control: "text", description: "Thumbnail url" },
   },
 };

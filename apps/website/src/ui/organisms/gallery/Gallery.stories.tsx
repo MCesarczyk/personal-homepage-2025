@@ -16,7 +16,7 @@ const meta: Meta<typeof Gallery> = {
       options: ["loading", "error", "success"],
       description: "Status",
     },
-    repos: { control: "disable", description: "Repositories list" },
+    repos: { control: { disabled: true }, description: "Repositories list" },
   },
 };
 export default meta;
