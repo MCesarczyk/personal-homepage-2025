@@ -4,5 +4,5 @@ previews:
 services:
   - type: web
     runtime: docker
-    name: personal-homepage-2024-backend
-    repo: https://github.com/MCesarczyk/personal-homepage-2024-backend
+    name: personal-homepage-2025
+    repo: https://github.com/MCesarczyk/personal-homepage-2025
