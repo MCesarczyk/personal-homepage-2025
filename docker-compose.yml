@@ -36,7 +36,7 @@ services:
     build:
       context: ./apps/backend
       dockerfile: ./Dockerfile.migrator.dev
-    container_name: personal-homepage-migrator
+    container_name: personal-homepage-backend-migrator
     env_file:
       - ./apps/backend/.env.dev
     depends_on:
