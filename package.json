@@ -1,11 +1,11 @@
 {
   "name": "personal-homepage-2025",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "private": true,
   "description": "monorepo personal homepage 2025 project built as a monorepo with pnpm",
   "scripts": {
     "commit": "cz",
-    "release": "standard-version",
+    "release": "commit-and-tag-version",
     "prepare": "husky",
     "db:prepare": "concurrently \"pnpm --filter backend db:prepare\"",
     "install": "cd apps/backend && pnpm install",
@@ -20,18 +20,18 @@
   "author": "Michał Cesarczyk",
   "license": "MIT",
   "packageManager": "pnpm@10.12.1",
-  "dependencies": {
-    "husky": "^9.0.11",
-    "madge": "^6.1.0",
-    "prettier": "^3.0.0",
-    "pretty-quick": "^4.0.0",
-    "source-map-support": "^0.5.21",
-    "standard-version": "^9.5.0",
+  "devDependencies": {
+    "concurrently": "^9.2.0",
+    "commit-and-tag-version": "^12.5.1",
     "cz-conventional-changelog": "^3.3.0",
     "eslint": "^8.42.0",
     "eslint-config-prettier": "^9.0.0",
     "eslint-plugin-prettier": "^5.0.0",
-    "concurrently": "^9.2.0"
+    "husky": "^9.0.11",
+    "madge": "^6.1.0",
+    "prettier": "^3.0.0",
+    "pretty-quick": "^4.0.0",
+    "source-map-support": "^0.5.21"
   },
   "config": {
     "commitizen": {
