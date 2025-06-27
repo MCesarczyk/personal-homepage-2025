@@ -1,4 +1,19 @@
 services:
+  website-prod:
+    image: ghcr.io/mcesarczyk/personal-homepage-website:latest
+    container_name: personal-homepage-website-prod
+    restart: always
+    depends_on:
+      - backend-prod
+    env_file:
+      - ./apps/website/.env.prod
+    ports:
+      - "3250:4200"
+    environment:
+      - NODE_ENV=production
+    expose:
+      - 3250
+
   admin-prod:
     image: ghcr.io/mcesarczyk/personal-homepage-admin:latest
     container_name: personal-homepage-admin-prod
@@ -12,7 +27,7 @@ services:
     environment:
       - NODE_ENV=production
     expose:
-      - 1234
+      - 3650
 
   backend-prod:
     image: ghcr.io/mcesarczyk/personal-homepage-backend:latest
