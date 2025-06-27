@@ -12,6 +12,6 @@ services:
 
   migrator-prod:
     image: ghcr.io/mcesarczyk/personal-homepage-backend-migrator:latest
-    container_name: personal-homepage-migrator-prod
+    container_name: personal-homepage-backend-migrator-prod
     env_file:
       - ./apps/backend/.env.prod

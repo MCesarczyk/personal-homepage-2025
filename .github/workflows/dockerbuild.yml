@@ -35,6 +35,7 @@ jobs:
           echo "Empty: ${{ steps.changed.outputs.empty }}"
 
   build_on_merge:
+    environment: ${{ startsWith(github.ref, 'refs/tags/') && 'production' || 'development' }}
     needs: [get-changed]
     if: ${{ !fromJson(needs.get-changed.outputs.empty) }}
     runs-on: ubuntu-latest
