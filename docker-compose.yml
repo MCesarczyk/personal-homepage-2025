@@ -1,4 +1,21 @@
 services:
+  website:
+    build:
+      context: ./apps/website
+      dockerfile: ./Dockerfile
+    environment:
+      - NODE_ENV=development
+    container_name: personal-homepage-website
+    restart: always
+    env_file:
+      - ./apps/website/.env
+    ports:
+      - 3200:4200
+    expose:
+      - 3200
+    depends_on:
+      - backend
+
   admin:
     build:
       context: ./apps/admin
