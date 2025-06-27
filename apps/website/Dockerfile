@@ -16,6 +16,8 @@ COPY . .
 
 # ENV NEXT_TELEMETRY_DISABLED=1
 ENV NEXT_PRIVATE_STANDALONE=true
+# https://nextjs.org/docs/messages/sharp-missing-in-production
+ENV NEXT_SHARP_PATH=./node_modules/sharp
 
 RUN npm install -g pnpm && pnpm run build
 
