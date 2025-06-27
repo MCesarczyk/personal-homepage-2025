@@ -1,0 +1,13 @@
+/node_modules
+/.pnp
+
+/coverage
+
+/build
+
+/src/gql
+/src/graphql
+
+.prettierrc.js
+
+.azure/azure-devops-pipelines.yml
