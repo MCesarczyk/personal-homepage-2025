@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.2.0](https://github.com/MCesarczyk/personal-homepage-2025/compare/v0.1.0...v1.2.0) (2025-06-27)
+
+### Features
+
+- migrate admin client app from standalone ([#67](https://github.com/MCesarczyk/personal-homepage-2025/issues/67)) ([4eca80d](https://github.com/MCesarczyk/personal-homepage-2025/commit/4eca80d91fa0fbe4534b5658c91f97af71ebbfd5)), closes [#30](https://github.com/MCesarczyk/personal-homepage-2025/issues/30)
+- migrate website app from standalone ([#71](https://github.com/MCesarczyk/personal-homepage-2025/issues/71)) ([99e6a67](https://github.com/MCesarczyk/personal-homepage-2025/commit/99e6a678fb34a8a15ba4a264b3b3e420cc714260)), closes [#70](https://github.com/MCesarczyk/personal-homepage-2025/issues/70)
+
 ## [1.1.0](https://github.com/MCesarczyk/personal-homepage-2025/compare/v0.1.0...v1.1.0) (2025-06-27)
 
 ### Features
