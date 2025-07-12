@@ -54,9 +54,9 @@ To run the application in Docker, you can use the provided `docker-compose.yml` 
    docker-compose up --build
    ```
 
-3. The application will be available at `http://localhost:3200` for the website, `http://localhost:3600` for the admin, and `http://localhost:4600` for the backend.
+3. The application will be available under addresses configured in `.env` file.
 
-## Orchestration
+## Orchestration with docker-swarm
 
 To deploy the application using Docker Swarm, you can use the provided `docker.compose.stack.yml` file. Make sure you have Docker Swarm initialized.
 
@@ -69,6 +69,8 @@ To deploy the application using Docker Swarm, you can use the provided `docker.c
 
    ```
 
-3. The application will be available at `http://localhost:3250` for the website, `http://localhost:3650` for the admin, and `http://localhost:4650` for the backend.
+3. The application will be available under addresses configured in swarm nodes parameters. Especially, variables `PUBLIC_URL`, `FRONTEND_URL` and `ADMIN_URL` should be set to the public addresses of the respective services in order to be accessible from outside the swarm and to meet CORS policy. Details are depending on your infrastructure.
 
-4. Moreover, you can use the `visualizer` service to monitor the Docker Swarm cluster. Access it at `http://localhost:8011`.
+4. Moreover, you can use the `visualizer` service to monitor the Docker Swarm cluster.
+
+For example, if you want to test this setup with **[Play with Docker](https://labs.play-with-docker.com/)**, use current session url as _"localhost"_ in `.env.prod` file.
