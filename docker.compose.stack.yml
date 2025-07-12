@@ -1,10 +1,5 @@
 version: "3.8"
 
-networks:
-  swarm:
-    driver: overlay
-    attachable: true
-
 services:
   website-prod:
     image: ghcr.io/mcesarczyk/personal-homepage-website:latest
@@ -14,13 +9,12 @@ services:
         condition: any
     environment:
       - NODE_ENV=production
+      - API_URL=http://ph_backend-prod:5000
       - API_PREFIX=/api/v1
+      - NEXT_PUBLIC_API_URL=http://ph_backend-prod:5000
       - NEXT_PUBLIC_API_PREFIX=/api/v1
     ports:
-      - target: 4200
-        published: 3250
-        protocol: tcp
-        mode: host
+      - 4200:4200
     networks:
       - swarm
 
@@ -34,10 +28,7 @@ services:
       - NODE_ENV=production
       - VITE_API_URL=http://ph_backend-prod:5000
     ports:
-      - target: 80
-        published: 3650
-        protocol: tcp
-        mode: host
+      - 4300:80
     networks:
       - swarm
 
@@ -46,23 +37,21 @@ services:
     deploy:
       replicas: 1
       restart_policy:
-        condition: any
+        condition: on-failure
+        delay: 60s
+        max_attempts: 5
+        window: 120s
     environment:
       - ENV=development
       - BACKEND_PORT=5000
       - PUBLIC_URL=http://localhost:4650
       - FRONTEND_URL=http://ph_website-prod:4200
       - ADMIN_URL=http://ph_admin-prod:80
-      - DATABASE_URL=${DATABASE_URL}
-      - DIRECT_URL=${DIRECT_URL}
-      - JWT_SECRET=${JWT_SECRET}
-      - API_URL=${API_URL}
-      - NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL}
+      - DATABASE_URL=postgresql://postgres:postgres@ph_db:5432/postgres?schema=public
+      - DIRECT_URL=postgresql://postgres:postgres@ph_db:5432/postgres?schema=public
+      - JWT_SECRET=45280cf2e1532342450c73bd435598577636d9b536f2bc1e659dbf6f4f9e5bf8
     ports:
-      - target: 5000
-        published: 4650
-        protocol: tcp
-        mode: host
+      - 5000:5000
     networks:
       - swarm
 
@@ -71,17 +60,44 @@ services:
     deploy:
       replicas: 1
       restart_policy:
-        condition: none
+        condition: on-failure
+        delay: 30s
+        max_attempts: 3
+        window: 120s
+    environment:
+      - DATABASE_URL=postgresql://postgres:postgres@ph_db:5432/postgres?schema=public
+      - DIRECT_URL=postgresql://postgres:postgres@ph_db:5432/postgres?schema=public
+    networks:
+      - swarm
+
+  db:
+    image: postgres:13
+    environment:
+      - POSTGRES_NAME=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=postgres
+      - POSTGRES_PORT=5432
+    ports:
+      - 5432:5432
     networks:
       - swarm
 
   visualizer:
     image: dockersamples/visualizer:stable
     ports:
-      - "8011:8080"
+      - "8080:8080"
     stop_grace_period: 1m30s
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock"
     deploy:
       placement:
         constraints: [node.role == manager]
+
+networks:
+  swarm:
+    driver: overlay
+    attachable: true
+
+volumes:
+  db-data:
