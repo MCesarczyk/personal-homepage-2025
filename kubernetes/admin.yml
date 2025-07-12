@@ -1,0 +1,46 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: admin
+  namespace: ph
+spec:
+  selector:
+    admin: admin
+  ports:
+    - port: 4300
+      targetPort: 80
+  type: ClusterIP
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: admin
+  labels:
+    admin: admin
+  namespace: ph
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      admin: admin
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        admin: admin
+    spec:
+      containers:
+        - image: ghcr.io/mcesarczyk/personal-homepage-admin:latest
+          name: admin
+          ports:
+            - containerPort: 80
+              protocol: TCP
+          env:
+            - name: NODE_ENV
+              value: production
+            - name: VITE_API_URL
+              value: http://app.ph.svc.cluster.local:5000
