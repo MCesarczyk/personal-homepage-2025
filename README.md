@@ -74,3 +74,5 @@ To deploy the application using Docker Swarm, you can use the provided `docker.c
 4. Moreover, you can use the `visualizer` service to monitor the Docker Swarm cluster.
 
 For example, if you want to test this setup with **[Play with Docker](https://labs.play-with-docker.com/)**, use current session url as _"localhost"_ in `.env.prod` file.
+
+**Note**: The `docker.compose.stack.yml` file is designed to be run with minimal configuration. It uses hardcoded environment variables, which should be adjusted in production use, especially secrets, ie. `JWT_SECRET`.

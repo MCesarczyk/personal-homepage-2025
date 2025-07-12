@@ -49,7 +49,7 @@ services:
       - ADMIN_URL=${ADMIN_URL}
       - DATABASE_URL=postgresql://postgres:postgres@ph_db:5432/postgres?schema=public
       - DIRECT_URL=postgresql://postgres:postgres@ph_db:5432/postgres?schema=public
-      - JWT_SECRET=45280cf2e1532342450c73bd435598577636d9b536f2bc1e659dbf6f4f9e5bf8
+      - JWT_SECRET=45280cf2e1532342450c73bd435598577636d9b536f2bc1e659dbf6f4f9e5bf8 # Example secret, change it in production!
     ports:
       - 5000:5000
     networks:
