@@ -12,6 +12,7 @@ async function bootstrap() {
   app.setGlobalPrefix('api/v1', { exclude: ['/'] });
   app.enableCors({
     origin: [
+      process.env.PUBLIC_URL || 'http://localhost:5000',
       process.env.FRONTEND_URL || 'http://localhost:4200',
       process.env.ADMIN_URL || 'http://localhost:4300',
     ],
