@@ -41,7 +41,10 @@ spec:
               protocol: TCP
           env:
             - name: DATABASE_URL
-              value: "postgresql://postgres:postgres@app-db.ph.svc.cluster.local:5432/postgres?schema=public"
+              valueFrom:
+                secretKeyRef:
+                  name: app-credentials
+                  key: db_url
             - name: BACKEND_PORT
               value: "5000"
             - name: PUBLIC_URL
@@ -50,3 +53,11 @@ spec:
               value: "http://localhost:4200"
             - name: ADMIN_URL
               value: "http://localhost:4300"
+          volumeMounts:
+            - name: secret-volume
+              mountPath: "/etc/secret"
+              readOnly: true
+      volumes:
+        - name: secret-volume
+          secret:
+            secretName: app-credentials

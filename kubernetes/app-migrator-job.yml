@@ -12,9 +12,15 @@ spec:
           name: app-migrator
           env:
             - name: DATABASE_URL
-              value: "postgresql://postgres:postgres@app-db.ph.svc.cluster.local:5432/postgres?schema=public"
+              valueFrom:
+                secretKeyRef:
+                  name: app-credentials
+                  key: db_url
             - name: DIRECT_URL
-              value: "postgresql://postgres:postgres@app-db.ph.svc.cluster.local:5432/postgres?schema=public"
+              valueFrom:
+                secretKeyRef:
+                  name: app-credentials
+                  key: db_url
           command: ["sh", "-c"]
           args:
             - |
@@ -26,7 +32,15 @@ spec:
               # Run the migrations
               echo "PostgreSQL is ready, running migrations..."
               npx prisma migrate deploy
+          volumeMounts:
+            - name: secret-volume
+              mountPath: "/etc/secret"
+              readOnly: true
       restartPolicy: OnFailure
+      volumes:
+        - name: secret-volume
+          secret:
+            secretName: app-credentials
   backoffLimit: 4
   completions: 1
   parallelism: 1

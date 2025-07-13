@@ -83,15 +83,39 @@ For example, if you want to test this setup with **[Play with Docker](https://la
 
 To deploy the application using Kubernetes, you can use the provided `kubernetes` directory. Make sure you have a Kubernetes cluster set up and `kubectl` configured.
 
-1. Run the following command to initialize the app namespace:
+1. Prepare secrets for the application. You can create a secret with the following command:
+
+   ```bash
+   kubectl create secret generic app-credentials --from-literal=db_username=[your-postgres-username] --from-literal=db_password=[your-postgres-password] --from-literal=db_url=postgresql://[your-postgres-username]:[your-postgres-password]@app-db.ph.svc.cluster.local:5432/postgres?schema=public
+   ```
+
+   If you want to display applied secrets in convenient way, you can use the following command:
+
+   ```bash
+   kubectl get secret app-credentials -o json | jq -r '.data | to_entries[] | "\(.key): \(.value | @base64d)"'
+   ```
+
+   or edit credential directly in your editor:
+
+   ```bash
+   kubectl edit secret app-credentials -n ph
+   ```
+
+   This opens the secret in your default editor. The values are base64-encoded—edit them as needed, encoding new values to base64 first. For example, you can use the following command to encode a value:
+
+   ```bash
+   echo -n "your-value" | base64
+   ```
+
+2. Run the following command to initialize the app namespace:
 
    ```bash
    kubectl apply -f namespace.yml
    ```
 
-2. If you want to use external database, please update environment variables in `kubernetes/website.yml`, `kubernetes/admin.yml`, and `kubernetes/backend.yml` files accordingly.
+3. If you want to use external database, please update environment variables in `kubernetes/website.yml`, `kubernetes/admin.yml`, and `kubernetes/backend.yml` files accordingly.
 
-3. If you want to use the built-in PostgreSQL database, you can apply the `kubernetes/app-db.yml` file:
+4. If you want to use the built-in PostgreSQL database, you can apply the `kubernetes/app-db.yml` file:
 
    ```bash
    kubectl apply -f kubernetes/app-db.yml
@@ -99,7 +123,7 @@ To deploy the application using Kubernetes, you can use the provided `kubernetes
 
    This will create a PostgreSQL deployment and service in the `ph` namespace.
 
-4. When creating database or after every change in the database schema, you need to run migrations. You can do this by applying the job in `kubernetes/app-migrator.yml` file:
+5. When creating database or after every change in the database schema, you need to run migrations. You can do this by applying the job in `kubernetes/app-migrator.yml` file:
 
    ```bash
    kubectl apply -f kubernetes/app-migrator.yml
@@ -107,7 +131,7 @@ To deploy the application using Kubernetes, you can use the provided `kubernetes
 
    This will run the Prisma migrations in the `ph` namespace.
 
-5. When db is ready, then is time to deploy other dependent apps:
+6. When db is ready, then is time to deploy other dependent apps:
 
    ```bash
    kubectl apply -f kubernetes/website.yml

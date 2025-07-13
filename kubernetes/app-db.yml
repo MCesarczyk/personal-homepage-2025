@@ -33,9 +33,15 @@ spec:
             - containerPort: 5432
           env:
             - name: POSTGRES_USER
-              value: postgres
+              valueFrom:
+                secretKeyRef:
+                  name: app-credentials
+                  key: db_username
             - name: POSTGRES_PASSWORD
-              value: postgres
+              valueFrom:
+                secretKeyRef:
+                  name: app-credentials
+                  key: db_password
             - name: POSTGRES_HOST
               value: postgres
             - name: POSTGRES_PORT
@@ -43,6 +49,12 @@ spec:
           volumeMounts:
             - name: app-db-storage
               mountPath: /ph/app-db
+            - name: secret-volume
+              mountPath: "/etc/secret"
+              readOnly: true
       volumes:
         - name: app-db-storage
           emptyDir: {}
+        - name: secret-volume
+          secret:
+            secretName: app-credentials
