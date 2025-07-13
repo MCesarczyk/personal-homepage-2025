@@ -79,7 +79,7 @@ For example, if you want to test this setup with **[Play with Docker](https://la
 
 ## Orchestration with Kubernetes
 
-**Note**: This is developent version of the application, which is designed to be run in a Kubernetes cluster. For production use, using some key vault service is recommended to manage secrets insted of hardcoding them in the Kubernetes manifests.
+**Note**: This is development version of the application, which is designed to be run in a Kubernetes cluster. For production use, using some key vault service is recommended to manage secrets instead of hardcoding them in the Kubernetes manifests.
 
 To deploy the application using Kubernetes, you can use the provided `kubernetes` directory. Make sure you have a Kubernetes cluster set up and `kubectl` configured.
 
