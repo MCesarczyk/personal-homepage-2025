@@ -1,0 +1,46 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: app-migrator
+  namespace: ph
+spec:
+  template:
+    spec:
+      containers:
+        - image: ghcr.io/mcesarczyk/personal-homepage-backend-migrator:latest
+          imagePullPolicy: Always
+          name: app-migrator
+          env:
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: app-credentials
+                  key: db_url
+            - name: DIRECT_URL
+              valueFrom:
+                secretKeyRef:
+                  name: app-credentials
+                  key: db_url
+          command: ["sh", "-c"]
+          args:
+            - |
+              # Wait for the database to be ready
+              until nc -z app-db.ph.svc.cluster.local 5432; do
+                echo "Waiting for PostgreSQL..."
+                sleep 5
+              done
+              # Run the migrations
+              echo "PostgreSQL is ready, running migrations..."
+              npx prisma migrate deploy
+          volumeMounts:
+            - name: secret-volume
+              mountPath: "/etc/secret"
+              readOnly: true
+      restartPolicy: OnFailure
+      volumes:
+        - name: secret-volume
+          secret:
+            secretName: app-credentials
+  backoffLimit: 4
+  completions: 1
+  parallelism: 1
