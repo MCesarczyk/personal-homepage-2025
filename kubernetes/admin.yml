@@ -7,9 +7,11 @@ spec:
   selector:
     admin: admin
   ports:
-    - port: 4300
+    - port: 80 # for cloud
+      # - port: 4300 # for local cluster
       targetPort: 80
-  type: ClusterIP
+  type: LoadBalancer # for cloud
+  # type: ClusterIP # for local cluster
 ---
 apiVersion: apps/v1
 kind: Deployment

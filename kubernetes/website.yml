@@ -7,9 +7,12 @@ spec:
   selector:
     website: website
   ports:
-    - port: 4200
+    - port: 80 # for cloud
+      # - port: 4200 # for local cluster
       targetPort: 4200
-  type: ClusterIP
+  type: LoadBalancer # for cloud
+  # type: ClusterIP # for local cluster
+
 ---
 apiVersion: apps/v1
 kind: Deployment

@@ -86,7 +86,7 @@ To deploy the application using Kubernetes, you can use the provided `kubernetes
 1. Prepare secrets for the application. You can create a secret with the following command:
 
    ```bash
-   kubectl create secret generic app-credentials --from-literal=db_username=[your-postgres-username] --from-literal=db_password=[your-postgres-password] --from-literal=db_url=postgresql://[your-postgres-username]:[your-postgres-password]@app-db.ph.svc.cluster.local:5432/postgres?schema=public
+   kubectl create secret generic app-credentials --from-literal=db_username=[your-postgres-username] --from-literal=db_password=[your-postgres-password] --from-literal=db_url=postgresql://[your-postgres-username]:[your-postgres-password]@app-db.ph.svc.cluster.local:5432/postgres?schema=public -n ph
    ```
 
    If you want to display applied secrets in convenient way, you can use the following command:
@@ -126,7 +126,7 @@ To deploy the application using Kubernetes, you can use the provided `kubernetes
 5. When creating database or after every change in the database schema, you need to run migrations. You can do this by applying the job in `kubernetes/app-migrator.yml` file:
 
    ```bash
-   kubectl apply -f kubernetes/app-migrator.yml
+   kubectl apply -f kubernetes/app-migrator-job.yml
    ```
 
    This will run the Prisma migrations in the `ph` namespace.
@@ -134,7 +134,5 @@ To deploy the application using Kubernetes, you can use the provided `kubernetes
 6. When db is ready, then is time to deploy other dependent apps:
 
    ```bash
-   kubectl apply -f kubernetes/website.yml
-   kubectl apply -f kubernetes/admin.yml
-   kubectl apply -f kubernetes/backend.yml
+   kubectl apply -f kubernetes/app.yml -f kubernetes/website.yml -f kubernetes/admin.yml
    ```
