@@ -3,7 +3,7 @@ import {
   PrismaHealthIndicator,
   HealthCheckService as PrismaHealthCheckService,
 } from '@nestjs/terminus';
-import { PrismaService } from 'src/prisma.service';
+import { PrismaService } from '../prisma.service';
 
 @Injectable()
 export class HealthCheckService {

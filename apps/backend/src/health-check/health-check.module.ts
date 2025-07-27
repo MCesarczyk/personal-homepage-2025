@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
-import { HealthCheckController } from './health-check.controller';
 import { TerminusModule } from '@nestjs/terminus';
-import { HealthCheckService } from 'src/health-check/health-check.service';
-import { PrismaService } from 'src/prisma.service';
+import { HealthCheckController } from './health-check.controller';
+import { HealthCheckService } from './health-check.service';
+import { PrismaService } from '../prisma.service';
 
 @Module({
   imports: [TerminusModule],

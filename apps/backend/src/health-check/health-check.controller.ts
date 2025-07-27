@@ -1,6 +1,6 @@
 import { Controller, Get } from '@nestjs/common';
-import { HealthCheckService } from './health-check.service';
 import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { HealthCheckService } from './health-check.service';
 import { Status } from './entities/status.entity';
 import { Public } from '../../src/auth/decorators/public.decorator';
 
