@@ -23,7 +23,7 @@ export const Button = ({
   <button
     {...props}
     className={clsx(
-      "inline-flex items-center text-sm sm:text-base md:text-lg lg:text-xl cursor-pointer",
+      "text-lg cursor-pointer text-center",
       buttonStyles[variant ?? "PRIMARY"],
       variant === "PRIMARY"
         ? "text-white"

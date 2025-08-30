@@ -76,15 +76,8 @@ export function KanbanBoard({ columnNames, tasks: initialTasks }: Props) {
       }}
     >
       <div className="flex flex-col gap-1">
-        <div className="flex justify-between gap-1 py-4">
+        <div className="py-4">
           <AddCard addCard={addNewCard} />
-          {confirmationPrompt ? (
-            <Button variant="PRIMARY" onClick={onDeleteConfirmation}>
-              Confirm
-            </Button>
-          ) : (
-            <Trash />
-          )}
         </div>
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
           <KanbanLane
@@ -102,6 +95,15 @@ export function KanbanBoard({ columnNames, tasks: initialTasks }: Props) {
             state={"COMPLETED"}
             items={filterTasksByState(tasks, "COMPLETED")}
           />
+        </div>
+        <div className="flex py-4">
+          {confirmationPrompt ? (
+            <Button variant="PRIMARY" onClick={onDeleteConfirmation}>
+              Confirm
+            </Button>
+          ) : (
+            <Trash />
+          )}
         </div>
       </div>
     </DragDropContainer>

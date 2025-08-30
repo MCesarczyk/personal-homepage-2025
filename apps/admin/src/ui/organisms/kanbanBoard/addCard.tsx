@@ -38,7 +38,7 @@ export const AddCard = ({ addCard }: AddCardProps) => {
   };
 
   return (
-    <form className="flex gap-2" onSubmit={onFormSubmit}>
+    <form className="flex flex-col sm:flex-row gap-2" onSubmit={onFormSubmit}>
       <Input ref={inputRef} type="text" name="content" />
       <Button variant="PRIMARY">Add</Button>
     </form>
