@@ -19,6 +19,8 @@ services:
       - 3200
     depends_on:
       - backend
+    profiles:
+      - dev
 
   admin:
     build:
@@ -37,6 +39,8 @@ services:
       - 3600
     depends_on:
       - backend
+    profiles:
+      - dev
 
   backend:
     build:
@@ -59,6 +63,8 @@ services:
       - migrator
     expose:
       - 4600
+    profiles:
+      - dev
 
   migrator:
     build:
@@ -70,6 +76,9 @@ services:
     depends_on:
       - db
     command: ["./migrate-and-seed.sh"]
+    profiles:
+      - dev
+      - db
 
   db:
     restart: always
@@ -81,6 +90,9 @@ services:
       - ph-db-data:/var/lib/postgresql/data
     ports:
       - 5600:5432
+    profiles:
+      - dev
+      - db
 
   pgadmin:
     image: dpage/pgadmin4
@@ -93,6 +105,9 @@ services:
     volumes:
       - ph-pgadmin-data:/var/lib/pgadmin
     depends_on:
+      - db
+    profiles:
+      - dev
       - db
 
 volumes:

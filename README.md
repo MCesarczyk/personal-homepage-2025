@@ -36,7 +36,15 @@ To get started with this project, follow these steps:
 3. Set up the environment variables:
    Create a `.env` file in the root directory and add the necessary environment variables. You can use the `.env.example` file as a reference.
 
-4. Start the development server:
+4. Prepare local database:
+
+   ```bash
+   docker-compose --profile db up -d
+   ```
+
+   it will start database on 5600 port, pgadmin on 8600, run migrations and seed sample data
+
+5. Start the development server:
    ```bash
    pnpm dev
    ```
@@ -51,7 +59,7 @@ To run the application in Docker, you can use the provided `docker-compose.yml` 
 2. Run the following command to start the application:
 
    ```bash
-   docker-compose up --build
+   docker-compose --profile dev up -d
    ```
 
 3. The application will be available under addresses configured in `.env` file.
