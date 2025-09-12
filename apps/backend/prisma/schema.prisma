@@ -55,7 +55,7 @@ model Project {
 model ProjectImage {
   id        String  @id @default(uuid())
   url       String
-  filename  String  @default("")
+  fileName  String  @default("")
   isCover   Boolean @default(false)
   project   Project @relation(fields: [projectId], references: [id])
   projectId String
