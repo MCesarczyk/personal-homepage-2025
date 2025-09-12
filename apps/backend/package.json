@@ -2,6 +2,7 @@
   "name": "backend",
   "scripts": {
     "build": "nest build",
+    "db:migrate": "prisma migrate dev && prisma generate",
     "db:prepare": "prisma migrate dev && prisma generate && npx prisma db seed",
     "build:prod": "prisma migrate dev && prisma generate && nest build",
     "start": "nest start",
