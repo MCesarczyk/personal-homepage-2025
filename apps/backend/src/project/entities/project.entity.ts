@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty, IsString } from 'class-validator';
+import { ImageDataDto } from 'src/project-image/dto/image-data.dto';
 
 export class Project {
   @IsString()
@@ -49,4 +50,10 @@ export class Project {
     description: 'The id of the user that created the project',
   })
   userId: string;
+
+  @ApiProperty({
+    type: [ImageDataDto],
+    description: 'The images of the project',
+  })
+  images: ImageDataDto[];
 }

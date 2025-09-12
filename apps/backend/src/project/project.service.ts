@@ -14,9 +14,18 @@ export class ProjectService {
     userId: string,
   ): Promise<ProjectDataDto> {
     return this.prisma.project.create({
-      data: { ...createProjectDto, userId },
+      data: {
+        ...createProjectDto,
+        images: {
+          create: createProjectDto.images,
+        },
+        userId,
+      },
       omit: {
         userId: true,
+      },
+      include: {
+        images: true,
       },
     });
   }
@@ -27,6 +36,9 @@ export class ProjectService {
       omit: {
         userId: true,
       },
+      include: {
+        images: true,
+      },
     });
   }
 
@@ -35,6 +47,9 @@ export class ProjectService {
       where: { id, userId },
       omit: {
         userId: true,
+      },
+      include: {
+        images: true,
       },
     });
 
@@ -60,9 +75,18 @@ export class ProjectService {
 
     return this.prisma.project.update({
       where: { id: updatedProject.id },
-      data: updateProjectDto,
+      data: {
+        ...updateProjectDto,
+        images: {
+          deleteMany: {},
+          create: updateProjectDto.images,
+        },
+      },
       omit: {
         userId: true,
+      },
+      include: {
+        images: true,
       },
     });
   }
@@ -80,6 +104,9 @@ export class ProjectService {
       where: { id: deletedProject.id },
       omit: {
         userId: true,
+      },
+      include: {
+        images: true,
       },
     });
   }
