@@ -27,6 +27,12 @@ model User {
   refreshToken String?
 }
 
+model Technology {
+  id      String @id @default(uuid())
+  content String @unique
+  rating  Int
+}
+
 enum SkillState {
   PLANNED
   RUNNING

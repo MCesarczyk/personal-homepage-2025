@@ -1,6 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty, IsString } from 'class-validator';
-import { ImageDataDto } from 'src/project-image/dto/image-data.dto';
+
+import { ImageDataDto } from '../../project-image/dto/image-data.dto';
 
 export class Project {
   @IsString()
