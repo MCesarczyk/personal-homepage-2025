@@ -4,9 +4,10 @@ import { PrismaService } from '../prisma.service';
 import { UserService } from './user.service';
 import { UserController } from './user.controller';
 import { AuthService } from '../auth/auth.service';
+import { TechnologyService } from '../technology/technology.service';
 
 @Module({
-  providers: [UserService, PrismaService, AuthService],
+  providers: [UserService, PrismaService, AuthService, TechnologyService],
   controllers: [UserController],
   exports: [UserService],
 })

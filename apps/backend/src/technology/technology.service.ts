@@ -14,7 +14,6 @@ export class TechnologyService {
       select: {
         id: true,
         content: true,
-        rating: true,
       },
     });
   }
@@ -24,7 +23,6 @@ export class TechnologyService {
       select: {
         id: true,
         content: true,
-        rating: true,
       },
     });
   }
@@ -35,7 +33,6 @@ export class TechnologyService {
       select: {
         id: true,
         content: true,
-        rating: true,
       },
     });
 
@@ -64,7 +61,6 @@ export class TechnologyService {
       select: {
         id: true,
         content: true,
-        rating: true,
       },
     });
   }
@@ -83,7 +79,6 @@ export class TechnologyService {
       select: {
         id: true,
         content: true,
-        rating: true,
       },
     });
   }

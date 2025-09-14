@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsInt, IsNotEmpty, IsString } from 'class-validator';
+import { IsNotEmpty, IsString } from 'class-validator';
 
 export class Technology {
   @IsString()
@@ -17,12 +17,4 @@ export class Technology {
     required: true,
   })
   content: string;
-
-  @IsInt()
-  @IsNotEmpty()
-  @ApiProperty({
-    example: '3',
-    required: true,
-  })
-  rating: number;
 }

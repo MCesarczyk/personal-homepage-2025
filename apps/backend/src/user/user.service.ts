@@ -1,6 +1,7 @@
 import {
   ConflictException,
   Injectable,
+  NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
 import { User } from '@prisma/client';
@@ -9,10 +10,17 @@ import * as bcrypt from 'bcryptjs';
 import { PrismaService } from '../prisma.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { AddUserTechnologyDto } from './dto/add-user-technology.dto';
+import { UserTechnologyDataDto } from './dto/user-technology-data.dto';
+import { TechnologyService } from '../technology/technology.service';
+import { UpdateUserTechnologyDto } from 'src/user/dto/update-user-technology.dto';
 
 @Injectable()
 export class UserService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private readonly technologyService: TechnologyService,
+  ) {}
 
   async createUser(createUserDto: CreateUserDto): Promise<User> {
     const existingUser = await this.prisma.user.findUnique({
@@ -65,5 +73,163 @@ export class UserService {
       where: { id: userId },
       data: { password: hashedPassword },
     });
+  }
+
+  async addUserTechnology(
+    userId: string,
+    dto: AddUserTechnologyDto,
+  ): Promise<UserTechnologyDataDto> {
+    const technology = await this.technologyService.findOne(dto.technologyId);
+    if (!technology) {
+      throw new NotFoundException('Technology does not exist');
+    }
+
+    const userTechnology = await this.prisma.userTechnology.upsert({
+      where: {
+        userId_technologyId: {
+          userId,
+          technologyId: dto.technologyId,
+        },
+      },
+      update: {
+        rating: dto.rating,
+      },
+      create: {
+        userId,
+        technologyId: dto.technologyId,
+        rating: dto.rating,
+      },
+    });
+
+    return {
+      technologyId: technology.id,
+      content: technology.content,
+      rating: userTechnology.rating || undefined,
+    };
+  }
+
+  async getUserTechnologies(userId: string): Promise<UserTechnologyDataDto[]> {
+    const userTechnologies = await this.prisma.userTechnology.findMany({
+      where: { userId },
+    });
+
+    const technologies = await this.technologyService.findAll();
+    const technologyIds = technologies.map((tech) => tech.id);
+
+    return userTechnologies.map((technology) => ({
+      technologyId: technology.technologyId,
+      content: technologyIds.includes(technology.technologyId)
+        ? technologies.find((tech) => tech.id === technology.technologyId)
+            ?.content || '' // eslint-disable-line
+        : 'Unknown Technology',
+      rating: technology.rating || undefined,
+    }));
+  }
+
+  async getUserTechnology(
+    userId: string,
+    technologyId: string,
+  ): Promise<UserTechnologyDataDto | undefined> {
+    const technology = await this.technologyService.findOne(technologyId);
+    if (!technology) {
+      throw new NotFoundException('Technology does not exist');
+    }
+
+    const userTechnology = await this.prisma.userTechnology.findUnique({
+      where: {
+        userId_technologyId: {
+          userId,
+          technologyId,
+        },
+      },
+    });
+
+    if (!userTechnology) {
+      throw new NotFoundException('Technology is not assigned to user');
+    }
+
+    return {
+      technologyId: technology.id,
+      content: technology.content,
+      rating: userTechnology.rating || undefined,
+    };
+  }
+
+  async updateUserTechnology(
+    userId: string,
+    technologyId: string,
+    userTechnologyUpdateDto: UpdateUserTechnologyDto,
+  ): Promise<UserTechnologyDataDto | undefined> {
+    const technology = await this.technologyService.findOne(technologyId);
+    if (!technology) {
+      throw new NotFoundException('Technology does not exist');
+    }
+
+    const userTechnology = await this.prisma.userTechnology.findUnique({
+      where: {
+        userId_technologyId: {
+          userId,
+          technologyId,
+        },
+      },
+    });
+
+    if (!userTechnology) {
+      throw new NotFoundException('Technology is not assigned to user');
+    }
+
+    if (
+      userTechnologyUpdateDto.rating === undefined ||
+      userTechnologyUpdateDto.rating === userTechnology.rating
+    ) {
+      return;
+    }
+
+    const updatedUserTechnology = await this.prisma.userTechnology.update({
+      where: {
+        userId_technologyId: {
+          userId,
+          technologyId,
+        },
+      },
+      data: userTechnologyUpdateDto,
+    });
+
+    return {
+      technologyId: technology.id,
+      content: technology.content,
+      rating: updatedUserTechnology.rating || undefined,
+    };
+  }
+
+  async removeUserTechnology(
+    userId: string,
+    technologyId: string,
+  ): Promise<UserTechnologyDataDto | undefined> {
+    const technology = await this.technologyService.findOne(technologyId);
+    if (!technology) {
+      throw new NotFoundException('Technology does not exist');
+    }
+
+    const record = await this.prisma.userTechnology.findUnique({
+      where: { userId_technologyId: { userId, technologyId } },
+    });
+    if (!record)
+      throw new NotFoundException('Technology is not assigned to user');
+
+    const deletedUserTechnology = await this.prisma.userTechnology.delete({
+      where: {
+        userId_technologyId: {
+          userId,
+          technologyId,
+        },
+      },
+    });
+
+    return {
+      technologyId: technology.id,
+      content: technology.content,
+      rating: deletedUserTechnology.rating || undefined,
+    };
   }
 }
