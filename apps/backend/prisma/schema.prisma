@@ -16,12 +16,13 @@ datasource db {
 }
 
 model User {
-  id           String    @id @default(uuid())
-  email        String    @unique
+  id           String       @id @default(uuid())
+  email        String       @unique
   name         String
   password     String
   occupation   String
   introduction String
+  technologies Technology[] @relation("UserTechnologies")
   skills       Skill[]
   projects     Project[]
   refreshToken String?
@@ -31,6 +32,7 @@ model Technology {
   id      String @id @default(uuid())
   content String @unique
   rating  Int
+  users   User[] @relation("UserTechnologies")
 }
 
 enum SkillState {
