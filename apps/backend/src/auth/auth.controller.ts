@@ -15,6 +15,7 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 
+import { UserService } from '../user/user.service';
 import { AuthService } from './auth.service';
 import { Public } from './decorators/public.decorator';
 import { LoginPayloadDto } from './dto/login-payload.dto';
@@ -24,9 +25,8 @@ import { SignedRequest } from './types';
 import { ChangePasswordPayloadDto } from './dto/change-password-payload.dto';
 import { LoginResponseDto } from './dto/login-response.dto';
 import { TokenRefreshPayloadDto } from './dto/token-refresh-payload.dto';
-import { RegisterPayloadDto } from 'src/auth/dto/register-payload.dto';
-import { UserService } from 'src/user/user.service';
-import { RegisterResponseDto } from 'src/auth/dto/register-response.dto';
+import { RegisterPayloadDto } from './dto/register-payload.dto';
+import { RegisterResponseDto } from './dto/register-response.dto';
 
 @ApiBearerAuth()
 @ApiTags('auth')
