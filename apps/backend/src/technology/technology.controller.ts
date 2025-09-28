@@ -60,7 +60,7 @@ export class TechnologyController {
   })
   @ApiResponse({ status: 401, description: 'Unauthorized.' })
   findOne(@Param('id') id: string): Promise<TechnologyDataDto | null> {
-    return this.technologyService.findOne(id);
+    return this.technologyService.findByContent(id);
   }
 
   @Patch(':id')

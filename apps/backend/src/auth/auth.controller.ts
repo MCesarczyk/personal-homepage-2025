@@ -24,12 +24,41 @@ import { SignedRequest } from './types';
 import { ChangePasswordPayloadDto } from './dto/change-password-payload.dto';
 import { LoginResponseDto } from './dto/login-response.dto';
 import { TokenRefreshPayloadDto } from './dto/token-refresh-payload.dto';
+import { RegisterPayloadDto } from 'src/auth/dto/register-payload.dto';
+import { UserService } from 'src/user/user.service';
+import { RegisterResponseDto } from 'src/auth/dto/register-response.dto';
 
 @ApiBearerAuth()
 @ApiTags('auth')
 @Controller('auth')
 export class AuthController {
-  constructor(private authService: AuthService) {}
+  constructor(
+    private authService: AuthService,
+    private userService: UserService,
+  ) {}
+
+  @Public()
+  @Post('register')
+  @ApiOperation({ summary: 'Register user' })
+  @ApiResponse({
+    status: HttpStatus.CREATED,
+    description: 'Register user',
+    type: RegisterResponseDto,
+  })
+  async register(
+    @Body() registerDto: RegisterPayloadDto,
+  ): Promise<RegisterResponseDto | undefined> {
+    const response = await this.userService.createUser(registerDto);
+    if (!response) {
+      return undefined;
+    }
+    const { id, password, refreshToken: _, ...user } = response;
+
+    const accessToken = await this.authService.createAccessToken(id);
+    const refreshToken = await this.authService.createRefreshToken(id);
+
+    return { ...user, refreshToken, accessToken };
+  }
 
   @Public()
   @HttpCode(HttpStatus.OK)

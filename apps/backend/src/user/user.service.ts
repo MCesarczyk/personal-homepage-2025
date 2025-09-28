@@ -79,16 +79,20 @@ export class UserService {
     userId: string,
     dto: AddUserTechnologyDto,
   ): Promise<UserTechnologyDataDto> {
-    const technology = await this.technologyService.findOne(dto.technologyId);
+    let technology;
+    technology = await this.technologyService.findByContent(dto.content);
     if (!technology) {
-      throw new NotFoundException('Technology does not exist');
+      const response = await this.technologyService.create({
+        content: dto.content,
+      });
+      technology = response;
     }
 
     const userTechnology = await this.prisma.userTechnology.upsert({
       where: {
         userId_technologyId: {
           userId,
-          technologyId: dto.technologyId,
+          technologyId: technology.id,
         },
       },
       update: {
@@ -96,7 +100,7 @@ export class UserService {
       },
       create: {
         userId,
-        technologyId: dto.technologyId,
+        technologyId: technology.id,
         rating: dto.rating,
       },
     });
@@ -130,7 +134,7 @@ export class UserService {
     userId: string,
     technologyId: string,
   ): Promise<UserTechnologyDataDto | undefined> {
-    const technology = await this.technologyService.findOne(technologyId);
+    const technology = await this.technologyService.findById(technologyId);
     if (!technology) {
       throw new NotFoundException('Technology does not exist');
     }
@@ -160,7 +164,7 @@ export class UserService {
     technologyId: string,
     userTechnologyUpdateDto: UpdateUserTechnologyDto,
   ): Promise<UserTechnologyDataDto | undefined> {
-    const technology = await this.technologyService.findOne(technologyId);
+    const technology = await this.technologyService.findById(technologyId);
     if (!technology) {
       throw new NotFoundException('Technology does not exist');
     }
@@ -206,7 +210,7 @@ export class UserService {
     userId: string,
     technologyId: string,
   ): Promise<UserTechnologyDataDto | undefined> {
-    const technology = await this.technologyService.findOne(technologyId);
+    const technology = await this.technologyService.findById(technologyId);
     if (!technology) {
       throw new NotFoundException('Technology does not exist');
     }

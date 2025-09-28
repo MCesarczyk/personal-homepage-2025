@@ -19,8 +19,6 @@ import {
 import { UserService } from './user.service';
 import { UserDataDto } from './dto/user-data.dto';
 import { SignedRequest } from '../auth/types';
-import { CreateUserDto } from './dto/create-user.dto';
-import { Public } from '../auth/decorators/public.decorator';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { AddUserTechnologyDto } from 'src/user/dto/add-user-technology.dto';
 import { UserTechnologyDataDto } from 'src/user/dto/user-technology-data.dto';
@@ -31,25 +29,6 @@ import { UpdateUserTechnologyDto } from 'src/user/dto/update-user-technology.dto
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
-
-  @Public()
-  @Post('register')
-  @ApiOperation({ summary: 'Register user' })
-  @ApiResponse({
-    status: HttpStatus.CREATED,
-    description: 'Register user',
-    type: UserDataDto,
-  })
-  async createProfile(
-    @Body() createUserDto: CreateUserDto,
-  ): Promise<UserDataDto | undefined> {
-    const response = await this.userService.createUser(createUserDto);
-    if (!response) {
-      return undefined;
-    }
-    const { id, password, refreshToken, ...user } = response;
-    return user;
-  }
 
   @Get('profile')
   @ApiOperation({ summary: 'Get profile' })

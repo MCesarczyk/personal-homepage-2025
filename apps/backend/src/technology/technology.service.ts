@@ -10,7 +10,7 @@ export class TechnologyService {
 
   create(createTechnologyDto: CreateTechnologyDto): Promise<TechnologyDataDto> {
     return this.prisma.technology.create({
-      data: { ...createTechnologyDto },
+      data: { content: createTechnologyDto.content },
       select: {
         id: true,
         content: true,
@@ -27,7 +27,7 @@ export class TechnologyService {
     });
   }
 
-  async findOne(id: string): Promise<TechnologyDataDto | null> {
+  async findById(id: string): Promise<TechnologyDataDto | null> {
     const matchedTechnology = await this.prisma.technology.findUnique({
       where: { id },
       select: {
@@ -39,6 +39,18 @@ export class TechnologyService {
     if (!matchedTechnology) {
       throw new NotFoundException('Technology not found');
     }
+
+    return matchedTechnology;
+  }
+
+  async findByContent(content: string): Promise<TechnologyDataDto | null> {
+    const matchedTechnology = await this.prisma.technology.findUnique({
+      where: { content },
+      select: {
+        id: true,
+        content: true,
+      },
+    });
 
     return matchedTechnology;
   }
