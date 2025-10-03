@@ -71,6 +71,8 @@ model Project {
   demoUrl     String
   user        User           @relation(fields: [userId], references: [id])
   userId      String
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @default(now()) @updatedAt
   images      ProjectImage[]
 }
 

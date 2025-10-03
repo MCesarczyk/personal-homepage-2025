@@ -53,6 +53,18 @@ export class Project {
   userId: string;
 
   @ApiProperty({
+    example: '2022-01-01T00:00:00.000Z',
+    description: 'The creation date of the project',
+  })
+  createdAt: Date;
+
+  @ApiProperty({
+    example: '2022-01-01T00:00:00.000Z',
+    description: 'The last update date of the project',
+  })
+  updatedAt: Date;
+
+  @ApiProperty({
     type: [ImageDataDto],
     description: 'The images of the project',
   })
