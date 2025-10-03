@@ -18,6 +18,8 @@ export class SkillService {
         id: true,
         content: true,
         state: true,
+        createdAt: true,
+        updatedAt: true,
       },
     });
   }
@@ -29,6 +31,8 @@ export class SkillService {
         id: true,
         content: true,
         state: true,
+        createdAt: true,
+        updatedAt: true,
       },
     });
   }
@@ -40,6 +44,8 @@ export class SkillService {
         id: true,
         content: true,
         state: true,
+        createdAt: true,
+        updatedAt: true,
       },
     });
 
@@ -70,6 +76,8 @@ export class SkillService {
         id: true,
         content: true,
         state: true,
+        createdAt: true,
+        updatedAt: true,
       },
     });
   }
@@ -89,6 +97,8 @@ export class SkillService {
         id: true,
         content: true,
         state: true,
+        createdAt: true,
+        updatedAt: true,
       },
     });
   }

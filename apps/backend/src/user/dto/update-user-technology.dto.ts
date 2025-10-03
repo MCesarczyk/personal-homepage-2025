@@ -5,4 +5,6 @@ import { UserTechnology } from '../entities/user-technology.entity';
 export class UpdateUserTechnologyDto extends OmitType(UserTechnology, [
   'technologyId',
   'userId',
+  'createdAt',
+  'updatedAt',
 ]) {}

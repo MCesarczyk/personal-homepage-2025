@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { SkillState } from '@prisma/client';
-import { IsNotEmpty, IsString } from 'class-validator';
+import { IsDateString, IsNotEmpty, IsString } from 'class-validator';
 
 export class Skill {
   @IsString()
@@ -34,4 +34,20 @@ export class Skill {
     required: true,
   })
   userId: string;
+
+  @IsDateString()
+  @IsNotEmpty()
+  @ApiProperty({
+    example: '2023-10-01T12:00:00Z',
+    description: 'The date and time when the skill was created',
+  })
+  createdAt: Date;
+
+  @IsDateString()
+  @IsNotEmpty()
+  @ApiProperty({
+    example: '2023-10-01T12:00:00Z',
+    description: 'The date and time when the skill was last updated',
+  })
+  updatedAt: Date;
 }

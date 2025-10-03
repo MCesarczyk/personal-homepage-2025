@@ -109,6 +109,8 @@ export class UserService {
       technologyId: technology.id,
       content: technology.content,
       rating: userTechnology.rating || undefined,
+      createdAt: userTechnology.createdAt,
+      updatedAt: userTechnology.updatedAt,
     };
   }
 
@@ -127,6 +129,8 @@ export class UserService {
             ?.content || '' // eslint-disable-line
         : 'Unknown Technology',
       rating: technology.rating || undefined,
+      createdAt: technology.createdAt,
+      updatedAt: technology.updatedAt,
     }));
   }
 
@@ -156,6 +160,8 @@ export class UserService {
       technologyId: technology.id,
       content: technology.content,
       rating: userTechnology.rating || undefined,
+      createdAt: userTechnology.createdAt,
+      updatedAt: userTechnology.updatedAt,
     };
   }
 
@@ -203,6 +209,8 @@ export class UserService {
       technologyId: technology.id,
       content: technology.content,
       rating: updatedUserTechnology.rating || undefined,
+      createdAt: updatedUserTechnology.createdAt,
+      updatedAt: updatedUserTechnology.updatedAt,
     };
   }
 
@@ -234,6 +242,8 @@ export class UserService {
       technologyId: technology.id,
       content: technology.content,
       rating: deletedUserTechnology.rating || undefined,
+      createdAt: deletedUserTechnology.createdAt,
+      updatedAt: deletedUserTechnology.updatedAt,
     };
   }
 }

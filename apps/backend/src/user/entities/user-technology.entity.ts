@@ -1,5 +1,12 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsNumber, IsString, Max, Min } from 'class-validator';
+import {
+  IsDateString,
+  IsNotEmpty,
+  IsNumber,
+  IsString,
+  Max,
+  Min,
+} from 'class-validator';
 
 export class UserTechnology {
   @IsString()
@@ -29,4 +36,20 @@ export class UserTechnology {
     required: false,
   })
   rating?: number;
+
+  @IsDateString()
+  @IsNotEmpty()
+  @ApiProperty({
+    example: '2023-10-01T12:00:00Z',
+    description: 'The date and time when the technology was created',
+  })
+  createdAt: Date;
+
+  @IsDateString()
+  @IsNotEmpty()
+  @ApiProperty({
+    example: '2023-10-01T12:00:00Z',
+    description: 'The date and time when the technology was last updated',
+  })
+  updatedAt: Date;
 }
