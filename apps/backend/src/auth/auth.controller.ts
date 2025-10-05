@@ -102,15 +102,7 @@ export class AuthController {
     @Res() res: Response,
     @Body() body: TokenRefreshPayloadDto,
   ): Promise<Response<TokenRefreshResponseDto>> {
-    const { accessToken, refreshToken } = await this.authService.refresh(
-      body.refreshToken,
-    );
-
-    res.cookie('refreshToken', refreshToken, {
-      httpOnly: true,
-      secure: true,
-      sameSite: 'strict',
-    });
+    const { accessToken } = await this.authService.refresh(body.refreshToken);
 
     return res.send({ accessToken });
   }
