@@ -12,7 +12,7 @@
     "check:circular": "madge --circular --extensions ts,tsx ./apps",
     "install": "cd apps/backend && pnpm install && cd ../admin && pnpm install && cd ../website && pnpm install",
     "db:prepare": "concurrently -c \"red\" \"pnpm --filter backend db:prepare\"",
-    "test": "concurrently -c \"red\" \"pnpm --filter backend test\"",
+    "test": "concurrently -c \"red,green\" \"pnpm --filter backend test\" \"pnpm --filter admin test\"",
     "lint": "concurrently -c \"red,green,blue\" \"pnpm --filter backend lint\" \"pnpm --filter admin lint\" \"pnpm --filter website lint\"",
     "dev": "concurrently -c \"red,green,blue\" \"pnpm --filter backend start:dev\" \"pnpm --filter admin dev\" \"pnpm --filter website dev\"",
     "build": "concurrently -c \"red,green,blue\" \"pnpm --filter backend build\" \"pnpm --filter admin build\" \"pnpm --filter website build\""
