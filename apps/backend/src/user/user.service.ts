@@ -8,12 +8,12 @@ import { User } from '@prisma/client';
 import * as bcrypt from 'bcryptjs';
 
 import { PrismaService } from '../prisma.service';
+import { TechnologyService } from '../technology/technology.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { AddUserTechnologyDto } from './dto/add-user-technology.dto';
+import { CreateUserTechnologyDto } from './dto/create-user-technology.dto';
 import { UserTechnologyDataDto } from './dto/user-technology-data.dto';
-import { TechnologyService } from '../technology/technology.service';
-import { UpdateUserTechnologyDto } from 'src/user/dto/update-user-technology.dto';
+import { UpdateUserTechnologyDto } from './dto/update-user-technology.dto';
 
 @Injectable()
 export class UserService {
@@ -77,7 +77,7 @@ export class UserService {
 
   async addUserTechnology(
     userId: string,
-    dto: AddUserTechnologyDto,
+    dto: CreateUserTechnologyDto,
   ): Promise<UserTechnologyDataDto> {
     let technology;
     technology = await this.technologyService.findByContent(dto.content);

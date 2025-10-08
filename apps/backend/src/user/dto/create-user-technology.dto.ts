@@ -1,9 +1,9 @@
 import { IntersectionType, PickType } from '@nestjs/swagger';
 
-import { UserTechnology } from '../entities/user-technology.entity';
 import { Technology } from '../../technology/entities/technology.entity';
+import { UserTechnology } from '../entities/user-technology.entity';
 
-export class AddUserTechnologyDto extends IntersectionType(
+export class CreateUserTechnologyDto extends IntersectionType(
   PickType(UserTechnology, ['rating']),
   PickType(Technology, ['content']),
 ) {}

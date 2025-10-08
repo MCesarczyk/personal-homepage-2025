@@ -1,5 +1,5 @@
 import { PartialType } from '@nestjs/swagger';
 
-import { Technology } from '../entities/technology.entity';
+import { CreateTechnologyDto } from './create-technology.dto';
 
-export class UpdateTechnologyDto extends PartialType(Technology) {}
+export class UpdateTechnologyDto extends PartialType(CreateTechnologyDto) {}

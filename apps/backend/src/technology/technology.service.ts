@@ -1,8 +1,9 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
+
+import { PrismaService } from '../prisma.service';
 import { CreateTechnologyDto } from './dto/create-technology.dto';
 import { UpdateTechnologyDto } from './dto/update-technology.dto';
-import { PrismaService } from '../prisma.service';
-import { TechnologyDataDto } from 'src/technology/dto/technology-data.dto';
+import { TechnologyDataDto } from './dto/technology-data.dto';
 
 @Injectable()
 export class TechnologyService {

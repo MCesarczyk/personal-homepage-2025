@@ -20,7 +20,7 @@ import { SignedRequest } from '../auth/types';
 import { UserService } from './user.service';
 import { UserDataDto } from './dto/user-data.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { AddUserTechnologyDto } from './dto/add-user-technology.dto';
+import { CreateUserTechnologyDto } from './dto/create-user-technology.dto';
 import { UserTechnologyDataDto } from './dto/user-technology-data.dto';
 import { UpdateUserTechnologyDto } from './dto/update-user-technology.dto';
 
@@ -82,7 +82,7 @@ export class UserController {
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   async addTechnologyToUser(
     @Req() req: SignedRequest,
-    @Body() dto: AddUserTechnologyDto,
+    @Body() dto: CreateUserTechnologyDto,
   ): Promise<UserTechnologyDataDto> {
     return this.userService.addUserTechnology(req.user.id, dto);
   }

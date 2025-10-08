@@ -1,10 +1,7 @@
-import { OmitType } from '@nestjs/swagger/dist/type-helpers/omit-type.helper';
+import { PickType } from '@nestjs/swagger';
 
-import { UserTechnology } from '../entities/user-technology.entity';
+import { CreateUserTechnologyDto } from './create-user-technology.dto';
 
-export class UpdateUserTechnologyDto extends OmitType(UserTechnology, [
-  'technologyId',
-  'userId',
-  'createdAt',
-  'updatedAt',
+export class UpdateUserTechnologyDto extends PickType(CreateUserTechnologyDto, [
+  'rating',
 ]) {}
