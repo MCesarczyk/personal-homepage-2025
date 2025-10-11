@@ -1,7 +1,7 @@
 import { Plus } from "lucide-react";
 import { useDroppable } from "@dnd-kit/core";
 
-import { Skill, SkillState } from "./types";
+import { type Skill, type SkillState } from "./types";
 import { SkillCard } from "./SkillCard";
 import { Button } from "../../shared/ui/Button";
 import { cn } from "../../shared/utils/cn";
@@ -16,15 +16,7 @@ interface KanbanColumnProps {
   color: "blue" | "yellow" | "green";
 }
 
-export const KanbanColumn = ({
-  title,
-  state,
-  skills,
-  onUpdate,
-  onDelete,
-  onAdd,
-  color,
-}: KanbanColumnProps) => {
+export const KanbanColumn = ({ title, state, skills, onUpdate, onDelete, onAdd, color }: KanbanColumnProps) => {
   const { setNodeRef } = useDroppable({
     id: state,
   });
@@ -44,33 +36,18 @@ export const KanbanColumn = ({
   return (
     <div
       ref={setNodeRef}
-      className={cn(
-        "rounded-xl border-2 md:h-[600px] flex flex-col min-h-fit h-auto",
-        colorClasses[color],
-      )}
+      className={cn("rounded-xl border-2 md:h-[600px] flex flex-col min-h-fit h-auto", colorClasses[color])}
     >
-      <div
-        className={cn(
-          "px-4 py-3 rounded-t-lg flex items-center justify-between",
-          headerColorClasses[color],
-        )}
-      >
+      <div className={cn("px-4 py-3 rounded-t-lg flex items-center justify-between", headerColorClasses[color])}>
         <h3 className="font-semibold">{title}</h3>
-        <span className="text-sm bg-gray-400 bg-opacity-50 px-2 py-1 rounded-full">
-          {skills.length}
-        </span>
+        <span className="text-sm bg-gray-400 bg-opacity-50 px-2 py-1 rounded-full">{skills.length}</span>
       </div>
 
       <div className={cn("flex-1 p-4 transition-colors bg-gray-800")}>
         <div className="space-y-3 min-h-[200px]">
           {skills.map((skill, index) => (
             <div key={skill.id}>
-              <SkillCard
-                index={index}
-                skill={skill}
-                onUpdate={onUpdate}
-                onDelete={onDelete}
-              />
+              <SkillCard index={index} skill={skill} onUpdate={onUpdate} onDelete={onDelete} />
             </div>
           ))}
         </div>

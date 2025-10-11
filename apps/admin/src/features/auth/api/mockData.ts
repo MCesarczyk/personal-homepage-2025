@@ -1,4 +1,4 @@
-import { User } from "../validation/authSchemas";
+import { type User } from "../validation/authSchemas";
 
 export const mockUsers: User[] = [
   {

@@ -4,7 +4,7 @@ import { PROJECTS_URLS } from "./projectsUrls";
 import { validateData } from "../../../shared/utils/validation";
 import {
   createProjectSchema,
-  Project,
+  type Project,
   projectSchema,
   projectsListSchema,
   updateProjectSchema,
@@ -12,9 +12,7 @@ import {
 
 export const projectsService = {
   getProjects: async (): Promise<Project[]> => {
-    const response = await authorizedFetchService(
-      `${API_URL}${API_PREFIX}${PROJECTS_URLS.getProjects}`,
-    );
+    const response = await authorizedFetchService(`${API_URL}${API_PREFIX}${PROJECTS_URLS.getProjects}`);
 
     if (!response.ok) {
       throw new Error("Failed to fetch projects");
@@ -30,9 +28,7 @@ export const projectsService = {
   },
 
   getProject: async (id: string): Promise<Project> => {
-    const response = await authorizedFetchService(
-      `${API_URL}${API_PREFIX}${PROJECTS_URLS.getProject(id)}`,
-    );
+    const response = await authorizedFetchService(`${API_URL}${API_PREFIX}${PROJECTS_URLS.getProject(id)}`);
 
     if (!response.ok) {
       throw new Error(`Failed to fetch project with id: ${id}`);
@@ -47,23 +43,16 @@ export const projectsService = {
     return validatedResponse.data;
   },
 
-  createProject: async (
-    data: Omit<Project, "id" | "createdAt" | "updatedAt">,
-  ): Promise<Project> => {
+  createProject: async (data: Omit<Project, "id" | "createdAt" | "updatedAt">): Promise<Project> => {
     const validationResult = validateData(createProjectSchema, data);
     if (!validationResult.success) {
-      throw new Error(
-        `Invalid project data: ${validationResult.errors.issues[0]?.message}`,
-      );
+      throw new Error(`Invalid project data: ${validationResult.errors.issues[0]?.message}`);
     }
 
-    const response = await authorizedFetchService(
-      `${API_URL}${API_PREFIX}${PROJECTS_URLS.createProject}`,
-      {
-        method: "POST",
-        body: JSON.stringify(data),
-      },
-    );
+    const response = await authorizedFetchService(`${API_URL}${API_PREFIX}${PROJECTS_URLS.createProject}`, {
+      method: "POST",
+      body: JSON.stringify(data),
+    });
 
     if (!response.ok) {
       throw new Error("Failed to create project");
@@ -78,24 +67,16 @@ export const projectsService = {
     return validatedResponse.data;
   },
 
-  updateProject: async (
-    id: string,
-    updates: Partial<Project>,
-  ): Promise<Project> => {
+  updateProject: async (id: string, updates: Partial<Project>): Promise<Project> => {
     const validationResult = validateData(updateProjectSchema, updates);
     if (!validationResult.success) {
-      throw new Error(
-        `Invalid project update data: ${validationResult.errors.issues[0]?.message}`,
-      );
+      throw new Error(`Invalid project update data: ${validationResult.errors.issues[0]?.message}`);
     }
 
-    const response = await authorizedFetchService(
-      `${API_URL}${API_PREFIX}${PROJECTS_URLS.updateProject(id)}`,
-      {
-        method: "PATCH",
-        body: JSON.stringify(updates),
-      },
-    );
+    const response = await authorizedFetchService(`${API_URL}${API_PREFIX}${PROJECTS_URLS.updateProject(id)}`, {
+      method: "PATCH",
+      body: JSON.stringify(updates),
+    });
 
     if (!response.ok) {
       throw new Error(`Failed to update project with id: ${id}`);
@@ -111,12 +92,9 @@ export const projectsService = {
   },
 
   deleteProject: async (id: string): Promise<void> => {
-    const response = await authorizedFetchService(
-      `${API_URL}${API_PREFIX}${PROJECTS_URLS.deleteProject(id)}`,
-      {
-        method: "DELETE",
-      },
-    );
+    const response = await authorizedFetchService(`${API_URL}${API_PREFIX}${PROJECTS_URLS.deleteProject(id)}`, {
+      method: "DELETE",
+    });
 
     if (!response.ok) {
       throw new Error(`Failed to delete project with id: ${id}`);

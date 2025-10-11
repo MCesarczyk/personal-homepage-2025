@@ -27,8 +27,7 @@ describe("technologiesService", () => {
       content: "Test Tech",
       rating: 5,
     };
-    const created =
-      await technologiesService.createUserTechnology(newTechnologyData);
+    const created = await technologiesService.createUserTechnology(newTechnologyData);
     expect(created.content).toBe(newTechnologyData.content);
     expect(created.rating).toBe(newTechnologyData.rating);
     expect(created.technologyId).toBeDefined();
@@ -42,10 +41,7 @@ describe("technologiesService", () => {
 
   it("should update a technology", async () => {
     const updates = { id: "2", content: "Updated Tech", rating: 4 };
-    const updated = await technologiesService.updateUserTechnology(
-      "2",
-      updates,
-    );
+    const updated = await technologiesService.updateUserTechnology("2", updates);
     expect(updated.rating).toBe(updates.rating);
     expect(updated.updatedAt).toBeDefined();
     expect(updated).toEqual({
@@ -58,20 +54,18 @@ describe("technologiesService", () => {
   });
 
   it("should throw if update technology not found", async () => {
-    await expect(
-      technologiesService.updateUserTechnology("99", { content: "Nope" }),
-    ).rejects.toThrow("Failed to update user technology with id: 99");
+    await expect(technologiesService.updateUserTechnology("99", { content: "Nope" })).rejects.toThrow(
+      "Failed to update user technology with id: 99",
+    );
   });
 
   it("should delete a technology", async () => {
-    await expect(
-      technologiesService.deleteUserTechnology("3"),
-    ).resolves.toBeUndefined();
+    await expect(technologiesService.deleteUserTechnology("3")).resolves.toBeUndefined();
   });
 
   it("should throw if deleting non-existent technology", async () => {
-    await expect(
-      technologiesService.deleteUserTechnology("99"),
-    ).rejects.toThrow("Failed to delete user technology with id: 99");
+    await expect(technologiesService.deleteUserTechnology("99")).rejects.toThrow(
+      "Failed to delete user technology with id: 99",
+    );
   });
 });

@@ -1,7 +1,7 @@
 import { http, HttpResponse } from "msw";
 
 import { mockProjects } from "./mockData";
-import { Project } from "../validation/projectSchemas";
+import { type Project } from "../validation/projectSchemas";
 
 const projects = [...mockProjects];
 
@@ -22,10 +22,7 @@ export const projectsHandlers = [
   }),
 
   http.post("*/api/v1/project", async ({ request }) => {
-    const data = (await request.json()) as Omit<
-      Project,
-      "id" | "createdAt" | "updatedAt"
-    >;
+    const data = (await request.json()) as Omit<Project, "id" | "createdAt" | "updatedAt">;
 
     const newProject: Project = {
       ...data,

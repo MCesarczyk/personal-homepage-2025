@@ -3,9 +3,4 @@ import { technologiesHandlers } from "../../features/technologies/api/mockHandle
 import { projectsHandlers } from "../../features/projects/api/mockHandlers";
 import { authHandlers } from "../../features/auth/api/mockHandlers";
 
-export const handlers = [
-  ...skillsHandlers,
-  ...technologiesHandlers,
-  ...projectsHandlers,
-  ...authHandlers,
-];
+export const handlers = [...skillsHandlers, ...technologiesHandlers, ...projectsHandlers, ...authHandlers];

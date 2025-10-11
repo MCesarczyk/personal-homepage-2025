@@ -1,9 +1,9 @@
-import { MouseEvent, useState } from "react";
+import { type MouseEvent, useState } from "react";
 import { Edit3, Trash2, Check, X } from "lucide-react";
 import { useDraggable } from "@dnd-kit/core";
 import { CSS } from "@dnd-kit/utilities";
 
-import { Skill } from "./types";
+import { type Skill } from "./types";
 import { Card } from "../../shared/ui/Card";
 import { Button } from "../../shared/ui/Button";
 import { cn } from "../../shared/utils/cn";
@@ -17,23 +17,16 @@ interface SkillCardProps {
   isDragging?: boolean;
 }
 
-export const SkillCard = ({
-  index,
-  skill,
-  onUpdate,
-  onDelete,
-  isDragging = false,
-}: SkillCardProps) => {
-  const { attributes, listeners, setNodeRef, setActivatorNodeRef, transform } =
-    useDraggable({
+export const SkillCard = ({ index, skill, onUpdate, onDelete, isDragging = false }: SkillCardProps) => {
+  const { attributes, listeners, setNodeRef, setActivatorNodeRef, transform } = useDraggable({
+    id: skill.id,
+    data: {
       id: skill.id,
-      data: {
-        id: skill.id,
-        content: skill.content,
-        index,
-        parent,
-      },
-    });
+      content: skill.content,
+      index,
+      parent,
+    },
+  });
   const style = {
     transform: CSS.Translate.toString(transform),
   };
@@ -63,10 +56,7 @@ export const SkillCard = ({
   return (
     <div style={style} {...attributes} ref={setNodeRef}>
       <Card
-        className={cn(
-          "mb-3 transition-all duration-200",
-          isDragging && "rotate-3 scale-105 shadow-lg",
-        )}
+        className={cn("mb-3 transition-all duration-200", isDragging && "rotate-3 scale-105 shadow-lg")}
         padding="sm"
       >
         <Handle {...{ ref: setActivatorNodeRef }} {...listeners} />
@@ -90,18 +80,12 @@ export const SkillCard = ({
           </div>
         ) : (
           <div className="flex items-start justify-between mb-2">
-            <p className="text-sm font-medium text-gray-50 flex-1">
-              {skill.content}
-            </p>
+            <p className="text-sm font-medium text-gray-50 flex-1">{skill.content}</p>
             <div className="flex space-x-1 ml-2">
               <Button variant="ghost" size="sm" onClick={handleEdit}>
                 <Edit3 className="w-3 h-3" />
               </Button>
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => onDelete(skill.id)}
-              >
+              <Button variant="ghost" size="sm" onClick={() => onDelete(skill.id)}>
                 <Trash2 className="w-3 h-3 text-red-500" />
               </Button>
             </div>

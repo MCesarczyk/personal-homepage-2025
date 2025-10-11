@@ -1,9 +1,5 @@
 import { z } from "zod";
-import {
-  idSchema,
-  dateSchema,
-  urlSchema,
-} from "../../../shared/validation/common";
+import { idSchema, dateSchema, urlSchema } from "../../../shared/validation/common";
 
 export const projectImageSchema = z.object({
   id: idSchema,
@@ -14,14 +10,8 @@ export const projectImageSchema = z.object({
 
 export const projectSchema = z.object({
   id: idSchema,
-  title: z
-    .string()
-    .min(1, "Project title is required")
-    .max(200, "Title too long"),
-  description: z
-    .string()
-    .min(1, "Project description is required")
-    .max(2000, "Description too long"),
+  title: z.string().min(1, "Project title is required").max(200, "Title too long"),
+  description: z.string().min(1, "Project description is required").max(2000, "Description too long"),
   codeUrl: urlSchema.refine((url) => !url || url.length > 0, {
     message: "Code URL must be valid if provided",
   }),
@@ -34,14 +24,8 @@ export const projectSchema = z.object({
 });
 
 export const createProjectSchema = z.object({
-  title: z
-    .string()
-    .min(1, "Project title is required")
-    .max(200, "Title too long"),
-  description: z
-    .string()
-    .min(1, "Project description is required")
-    .max(2000, "Description too long"),
+  title: z.string().min(1, "Project title is required").max(200, "Title too long"),
+  description: z.string().min(1, "Project description is required").max(2000, "Description too long"),
   codeUrl: urlSchema.default(""),
   demoUrl: urlSchema.default(""),
   images: z.array(projectImageSchema).default([]),
@@ -49,16 +33,8 @@ export const createProjectSchema = z.object({
 
 export const updateProjectSchema = z
   .object({
-    title: z
-      .string()
-      .min(1, "Project title is required")
-      .max(200, "Title too long")
-      .optional(),
-    description: z
-      .string()
-      .min(1, "Project description is required")
-      .max(2000, "Description too long")
-      .optional(),
+    title: z.string().min(1, "Project title is required").max(200, "Title too long").optional(),
+    description: z.string().min(1, "Project description is required").max(2000, "Description too long").optional(),
     codeUrl: urlSchema.optional(),
     demoUrl: urlSchema.optional(),
     images: z.array(projectImageSchema).optional(),

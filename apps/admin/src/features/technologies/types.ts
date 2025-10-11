@@ -1,5 +1,1 @@
-export type {
-  Technology,
-  CreateTechnologyData,
-  UpdateTechnologyData,
-} from "./validation/technologySchemas";
+export type { Technology, CreateTechnologyData, UpdateTechnologyData } from "./validation/technologySchemas";

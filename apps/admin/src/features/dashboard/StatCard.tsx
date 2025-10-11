@@ -1,4 +1,4 @@
-import { LucideIcon } from "lucide-react";
+import { type LucideIcon } from "lucide-react";
 
 import { Card } from "../../shared/ui/Card";
 import { cn } from "../../shared/utils/cn";
@@ -13,14 +13,7 @@ interface StatCardProps {
   subtitle?: string;
 }
 
-export const StatCard = ({
-  loading,
-  title,
-  value,
-  icon: Icon,
-  color,
-  subtitle,
-}: StatCardProps) => {
+export const StatCard = ({ loading, title, value, icon: Icon, color, subtitle }: StatCardProps) => {
   const colorClasses = {
     blue: "bg-blue-600 text-blue-50",
     green: "bg-green-600 text-green-50",

@@ -1,17 +1,8 @@
-import {
-  createContext,
-  useContext,
-  useReducer,
-  useEffect,
-  ReactNode,
-} from "react";
+import { createContext, useContext, useReducer, useEffect, type ReactNode } from "react";
 
-import { User } from "../validation/authSchemas";
+import { type User } from "../validation/authSchemas";
 import { authService } from "../api/authService";
-import {
-  LOCAL_STORAGE_ACCESS_TOKEN,
-  LOCAL_STORAGE_REFRESH_TOKEN,
-} from "../../../shared/constants/localStorage";
+import { LOCAL_STORAGE_ACCESS_TOKEN, LOCAL_STORAGE_REFRESH_TOKEN } from "../../../shared/constants/localStorage";
 
 interface AuthState {
   user: User | null;

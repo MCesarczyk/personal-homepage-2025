@@ -5,28 +5,23 @@ import { validateData } from "../../../shared/utils/validation";
 import {
   createTechnologySchema,
   technologiesListSchema,
-  Technology,
+  type Technology,
   updateTechnologySchema,
   userTechnologiesListSchema,
-  UserTechnology,
+  type UserTechnology,
   userTechnologySchema,
 } from "../validation/technologySchemas";
 
 export const technologiesService = {
   getTechnologies: async (): Promise<Technology[]> => {
-    const response = await authorizedFetchService(
-      `${API_URL}${API_PREFIX}${TECHNOLOGIES_URLS.getTechnologies}`,
-    );
+    const response = await authorizedFetchService(`${API_URL}${API_PREFIX}${TECHNOLOGIES_URLS.getTechnologies}`);
 
     if (!response.ok) {
       throw new Error("Failed to fetch technologies");
     }
 
     const responseData = await response.json();
-    const validatedResponse = validateData(
-      technologiesListSchema,
-      responseData,
-    );
+    const validatedResponse = validateData(technologiesListSchema, responseData);
     if (!validatedResponse.success) {
       throw new Error("Invalid technologies data format from server");
     }
@@ -35,19 +30,14 @@ export const technologiesService = {
   },
 
   getUserTechnologies: async (): Promise<UserTechnology[]> => {
-    const response = await authorizedFetchService(
-      `${API_URL}${API_PREFIX}${TECHNOLOGIES_URLS.getUserTechnologies}`,
-    );
+    const response = await authorizedFetchService(`${API_URL}${API_PREFIX}${TECHNOLOGIES_URLS.getUserTechnologies}`);
 
     if (!response.ok) {
       throw new Error("Failed to fetch user technologies");
     }
 
     const responseData = await response.json();
-    const validatedResponse = validateData(
-      userTechnologiesListSchema,
-      responseData,
-    );
+    const validatedResponse = validateData(userTechnologiesListSchema, responseData);
     if (!validatedResponse.success) {
       throw new Error("Invalid user technologies data format from server");
     }
@@ -56,9 +46,7 @@ export const technologiesService = {
   },
 
   getUserTechnology: async (id: string): Promise<UserTechnology> => {
-    const response = await authorizedFetchService(
-      `${API_URL}${API_PREFIX}${TECHNOLOGIES_URLS.getUserTechnology(id)}`,
-    );
+    const response = await authorizedFetchService(`${API_URL}${API_PREFIX}${TECHNOLOGIES_URLS.getUserTechnology(id)}`);
 
     if (!response.ok) {
       throw new Error(`Failed to fetch user technology with id: ${id}`);
@@ -73,24 +61,16 @@ export const technologiesService = {
     return validatedResponse.data;
   },
 
-  createUserTechnology: async (data: {
-    content: string;
-    rating: number;
-  }): Promise<UserTechnology> => {
+  createUserTechnology: async (data: { content: string; rating: number }): Promise<UserTechnology> => {
     const validationResult = validateData(createTechnologySchema, data);
     if (!validationResult.success) {
-      throw new Error(
-        `Invalid user technology data: ${validationResult.errors.issues[0]?.message}`,
-      );
+      throw new Error(`Invalid user technology data: ${validationResult.errors.issues[0]?.message}`);
     }
 
-    const response = await authorizedFetchService(
-      `${API_URL}${API_PREFIX}${TECHNOLOGIES_URLS.createUserTechnology}`,
-      {
-        method: "POST",
-        body: JSON.stringify(data),
-      },
-    );
+    const response = await authorizedFetchService(`${API_URL}${API_PREFIX}${TECHNOLOGIES_URLS.createUserTechnology}`, {
+      method: "POST",
+      body: JSON.stringify(data),
+    });
 
     if (!response.ok) {
       throw new Error("Failed to create user technology");
@@ -105,15 +85,10 @@ export const technologiesService = {
     return validatedResponse.data;
   },
 
-  updateUserTechnology: async (
-    id: string,
-    updates: Partial<Technology>,
-  ): Promise<UserTechnology> => {
+  updateUserTechnology: async (id: string, updates: Partial<Technology>): Promise<UserTechnology> => {
     const validationResult = validateData(updateTechnologySchema, updates);
     if (!validationResult.success) {
-      throw new Error(
-        `Invalid user technology update data: ${validationResult.errors.issues[0]?.message}`,
-      );
+      throw new Error(`Invalid user technology update data: ${validationResult.errors.issues[0]?.message}`);
     }
 
     const response = await authorizedFetchService(

@@ -1,6 +1,1 @@
-export type {
-  Project,
-  ProjectImage,
-  CreateProjectData,
-  UpdateProjectData,
-} from "./validation/projectSchemas";
+export type { Project, ProjectImage, CreateProjectData, UpdateProjectData } from "./validation/projectSchemas";

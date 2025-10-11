@@ -22,9 +22,7 @@ describe("authService", () => {
         password: "password123",
       };
 
-      await expect(authService.login(credentials)).rejects.toThrow(
-        "Invalid email or password",
-      );
+      await expect(authService.login(credentials)).rejects.toThrow("Invalid email or password");
     });
 
     it("should throw error with invalid password", async () => {
@@ -33,9 +31,7 @@ describe("authService", () => {
         password: "wrongpassword",
       };
 
-      await expect(authService.login(credentials)).rejects.toThrow(
-        "Invalid email or password",
-      );
+      await expect(authService.login(credentials)).rejects.toThrow("Invalid email or password");
     });
   });
 
@@ -70,9 +66,7 @@ describe("authService", () => {
         introduction: "Hello, I am an existing user.",
       };
 
-      await expect(authService.register(registerData)).rejects.toThrow(
-        "User with this email already exists",
-      );
+      await expect(authService.register(registerData)).rejects.toThrow("User with this email already exists");
     });
 
     it("should throw error when passwords do not match", async () => {

@@ -3,7 +3,7 @@ import { Trash2 } from "lucide-react";
 import { Card } from "../../shared/ui/Card";
 import { Button } from "../../shared/ui/Button";
 import { StarRating } from "../../shared/ui/StarRating";
-import { UserTechnology } from "./validation/technologySchemas";
+import { type UserTechnology } from "./validation/technologySchemas";
 
 interface TechnologyCardProps {
   technology: UserTechnology;
@@ -11,11 +11,7 @@ interface TechnologyCardProps {
   onDelete: (id: string) => void;
 }
 
-export const TechnologyCard = ({
-  technology,
-  onUpdate,
-  onDelete,
-}: TechnologyCardProps) => {
+export const TechnologyCard = ({ technology, onUpdate, onDelete }: TechnologyCardProps) => {
   const handleRatingChange = (rating: number) => {
     onUpdate(technology.technologyId, { rating });
   };
@@ -24,15 +20,9 @@ export const TechnologyCard = ({
     <Card>
       <div className="space-y-4">
         <div className="flex items-start justify-between">
-          <h3 className="text-lg font-semibold text-gray-100 flex-1">
-            {technology.content}
-          </h3>
+          <h3 className="text-lg font-semibold text-gray-100 flex-1">{technology.content}</h3>
           <div className="flex space-x-2">
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => onDelete(technology.technologyId)}
-            >
+            <Button variant="ghost" size="sm" onClick={() => onDelete(technology.technologyId)}>
               <Trash2 className="w-4 h-4 text-red-500" />
             </Button>
           </div>

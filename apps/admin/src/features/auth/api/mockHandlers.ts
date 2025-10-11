@@ -2,11 +2,11 @@ import { http, HttpResponse } from "msw";
 
 import { mockUsers, mockCredentials } from "./mockData";
 import {
-  User,
-  LoginCredentials,
-  RegisterData,
-  LoginResponse,
-  RefreshTokenResponse,
+  type User,
+  type LoginCredentials,
+  type RegisterData,
+  type LoginResponse,
+  type RefreshTokenResponse,
 } from "../validation/authSchemas";
 
 const users = [...mockUsers];
@@ -18,19 +18,12 @@ export const authHandlers = [
     const user = users.find((u) => u.email === credentials.email);
 
     if (!user) {
-      return HttpResponse.json(
-        { message: "Invalid email or password", field: "email" },
-        { status: 401 },
-      );
+      return HttpResponse.json({ message: "Invalid email or password", field: "email" }, { status: 401 });
     }
 
-    const expectedPassword =
-      mockCredentials[credentials.email as keyof typeof mockCredentials];
+    const expectedPassword = mockCredentials[credentials.email as keyof typeof mockCredentials];
     if (credentials.password !== expectedPassword) {
-      return HttpResponse.json(
-        { message: "Invalid email or password", field: "password" },
-        { status: 401 },
-      );
+      return HttpResponse.json({ message: "Invalid email or password", field: "password" }, { status: 401 });
     }
 
     const response: LoginResponse = {
@@ -46,10 +39,7 @@ export const authHandlers = [
 
     const existingUser = users.find((u) => u.email === data.email);
     if (existingUser) {
-      return HttpResponse.json(
-        { message: "User with this email already exists", field: "email" },
-        { status: 409 },
-      );
+      return HttpResponse.json({ message: "User with this email already exists", field: "email" }, { status: 409 });
     }
 
     const newUser: User = {

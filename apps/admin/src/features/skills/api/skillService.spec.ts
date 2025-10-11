@@ -21,9 +21,7 @@ describe("skillsService", () => {
   });
 
   it("should throw if skill not found", async () => {
-    await expect(skillsService.getSkill("99")).rejects.toThrow(
-      "Failed to fetch skill with id: 99",
-    );
+    await expect(skillsService.getSkill("99")).rejects.toThrow("Failed to fetch skill with id: 99");
   });
 
   it("should create a new skill", async () => {
@@ -54,9 +52,9 @@ describe("skillsService", () => {
   });
 
   it("should throw if update skill not found", async () => {
-    await expect(
-      skillsService.updateSkill("99", { content: "Nope" }),
-    ).rejects.toThrow("Failed to update skill with id: 99");
+    await expect(skillsService.updateSkill("99", { content: "Nope" })).rejects.toThrow(
+      "Failed to update skill with id: 99",
+    );
   });
 
   it("should delete a skill", async () => {
@@ -64,8 +62,6 @@ describe("skillsService", () => {
   });
 
   it("should throw if deleting non-existent skill", async () => {
-    await expect(skillsService.deleteSkill("99")).rejects.toThrow(
-      "Failed to delete skill with id: 99",
-    );
+    await expect(skillsService.deleteSkill("99")).rejects.toThrow("Failed to delete skill with id: 99");
   });
 });

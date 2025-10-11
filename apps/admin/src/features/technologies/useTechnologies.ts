@@ -1,18 +1,12 @@
 import { useState, useEffect } from "react";
 
-import {
-  CreateTechnologyData,
-  Technology,
-  UpdateTechnologyData,
-} from "./types";
+import { type CreateTechnologyData, type Technology, type UpdateTechnologyData } from "./types";
 import { technologiesService } from "./api/technologiesService";
-import { UserTechnology } from "./validation/technologySchemas";
+import { type UserTechnology } from "./validation/technologySchemas";
 
 export const useTechnologies = () => {
   const [technologies, setTechnologies] = useState<Technology[]>([]);
-  const [userTechnologies, setUserTechnologies] = useState<UserTechnology[]>(
-    [],
-  );
+  const [userTechnologies, setUserTechnologies] = useState<UserTechnology[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
 
@@ -49,18 +43,12 @@ export const useTechnologies = () => {
     loadUserTechnologies();
   }, []);
 
-  const addTechnology = async (
-    content: string,
-    rating: number = 0,
-  ): Promise<UserTechnology> => {
+  const addTechnology = async (content: string, rating: number = 0): Promise<UserTechnology> => {
     try {
       const technologyData: CreateTechnologyData = { content, rating };
-      const newTechnology =
-        await technologiesService.createUserTechnology(technologyData);
+      const newTechnology = await technologiesService.createUserTechnology(technologyData);
       const updatedTechnologies = [
-        ...userTechnologies.filter(
-          (tech) => tech.technologyId !== newTechnology.technologyId,
-        ),
+        ...userTechnologies.filter((tech) => tech.technologyId !== newTechnology.technologyId),
         newTechnology,
       ];
       if (updatedTechnologies.length) setUserTechnologies(updatedTechnologies);
@@ -71,18 +59,10 @@ export const useTechnologies = () => {
     }
   };
 
-  const updateTechnology = async (
-    id: string,
-    updates: UpdateTechnologyData,
-  ): Promise<void> => {
+  const updateTechnology = async (id: string, updates: UpdateTechnologyData): Promise<void> => {
     try {
-      const updatedTechnology = await technologiesService.updateUserTechnology(
-        id,
-        updates,
-      );
-      const updatedTechnologies = userTechnologies.map((tech) =>
-        tech.technologyId === id ? updatedTechnology : tech,
-      );
+      const updatedTechnology = await technologiesService.updateUserTechnology(id, updates);
+      const updatedTechnologies = userTechnologies.map((tech) => (tech.technologyId === id ? updatedTechnology : tech));
       if (updatedTechnologies.length) setUserTechnologies(updatedTechnologies);
     } catch (error) {
       console.error("Failed to update technology:", error);
@@ -93,9 +73,7 @@ export const useTechnologies = () => {
   const deleteTechnology = async (id: string): Promise<void> => {
     try {
       await technologiesService.deleteUserTechnology(id);
-      const updatedTechnologies = userTechnologies.filter(
-        (tech) => tech.technologyId !== id,
-      );
+      const updatedTechnologies = userTechnologies.filter((tech) => tech.technologyId !== id);
       if (updatedTechnologies.length) setUserTechnologies(updatedTechnologies);
     } catch (error) {
       console.error("Failed to delete technology:", error);

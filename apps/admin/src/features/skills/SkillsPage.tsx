@@ -3,7 +3,7 @@ import { createPortal } from "react-dom";
 import { DragOverlay, rectIntersection } from "@dnd-kit/core";
 
 import { useSkills } from "./useSkills";
-import { Skill, SkillState } from "./types";
+import { type Skill, SkillState } from "./types";
 import { ConfirmDialog } from "../../shared/ui/ConfirmDialog";
 import { KanbanColumn } from "./KanbanColumn";
 import { AddSkillModal } from "./AddSkillModal";
@@ -11,8 +11,7 @@ import { DragDropContainer } from "../../shared/utils/dndContainer";
 import { SkillCard } from "./SkillCard";
 
 export const SkillsPage = () => {
-  const { skills, skillsLoading, addSkill, updateSkill, deleteSkill } =
-    useSkills();
+  const { skills, skillsLoading, addSkill, updateSkill, deleteSkill } = useSkills();
   const [activeId, setActiveId] = useState<string | null>(null);
   const [displayedSkills, setDisplayedSkills] = useState<Skill[]>([]);
 
@@ -21,9 +20,7 @@ export const SkillsPage = () => {
   }, [skills]);
 
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
-  const [initialState, setInitialState] = useState<SkillState>(
-    SkillState.PLANNED,
-  );
+  const [initialState, setInitialState] = useState<SkillState>(SkillState.PLANNED);
   const [deleteConfirm, setDeleteConfirm] = useState<{
     isOpen: boolean;
     id: string;
@@ -52,15 +49,9 @@ export const SkillsPage = () => {
   };
 
   const skillsByState = {
-    [SkillState.PLANNED]: displayedSkills.filter(
-      (skill) => skill.state === SkillState.PLANNED,
-    ),
-    [SkillState.RUNNING]: displayedSkills.filter(
-      (skill) => skill.state === SkillState.RUNNING,
-    ),
-    [SkillState.COMPLETED]: displayedSkills.filter(
-      (skill) => skill.state === SkillState.COMPLETED,
-    ),
+    [SkillState.PLANNED]: displayedSkills.filter((skill) => skill.state === SkillState.PLANNED),
+    [SkillState.RUNNING]: displayedSkills.filter((skill) => skill.state === SkillState.RUNNING),
+    [SkillState.COMPLETED]: displayedSkills.filter((skill) => skill.state === SkillState.COMPLETED),
   };
 
   if (skillsLoading) {
@@ -75,9 +66,7 @@ export const SkillsPage = () => {
     <div className="space-y-6 h-fit">
       <div>
         <h1 className="text-3xl font-bold text-gray-50">Skills</h1>
-        <p className="mt-2 text-gray-400">
-          Track your learning journey with a visual kanban board
-        </p>
+        <p className="mt-2 text-gray-400">Track your learning journey with a visual kanban board</p>
       </div>
 
       <DragDropContainer

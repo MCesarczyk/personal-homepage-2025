@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 
-import { DashboardStats } from "./types";
+import { type DashboardStats } from "./types";
 import { useTechnologies } from "../technologies/useTechnologies";
 import { useSkills } from "../skills/useSkills";
 import { useProjects } from "../projects/useProjects";
@@ -20,42 +20,25 @@ export const useDashboard = () => {
       technologiesCount: userTechnologies.length,
       skillsCount: skills.length,
       projectsCount: projects.length,
-      completedSkillsCount: skills.filter(
-        (skill) => skill.state === SkillState.COMPLETED,
-      ).length,
+      completedSkillsCount: skills.filter((skill) => skill.state === SkillState.COMPLETED).length,
     };
   }, [userTechnologies, skills, projects]);
 
   const recentTechnologies = useMemo(
     () =>
       [...userTechnologies]
-        .sort(
-          (a, b) =>
-            new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime(),
-        )
+        .sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime())
         .slice(0, 3),
     [userTechnologies],
   );
 
   const recentSkills = useMemo(
-    () =>
-      [...skills]
-        .sort(
-          (a, b) =>
-            new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime(),
-        )
-        .slice(0, 3),
+    () => [...skills].sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()).slice(0, 3),
     [skills],
   );
 
   const recentProjects = useMemo(
-    () =>
-      [...projects]
-        .sort(
-          (a, b) =>
-            new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime(),
-        )
-        .slice(0, 3),
+    () => [...projects].sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()).slice(0, 3),
     [projects],
   );
 

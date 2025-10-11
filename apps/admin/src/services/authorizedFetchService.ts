@@ -1,16 +1,10 @@
 import { authService } from "../features/auth/api/authService";
-import {
-  LOCAL_STORAGE_ACCESS_TOKEN,
-  LOCAL_STORAGE_REFRESH_TOKEN,
-} from "../shared/constants/localStorage";
+import { LOCAL_STORAGE_ACCESS_TOKEN, LOCAL_STORAGE_REFRESH_TOKEN } from "../shared/constants/localStorage";
 
 let isRefreshing = false;
 let requestQueue: ((newToken: string) => Promise<void>)[] = [];
 
-export const authorizedFetchService = async (
-  url: string,
-  optionsUpdate?: RequestInit,
-): Promise<Response> => {
+export const authorizedFetchService = async (url: string, optionsUpdate?: RequestInit): Promise<Response> => {
   const accessToken = localStorage.getItem(LOCAL_STORAGE_ACCESS_TOKEN);
 
   const options = {
@@ -25,8 +19,10 @@ export const authorizedFetchService = async (
   const response = await fetch(url, options);
 
   if (response.status === 401) {
+    console.log("Access token expired, attempting to refresh...");
     if (!isRefreshing) {
       isRefreshing = true;
+      console.log("Refreshing token...");
       try {
         const data = await authService.refreshToken();
 

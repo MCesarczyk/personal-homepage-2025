@@ -18,9 +18,7 @@ describe("projectsService", () => {
   });
 
   it("should throw if project not found", async () => {
-    await expect(projectsService.getProject("99")).rejects.toThrow(
-      "Failed to fetch project with id: 99",
-    );
+    await expect(projectsService.getProject("99")).rejects.toThrow("Failed to fetch project with id: 99");
   });
 
   it("should create a new project", async () => {
@@ -56,9 +54,9 @@ describe("projectsService", () => {
   });
 
   it("should throw if update project not found", async () => {
-    await expect(
-      projectsService.updateProject("99", { title: "New" }),
-    ).rejects.toThrow("Failed to update project with id: 99");
+    await expect(projectsService.updateProject("99", { title: "New" })).rejects.toThrow(
+      "Failed to update project with id: 99",
+    );
   });
 
   it("should delete a project", async () => {
@@ -66,8 +64,6 @@ describe("projectsService", () => {
   });
 
   it("should throw if deleting non-existent project", async () => {
-    await expect(projectsService.deleteProject("99")).rejects.toThrow(
-      "Failed to delete project with id: 99",
-    );
+    await expect(projectsService.deleteProject("99")).rejects.toThrow("Failed to delete project with id: 99");
   });
 });

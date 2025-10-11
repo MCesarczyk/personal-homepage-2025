@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-import { CreateSkillData, Skill, SkillState, UpdateSkillData } from "./types";
+import { type CreateSkillData, type Skill, SkillState, type UpdateSkillData } from "./types";
 import { skillsService } from "./api/skillsService";
 
 export const useSkills = () => {
@@ -26,10 +26,7 @@ export const useSkills = () => {
     loadSkills();
   }, []);
 
-  const addSkill = async (
-    content: string,
-    state: SkillState = SkillState.PLANNED,
-  ): Promise<Skill> => {
+  const addSkill = async (content: string, state: SkillState = SkillState.PLANNED): Promise<Skill> => {
     try {
       const skillData: CreateSkillData = { content, state };
       const newSkill = await skillsService.createSkill(skillData);
@@ -42,15 +39,10 @@ export const useSkills = () => {
     }
   };
 
-  const updateSkill = async (
-    id: string,
-    updates: UpdateSkillData,
-  ): Promise<void> => {
+  const updateSkill = async (id: string, updates: UpdateSkillData): Promise<void> => {
     try {
       const updatedSkill = await skillsService.updateSkill(id, updates);
-      const updatedSkills = skills.map((skill) =>
-        skill.id === id ? updatedSkill : skill,
-      );
+      const updatedSkills = skills.map((skill) => (skill.id === id ? updatedSkill : skill));
       setSkills(updatedSkills);
     } catch (error) {
       console.error("Failed to update skill:", error);

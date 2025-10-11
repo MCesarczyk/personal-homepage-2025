@@ -31,10 +31,7 @@ export const loginResponseSchema = z.object({
   refreshToken: z.string(),
 });
 
-export const registerResponseSchema = z.intersection(
-  userSchema,
-  loginResponseSchema,
-);
+export const registerResponseSchema = z.intersection(userSchema, loginResponseSchema);
 
 export const refreshTokenResponseSchema = z.object({
   accessToken: z.string(),

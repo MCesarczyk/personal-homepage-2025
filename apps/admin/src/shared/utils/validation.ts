@@ -15,17 +15,12 @@ export function validateData<T>(
   }
 }
 
-export function safeParseData<T>(
-  schema: z.ZodSchema<T>,
-  data: unknown,
-): T | null {
+export function safeParseData<T>(schema: z.ZodSchema<T>, data: unknown): T | null {
   const result = schema.safeParse(data);
   return result.success ? result.data : null;
 }
 
-export function formatValidationErrors(
-  errors: z.ZodError,
-): Record<string, string> {
+export function formatValidationErrors(errors: z.ZodError): Record<string, string> {
   const formattedErrors: Record<string, string> = {};
 
   errors.issues.forEach((error) => {
@@ -40,9 +35,7 @@ export function createValidationMiddleware<T>(schema: z.ZodSchema<T>) {
   return (data: unknown): T => {
     const result = validateData(schema, data);
     if (!result.success) {
-      throw new Error(
-        `Validation failed: ${JSON.stringify(formatValidationErrors(result.errors))}`,
-      );
+      throw new Error(`Validation failed: ${JSON.stringify(formatValidationErrors(result.errors))}`);
     }
     return result.data;
   };

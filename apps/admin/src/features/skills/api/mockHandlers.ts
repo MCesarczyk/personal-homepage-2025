@@ -1,7 +1,7 @@
 import { http, HttpResponse } from "msw";
 
 import { mockSkills } from "./mockData";
-import { Skill, SkillState } from "../validation/skillSchemas";
+import { type Skill, type SkillState } from "../validation/skillSchemas";
 
 const skills = [...mockSkills];
 

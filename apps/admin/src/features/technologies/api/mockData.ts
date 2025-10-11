@@ -1,4 +1,4 @@
-import { Technology, UserTechnology } from "../validation/technologySchemas";
+import { type Technology, type UserTechnology } from "../validation/technologySchemas";
 
 export const mockTechnologies: Technology[] = [
   {

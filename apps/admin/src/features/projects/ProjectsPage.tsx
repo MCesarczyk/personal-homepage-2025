@@ -1,20 +1,14 @@
 import { useState } from "react";
 import { Plus, FolderOpen } from "lucide-react";
 import { useProjects } from "./useProjects";
-import { Project } from "./types";
+import { type Project } from "./types";
 import { Button } from "../../shared/ui/Button";
 import { ConfirmDialog } from "../../shared/ui/ConfirmDialog";
 import { ProjectCard } from "./ProjectCard";
 import { ProjectModal } from "./ProjectModal";
 
 export const ProjectsPage = () => {
-  const {
-    projects,
-    projectsLoading,
-    addProject,
-    updateProject,
-    deleteProject,
-  } = useProjects();
+  const { projects, projectsLoading, addProject, updateProject, deleteProject } = useProjects();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingProject, setEditingProject] = useState<Project | undefined>();
   const [deleteConfirm, setDeleteConfirm] = useState<{
@@ -67,9 +61,7 @@ export const ProjectsPage = () => {
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           <h1 className="text-3xl font-bold text-gray-50">Projects</h1>
-          <p className="mt-2 text-gray-400">
-            Showcase your work with detailed project information and galleries
-          </p>
+          <p className="mt-2 text-gray-400">Showcase your work with detailed project information and galleries</p>
         </div>
         <Button onClick={handleAdd}>
           <Plus className="w-4 h-4 mr-2" />
@@ -80,12 +72,8 @@ export const ProjectsPage = () => {
       {projects.length === 0 ? (
         <div className="text-center py-12">
           <FolderOpen className="mx-auto h-12 w-12 text-gray-400" />
-          <h3 className="mt-2 text-sm font-medium text-gray-900">
-            No projects yet
-          </h3>
-          <p className="mt-1 text-sm text-gray-500">
-            Get started by adding your first project.
-          </p>
+          <h3 className="mt-2 text-sm font-medium text-gray-900">No projects yet</h3>
+          <p className="mt-1 text-sm text-gray-500">Get started by adding your first project.</p>
           <div className="mt-6">
             <Button onClick={handleAdd}>
               <Plus className="w-4 h-4 mr-2" />
@@ -96,12 +84,7 @@ export const ProjectsPage = () => {
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {projects.map((project) => (
-            <ProjectCard
-              key={project.id}
-              project={project}
-              onEdit={handleEdit}
-              onDelete={handleDelete}
-            />
+            <ProjectCard key={project.id} project={project} onEdit={handleEdit} onDelete={handleDelete} />
           ))}
         </div>
       )}

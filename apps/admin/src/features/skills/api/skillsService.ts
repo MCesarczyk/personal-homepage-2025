@@ -4,18 +4,16 @@ import { SKILLS_URLS } from "./skillsUrls";
 import { validateData } from "../../../shared/utils/validation";
 import {
   createSkillSchema,
-  Skill,
+  type Skill,
   skillSchema,
   skillsListSchema,
-  SkillState,
+  type SkillState,
   updateSkillSchema,
 } from "../validation/skillSchemas";
 
 export const skillsService = {
   getSkills: async (): Promise<Skill[]> => {
-    const response = await authorizedFetchService(
-      `${API_URL}${API_PREFIX}${SKILLS_URLS.getSkills}`,
-    );
+    const response = await authorizedFetchService(`${API_URL}${API_PREFIX}${SKILLS_URLS.getSkills}`);
 
     if (!response.ok) {
       throw new Error("Failed to fetch skills");
@@ -31,10 +29,7 @@ export const skillsService = {
   },
 
   getSkill: async (id: string): Promise<Skill> => {
-    const response = await authorizedFetchService(
-      `${API_URL}${API_PREFIX}${SKILLS_URLS.getSkill(id)}`,
-      {},
-    );
+    const response = await authorizedFetchService(`${API_URL}${API_PREFIX}${SKILLS_URLS.getSkill(id)}`, {});
 
     if (!response.ok) {
       throw new Error(`Failed to fetch skill with id: ${id}`);
@@ -49,24 +44,16 @@ export const skillsService = {
     return validatedResponse.data;
   },
 
-  createSkill: async (data: {
-    content: string;
-    state: SkillState;
-  }): Promise<Skill> => {
+  createSkill: async (data: { content: string; state: SkillState }): Promise<Skill> => {
     const validationResult = validateData(createSkillSchema, data);
     if (!validationResult.success) {
-      throw new Error(
-        `Invalid skill data: ${validationResult.errors.issues[0]?.message}`,
-      );
+      throw new Error(`Invalid skill data: ${validationResult.errors.issues[0]?.message}`);
     }
 
-    const response = await authorizedFetchService(
-      `${API_URL}${API_PREFIX}${SKILLS_URLS.createSkill}`,
-      {
-        method: "POST",
-        body: JSON.stringify(data),
-      },
-    );
+    const response = await authorizedFetchService(`${API_URL}${API_PREFIX}${SKILLS_URLS.createSkill}`, {
+      method: "POST",
+      body: JSON.stringify(data),
+    });
 
     if (!response.ok) {
       throw new Error("Failed to create skill");
@@ -84,18 +71,13 @@ export const skillsService = {
   updateSkill: async (id: string, updates: Partial<Skill>): Promise<Skill> => {
     const validationResult = validateData(updateSkillSchema, updates);
     if (!validationResult.success) {
-      throw new Error(
-        `Invalid skill update data: ${validationResult.errors.issues[0]?.message}`,
-      );
+      throw new Error(`Invalid skill update data: ${validationResult.errors.issues[0]?.message}`);
     }
 
-    const response = await authorizedFetchService(
-      `${API_URL}${API_PREFIX}${SKILLS_URLS.updateSkill(id)}`,
-      {
-        method: "PATCH",
-        body: JSON.stringify(updates),
-      },
-    );
+    const response = await authorizedFetchService(`${API_URL}${API_PREFIX}${SKILLS_URLS.updateSkill(id)}`, {
+      method: "PATCH",
+      body: JSON.stringify(updates),
+    });
 
     if (!response.ok) {
       throw new Error(`Failed to update skill with id: ${id}`);
@@ -111,12 +93,9 @@ export const skillsService = {
   },
 
   deleteSkill: async (id: string): Promise<void> => {
-    const response = await authorizedFetchService(
-      `${API_URL}${API_PREFIX}${SKILLS_URLS.deleteSkill(id)}`,
-      {
-        method: "DELETE",
-      },
-    );
+    const response = await authorizedFetchService(`${API_URL}${API_PREFIX}${SKILLS_URLS.deleteSkill(id)}`, {
+      method: "DELETE",
+    });
 
     if (!response.ok) {
       throw new Error(`Failed to delete skill with id: ${id}`);

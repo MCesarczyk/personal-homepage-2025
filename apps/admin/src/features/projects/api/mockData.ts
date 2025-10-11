@@ -1,4 +1,4 @@
-import { Project } from "../validation/projectSchemas";
+import { type Project } from "../validation/projectSchemas";
 
 export const mockProjects: Project[] = [
   {

@@ -1,5 +1,5 @@
 import { SkillState } from "../types";
-import { Skill } from "../validation/skillSchemas";
+import { type Skill } from "../validation/skillSchemas";
 
 export const mockSkills: Skill[] = [
   {

@@ -1,11 +1,6 @@
 import { useState, useEffect } from "react";
 
-import {
-  CreateProjectData,
-  Project,
-  ProjectImage,
-  UpdateProjectData,
-} from "./types";
+import { type CreateProjectData, type Project, type ProjectImage, type UpdateProjectData } from "./types";
 import { projectsService } from "./api/projectsService";
 
 export const useProjects = () => {
@@ -31,9 +26,7 @@ export const useProjects = () => {
     loadProjects();
   }, []);
 
-  const addProject = async (
-    projectData: Omit<Project, "id" | "createdAt" | "updatedAt">,
-  ): Promise<Project> => {
+  const addProject = async (projectData: Omit<Project, "id" | "createdAt" | "updatedAt">): Promise<Project> => {
     try {
       const createData: CreateProjectData = {
         title: projectData.title,
@@ -52,15 +45,10 @@ export const useProjects = () => {
     }
   };
 
-  const updateProject = async (
-    id: string,
-    updates: UpdateProjectData,
-  ): Promise<void> => {
+  const updateProject = async (id: string, updates: UpdateProjectData): Promise<void> => {
     try {
       const updatedProject = await projectsService.updateProject(id, updates);
-      const updatedProjects = projects.map((project) =>
-        project.id === id ? updatedProject : project,
-      );
+      const updatedProjects = projects.map((project) => (project.id === id ? updatedProject : project));
       setProjects(updatedProjects);
     } catch (error) {
       console.error("Failed to update project:", error);
@@ -79,10 +67,7 @@ export const useProjects = () => {
     }
   };
 
-  const addImageToProject = async (
-    projectId: string,
-    imageUrl: string,
-  ): Promise<void> => {
+  const addImageToProject = async (projectId: string, imageUrl: string): Promise<void> => {
     const project = projects.find((p) => p.id === projectId);
     if (!project) return;
 
@@ -98,10 +83,7 @@ export const useProjects = () => {
     });
   };
 
-  const removeImageFromProject = async (
-    projectId: string,
-    imageId: string,
-  ): Promise<void> => {
+  const removeImageFromProject = async (projectId: string, imageId: string): Promise<void> => {
     const project = projects.find((p) => p.id === projectId);
     if (!project) return;
 
@@ -109,10 +91,7 @@ export const useProjects = () => {
     await updateProject(projectId, { images: updatedImages });
   };
 
-  const setCoverImage = async (
-    projectId: string,
-    imageId: string,
-  ): Promise<void> => {
+  const setCoverImage = async (projectId: string, imageId: string): Promise<void> => {
     const project = projects.find((p) => p.id === projectId);
     if (!project) return;
 

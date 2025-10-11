@@ -1,7 +1,7 @@
 import { http, HttpResponse } from "msw";
 
 import { mockTechnologies, mockUserTechnologies } from "./mockData";
-import { UserTechnology } from "../validation/technologySchemas";
+import { type UserTechnology } from "../validation/technologySchemas";
 
 const technologies = [...mockTechnologies];
 const userTechnologies = [...mockUserTechnologies];
@@ -45,9 +45,7 @@ export const technologiesHandlers = [
     const { id } = params;
     const updates = (await request.json()) as Partial<UserTechnology>;
 
-    const technologyIndex = userTechnologies.findIndex(
-      (t) => t.technologyId === id,
-    );
+    const technologyIndex = userTechnologies.findIndex((t) => t.technologyId === id);
     if (technologyIndex === -1) {
       return new HttpResponse(null, { status: 404 });
     }
@@ -64,9 +62,7 @@ export const technologiesHandlers = [
 
   http.delete("*/api/v1/user/technology/:id", ({ params }) => {
     const { id } = params;
-    const technologyIndex = userTechnologies.findIndex(
-      (t) => t.technologyId === id,
-    );
+    const technologyIndex = userTechnologies.findIndex((t) => t.technologyId === id);
 
     if (technologyIndex === -1) {
       return new HttpResponse(null, { status: 404 });
