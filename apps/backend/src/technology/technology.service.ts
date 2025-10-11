@@ -88,7 +88,7 @@ export class TechnologyService {
     }
 
     return this.prisma.technology.delete({
-      where: { id: deletedTechnology?.id },
+      where: { id: deletedTechnology.id },
       select: {
         id: true,
         content: true,

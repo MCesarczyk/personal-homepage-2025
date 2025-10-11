@@ -79,14 +79,9 @@ export class UserService {
     userId: string,
     dto: CreateUserTechnologyDto,
   ): Promise<UserTechnologyDataDto> {
-    let technology;
-    technology = await this.technologyService.findByContent(dto.content);
-    if (!technology) {
-      const response = await this.technologyService.create({
-        content: dto.content,
-      });
-      technology = response;
-    }
+    const technology =
+      (await this.technologyService.findByContent(dto.content)) ||
+      (await this.technologyService.create({ content: dto.content }));
 
     const userTechnology = await this.prisma.userTechnology.upsert({
       where: {
@@ -120,14 +115,11 @@ export class UserService {
     });
 
     const technologies = await this.technologyService.findAll();
-    const technologyIds = technologies.map((tech) => tech.id);
-
+    const techMap = new Map(technologies.map((tech) => [tech.id, tech]));
     return userTechnologies.map((technology) => ({
       technologyId: technology.technologyId,
-      content: technologyIds.includes(technology.technologyId)
-        ? technologies.find((tech) => tech.id === technology.technologyId)
-            ?.content || '' // eslint-disable-line
-        : 'Unknown Technology',
+      content:
+        techMap.get(technology.technologyId)?.content || 'Unknown Technology',
       rating: technology.rating || undefined,
       createdAt: technology.createdAt,
       updatedAt: technology.updatedAt,

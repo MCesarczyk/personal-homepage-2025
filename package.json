@@ -8,7 +8,7 @@
     "release": "commit-and-tag-version",
     "prepare": "husky",
     "migrate:dev": "pnpm --filter backend db:migrate",
-    "format": "npx prettier --write \"apps/**/src/**/*.ts\" \"apps/**/test/**/*.ts\"",
+    "format": "prettier --write \"apps/**/src/**/*.ts\" \"apps/**/test/**/*.ts\"",
     "check:circular": "madge --circular --extensions ts,tsx ./apps",
     "install": "cd apps/backend && pnpm install && cd ../admin && pnpm install && cd ../website && pnpm install",
     "db:prepare": "concurrently -c \"red\" \"pnpm --filter backend db:prepare\"",
