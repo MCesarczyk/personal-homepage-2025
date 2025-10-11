@@ -1,4 +1,5 @@
 import { z } from "zod";
+
 import { dateSchema, idSchema } from "../../../shared/validation/common";
 
 export const technologySchema = z.object({

@@ -7,16 +7,13 @@ import {
   loginResponseSchema,
   type LoginCredentials,
   loginCredentialsSchema,
-  refreshTokenResponseSchema,
   type RegisterData,
   registerDataSchema,
   type RegisterResponse,
   registerResponseSchema,
   type User,
   userSchema,
-  type RefreshTokenResponse,
 } from "../validation/authSchemas";
-import { LOCAL_STORAGE_REFRESH_TOKEN } from "../../../shared/constants/localStorage";
 
 export const authService = {
   login: async (credentials: LoginCredentials): Promise<LoginResponse> => {
@@ -106,32 +103,6 @@ export const authService = {
     const validatedResponse = validateData(userSchema, responseData);
     if (!validatedResponse.success) {
       throw new Error("Invalid user data format from server");
-    }
-
-    return validatedResponse.data;
-  },
-
-  refreshToken: async (): Promise<RefreshTokenResponse> => {
-    const refreshTokenValue = localStorage.getItem(LOCAL_STORAGE_REFRESH_TOKEN);
-    if (!refreshTokenValue) {
-      throw new Error("No refresh token available");
-    }
-
-    const response = await authorizedFetchService(`${API_URL}${API_PREFIX}${AUTH_URLS.refreshToken}`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      credentials: "include",
-      body: JSON.stringify({
-        refreshToken: refreshTokenValue,
-      }),
-    });
-
-    const responseData = await response.json();
-    const validatedResponse = validateData(refreshTokenResponseSchema, responseData);
-    if (!validatedResponse.success) {
-      throw new Error("Invalid refresh token response format from server");
     }
 
     return validatedResponse.data;

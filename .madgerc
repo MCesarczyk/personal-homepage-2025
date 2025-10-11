@@ -1,0 +1,16 @@
+{
+  "detectiveOptions": {
+    "ts": {
+      "skipTypeImports": true,
+      "skipAsyncImports": true
+    },
+    "tsx": {
+      "skipTypeImports": true,
+      "skipAsyncImports": true
+    }
+  },
+  "excludeRegExp": [
+    "(test|mockData|__mocks__)",
+    "admin/src/services/msw/browser"
+  ]
+}
