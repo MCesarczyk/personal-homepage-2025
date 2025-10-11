@@ -1,8 +1,9 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
+
+import { PrismaService } from '../prisma.service';
 import { CreateSkillDto } from './dto/create-skill.dto';
 import { UpdateSkillDto } from './dto/update-skill.dto';
-import { PrismaService } from '../prisma.service';
-import { SkillDataDto } from 'src/skill/dto/skill-data.dto';
+import { SkillDataDto } from './dto/skill-data.dto';
 
 @Injectable()
 export class SkillService {
@@ -18,6 +19,8 @@ export class SkillService {
         id: true,
         content: true,
         state: true,
+        createdAt: true,
+        updatedAt: true,
       },
     });
   }
@@ -29,6 +32,8 @@ export class SkillService {
         id: true,
         content: true,
         state: true,
+        createdAt: true,
+        updatedAt: true,
       },
     });
   }
@@ -40,6 +45,8 @@ export class SkillService {
         id: true,
         content: true,
         state: true,
+        createdAt: true,
+        updatedAt: true,
       },
     });
 
@@ -70,6 +77,8 @@ export class SkillService {
         id: true,
         content: true,
         state: true,
+        createdAt: true,
+        updatedAt: true,
       },
     });
   }
@@ -89,6 +98,8 @@ export class SkillService {
         id: true,
         content: true,
         state: true,
+        createdAt: true,
+        updatedAt: true,
       },
     });
   }

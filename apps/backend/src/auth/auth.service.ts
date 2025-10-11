@@ -5,9 +5,9 @@ import { compare } from 'bcryptjs';
 
 import { jwtConstants } from './constants';
 import { LoginPayloadDto } from './dto/login-payload.dto';
+import { LoginResponseDto } from './dto/login-response.dto';
 import { UserService } from '../user/user.service';
 import { UserDataDto } from '../user/dto/user-data.dto';
-import { LoginResponseDto } from 'src/auth/dto/login-response.dto';
 
 @Injectable()
 export class AuthService {
@@ -56,9 +56,7 @@ export class AuthService {
     return { accessToken, refreshToken };
   }
 
-  async refresh(
-    refreshToken: string,
-  ): Promise<{ accessToken: string; refreshToken: string }> {
+  async refresh(refreshToken: string): Promise<{ accessToken: string }> {
     const { id } = this.jwtService.verify(refreshToken);
 
     const user = await this.userService.getUserById(id);
@@ -68,13 +66,8 @@ export class AuthService {
     }
 
     const accessToken = await this.createAccessToken(user.id);
-    const newRefreshToken = await this.createRefreshToken(user.id);
 
-    await this.userService.updateUser(user.id, {
-      refreshToken: newRefreshToken,
-    });
-
-    return { accessToken, refreshToken: newRefreshToken };
+    return { accessToken };
   }
 
   async changePassword(

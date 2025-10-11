@@ -1,40 +1,38 @@
-import { authService } from "../features/auth/authService";
-import {
-  LOCAL_STORAGE_ACCESS_TOKEN,
-  LOCAL_STORAGE_REFRESH_TOKEN,
-} from "../features/auth/constants";
-import { localStorageService } from "./localStorageService";
+import { refreshToken } from "../features/auth/api/refreshToken";
+import { LOCAL_STORAGE_ACCESS_TOKEN, LOCAL_STORAGE_REFRESH_TOKEN } from "../shared/constants/localStorage";
 
 let isRefreshing = false;
 let requestQueue: ((newToken: string) => Promise<void>)[] = [];
 
-export const authorizedFetchService = async (
-  url: string,
-  options: RequestInit & { headers: { Authorization: string } },
-): Promise<Response> => {
-  options.headers = {
-    ...options.headers,
-    Authorization: `Bearer ${localStorageService.getItem(LOCAL_STORAGE_ACCESS_TOKEN)}`,
+export const authorizedFetchService = async (url: string, optionsUpdate?: RequestInit): Promise<Response> => {
+  const accessToken = localStorage.getItem(LOCAL_STORAGE_ACCESS_TOKEN);
+
+  const options = {
+    ...optionsUpdate,
+    headers: {
+      ...(optionsUpdate?.headers || {}),
+      Authorization: `Bearer ${accessToken}`,
+      "Content-Type": "application/json",
+    },
   };
 
   const response = await fetch(url, options);
 
   if (response.status === 401) {
+    console.log("Access token expired, attempting to refresh...");
     if (!isRefreshing) {
       isRefreshing = true;
+      console.log("Refreshing token...");
       try {
-        const data = await authService.refresh();
+        const data = await refreshToken();
 
-        if (data.statusCode === 401) {
+        if ("statusCode" in data && data.statusCode === 401) {
           console.log("Failed to refresh token");
-          localStorageService.removeItem(LOCAL_STORAGE_ACCESS_TOKEN);
-          localStorageService.removeItem(LOCAL_STORAGE_REFRESH_TOKEN);
+          localStorage.removeItem(LOCAL_STORAGE_ACCESS_TOKEN);
+          localStorage.removeItem(LOCAL_STORAGE_REFRESH_TOKEN);
         }
 
-        localStorageService.setItem(
-          LOCAL_STORAGE_ACCESS_TOKEN,
-          data.accessToken,
-        );
+        localStorage.setItem(LOCAL_STORAGE_ACCESS_TOKEN, data.accessToken);
         isRefreshing = false;
 
         requestQueue.forEach((cb) => cb(data.accessToken));
