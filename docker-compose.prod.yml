@@ -49,7 +49,7 @@ services:
     ports:
       - 4650:5000
     expose:
-      - 6600
+      - 4650
 
   migrator-prod:
     image: ghcr.io/mcesarczyk/personal-homepage-backend-migrator:latest
