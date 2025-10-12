@@ -2,6 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { ValidationPipe } from '@nestjs/common';
 import * as cookieParser from 'cookie-parser';
+import { NextFunction, Request, Response } from 'express';
 
 import { AppModule } from './app.module';
 
@@ -21,6 +22,23 @@ async function bootstrap() {
     allowedHeaders: 'Content-Type,Authorization',
   });
   app.use(cookieParser());
+
+  app.use((req: Request, res: Response, next: NextFunction) => {
+    if (req.method === 'OPTIONS') {
+      res.header(
+        'Access-Control-Allow-Origin',
+        process.env.ADMIN_URL || 'http://localhost:4300',
+      );
+      res.header(
+        'Access-Control-Allow-Methods',
+        'GET,POST,PUT,PATCH,DELETE,OPTIONS',
+      );
+      res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+      res.sendStatus(204);
+    } else {
+      next();
+    }
+  });
 
   app.useGlobalPipes(new ValidationPipe({ transform: true }));
 
