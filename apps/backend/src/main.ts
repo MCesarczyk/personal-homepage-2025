@@ -7,16 +7,15 @@ import { NextFunction, Request, Response } from 'express';
 import { AppModule } from './app.module';
 
 const port = process.env.BACKEND_PORT || 5000;
+const publicUrl = process.env.PUBLIC_URL || 'http://localhost:5000';
+const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:4200';
+const adminUrl = process.env.ADMIN_URL || 'http://localhost:4300';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.setGlobalPrefix('api/v1', { exclude: ['/'] });
   app.enableCors({
-    origin: [
-      process.env.PUBLIC_URL || 'http://localhost:5000',
-      process.env.FRONTEND_URL || 'http://localhost:4200',
-      process.env.ADMIN_URL || 'http://localhost:4300',
-    ],
+    origin: [publicUrl, frontendUrl, adminUrl],
     credentials: true,
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     allowedHeaders: 'Content-Type,Authorization',
@@ -25,10 +24,7 @@ async function bootstrap() {
 
   app.use((req: Request, res: Response, next: NextFunction) => {
     if (req.method === 'OPTIONS') {
-      res.header(
-        'Access-Control-Allow-Origin',
-        process.env.ADMIN_URL || 'http://localhost:4300',
-      );
+      res.header('Access-Control-Allow-Origin', adminUrl);
       res.header(
         'Access-Control-Allow-Methods',
         'GET,POST,PUT,PATCH,DELETE,OPTIONS',
