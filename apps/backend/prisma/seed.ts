@@ -38,6 +38,7 @@ async function main() {
               create: [
                 {
                   url: 'https://www.prisma.io/assets/images/prisma-logo.svg',
+                  fileName: 'prisma-logo.svg',
                 },
               ],
             },
@@ -51,6 +52,7 @@ async function main() {
               create: [
                 {
                   url: 'https://nexusjs.org/img/logo.svg',
+                  fileName: 'nexus-logo.svg',
                 },
               ],
             },
@@ -94,6 +96,7 @@ async function main() {
               create: [
                 {
                   url: 'https://www.typeorm.io/images/logo_big.png',
+                  fileName: 'typeorm-logo.png',
                 },
               ],
             },
