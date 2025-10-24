@@ -30,6 +30,7 @@ async function bootstrap() {
         'GET,POST,PUT,PATCH,DELETE,OPTIONS',
       );
       res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+      res.header('Access-Control-Allow-Credentials', 'true');
       res.sendStatus(204);
     } else {
       next();
