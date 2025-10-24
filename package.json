@@ -22,8 +22,8 @@
   "license": "MIT",
   "packageManager": "pnpm@10.12.1",
   "devDependencies": {
-    "concurrently": "^9.2.0",
     "commit-and-tag-version": "^12.5.1",
+    "concurrently": "^9.2.0",
     "cz-conventional-changelog": "^3.3.0",
     "husky": "^9.0.11",
     "madge": "^6.1.0",
@@ -35,5 +35,12 @@
     "commitizen": {
       "path": "./node_modules/cz-conventional-changelog"
     }
+  },
+  "dependencies": {
+    "@prisma/client": "^6.18.0",
+    "prisma": "^6.18.0"
+  },
+  "volta": {
+    "node": "22.21.0"
   }
 }
