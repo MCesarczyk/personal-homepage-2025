@@ -11,7 +11,11 @@ export class ApiKeyService {
 
   constructor(private prisma: PrismaService) {}
 
-  async generateApiKey(userId: string, description?: string): Promise<string> {
+  async generateApiKey(
+    userId: string,
+    description: string | null,
+    expiresAt: Date | null,
+  ): Promise<string> {
     const rawApiKey = randomBytes(32).toString('hex');
 
     const hashedKey = await bcrypt.hash(rawApiKey, this.saltRounds);
@@ -24,6 +28,7 @@ export class ApiKeyService {
         isActive: true,
         createdAt: new Date(),
         lastUsedAt: null,
+        expiresAt: expiresAt || null,
       },
     });
 
