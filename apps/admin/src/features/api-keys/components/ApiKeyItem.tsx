@@ -23,7 +23,7 @@ export function ApiKeyItem({ apiKey, onRotate, onRevoke, isLoading }: ApiKeyItem
   };
 
   const isExpired = apiKey.expiresAt ? new Date(apiKey.expiresAt) < new Date() : false;
-  const truncatedHash = `${apiKey.keyHash.substring(0, 8)}...`;
+  const truncatedHash = `${apiKey.id?.substring(0, 8)}...`;
 
   return (
     <div className="bg-white border border-gray-200 rounded-lg p-5 hover:shadow-md transition-shadow">

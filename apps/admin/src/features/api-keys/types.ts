@@ -1,7 +1,5 @@
 export interface ApiKey {
   id: string;
-  userId: string;
-  keyHash: string;
   description: string | null;
   isActive: boolean;
   createdAt: Date;
