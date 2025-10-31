@@ -69,6 +69,7 @@ export function ApiKeyItem({ apiKey, onRotate, onRevoke, isLoading }: ApiKeyItem
             className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors disabled:text-gray-400 disabled:hover:bg-transparent disabled:cursor-not-allowed"
             aria-label="Rotate API key"
             title="Rotate key"
+            data-testid={`rotate-api-key-button-${apiKey.id}`}
           >
             <RotateCw className="w-5 h-5" />
           </button>
@@ -78,6 +79,7 @@ export function ApiKeyItem({ apiKey, onRotate, onRevoke, isLoading }: ApiKeyItem
             className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors disabled:text-gray-400 disabled:hover:bg-transparent disabled:cursor-not-allowed"
             aria-label="Revoke API key"
             title="Revoke key"
+            data-testid={`revoke-api-key-button-${apiKey.id}`}
           >
             <Trash2 className="w-5 h-5" />
           </button>
