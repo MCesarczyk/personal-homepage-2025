@@ -8,4 +8,5 @@ export class ApiKeyDataDto extends PickType(ApiKey, [
   'isActive',
   'createdAt',
   'lastUsedAt',
+  'expiresAt',
 ]) {}

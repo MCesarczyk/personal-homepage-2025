@@ -93,6 +93,7 @@ export class ApiKeyService {
         isActive: true,
         createdAt: true,
         lastUsedAt: true,
+        expiresAt: true,
       },
     });
   }
