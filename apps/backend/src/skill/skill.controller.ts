@@ -15,10 +15,10 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 
+import { SignedRequest } from '../auth/types';
 import { SkillService } from './skill.service';
 import { CreateSkillDto } from './dto/create-skill.dto';
 import { UpdateSkillDto } from './dto/update-skill.dto';
-import { SignedRequest } from '../auth/types';
 import { SkillDataDto } from './dto/skill-data.dto';
 
 @ApiBearerAuth()
