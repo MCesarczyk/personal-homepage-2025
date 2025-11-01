@@ -7,9 +7,9 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import {
-  ApiBearerAuth,
   ApiOperation,
   ApiResponse,
+  ApiSecurity,
   ApiTags,
 } from '@nestjs/swagger';
 
@@ -19,7 +19,7 @@ import { Public } from '../auth/decorators/public.decorator';
 import { UserService } from './user.service';
 import { UserTechnologyDataDto } from './dto/user-technology-data.dto';
 
-@ApiBearerAuth()
+@ApiSecurity('apiKeyAuth')
 @ApiTags('user-public')
 @Controller('user-public')
 @Public()

@@ -1,8 +1,8 @@
 import { Controller, Get, Param, Req, UseGuards } from '@nestjs/common';
 import {
-  ApiBearerAuth,
   ApiOperation,
   ApiResponse,
+  ApiSecurity,
   ApiTags,
 } from '@nestjs/swagger';
 
@@ -12,7 +12,7 @@ import { Public } from '../auth/decorators/public.decorator';
 import { ProjectService } from './project.service';
 import { ProjectDataDto } from './dto/project-data.dto';
 
-@ApiBearerAuth()
+@ApiSecurity('apiKeyAuth')
 @ApiTags('project-public')
 @Controller('project-public')
 @Public()

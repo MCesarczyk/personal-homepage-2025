@@ -1,8 +1,8 @@
 import { Controller, Get, Param, Req, UseGuards } from '@nestjs/common';
 import {
-  ApiBearerAuth,
   ApiOperation,
   ApiResponse,
+  ApiSecurity,
   ApiTags,
 } from '@nestjs/swagger';
 
@@ -12,7 +12,7 @@ import { Public } from '../auth/decorators/public.decorator';
 import { SkillService } from './skill.service';
 import { SkillDataDto } from './dto/skill-data.dto';
 
-@ApiBearerAuth()
+@ApiSecurity('apiKeyAuth')
 @ApiTags('skill-public')
 @Controller('skill-public')
 @Public()
