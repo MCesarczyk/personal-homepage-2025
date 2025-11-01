@@ -28,7 +28,7 @@ describe('AppController', () => {
   describe('root', () => {
     it('should return proper message', () => {
       expect(appController.getHello()).toBe(
-        '<h1>Backend for <a href="https://cesarczyk.dev" >cesarczyk.dev</a> portfolio up and running 🚀🚀🚀</h1>    <p><h3>Docs available at <a href="http://localhost:5000/docs" >http://localhost:5000/docs</a></h3></p>',
+        '<h1>Backend for <a href="https://cesarczyk.dev" >cesarczyk.dev</a> portfolio up and running 🚀🚀🚀</h1>    <p><h3>Docs for JWT authorized endpoints available at <a href="http://localhost:5000/docs" >http://localhost:5000/docs</a></h3></p>    <p><h3>Docs for Public/Api key authorized endpoints available at <a href="http://localhost:5000/docs-public" >http://localhost:5000/docs-public</a></h3></p>',
       );
     });
   });

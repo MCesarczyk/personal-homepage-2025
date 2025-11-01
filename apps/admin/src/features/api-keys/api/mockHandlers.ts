@@ -6,7 +6,7 @@ import { mockApiKeys, generateMockApiKey } from "./mockData";
 const apiKeysStore: ApiKey[] = [...mockApiKeys];
 
 export const apiKeyHandlers = [
-  http.get("*/api-key/list", () => {
+  http.get("*/api-key", () => {
     return HttpResponse.json(apiKeysStore);
   }),
 
@@ -15,8 +15,6 @@ export const apiKeyHandlers = [
 
     const newKey: ApiKey = {
       id: `key-${Date.now()}`,
-      userId: "user-123",
-      keyHash: generateMockApiKey(),
       description: body.description,
       isActive: true,
       createdAt: new Date(),
@@ -27,7 +25,7 @@ export const apiKeyHandlers = [
     apiKeysStore.push(newKey);
 
     return HttpResponse.json({
-      apiKey: newKey.keyHash,
+      apiKey: generateMockApiKey(),
       message: "API key generated successfully",
     });
   }),
@@ -67,8 +65,6 @@ export const apiKeyHandlers = [
     const newKeyHash = generateMockApiKey();
     const newKey: ApiKey = {
       id: `key-${Date.now()}`,
-      userId: oldKey.userId,
-      keyHash: newKeyHash,
       description: oldKey.description,
       isActive: true,
       createdAt: new Date(),

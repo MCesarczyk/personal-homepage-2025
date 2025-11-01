@@ -13,7 +13,6 @@ describe("ApiKeysService", () => {
     expect(keys.length).toBeGreaterThan(0);
     expect(keys[0]).toMatchObject({
       id: expect.any(String),
-      userId: "user-123",
       description: expect.any(String),
     });
     expect(keys[0].createdAt instanceof Date).toBe(true);
@@ -22,7 +21,7 @@ describe("ApiKeysService", () => {
   });
 
   it("throws when API keys fetch fails", async () => {
-    server.use(http.get("*/api-key/list", () => new Response(null, { status: 500 })));
+    server.use(http.get("*/api-key", () => new Response(null, { status: 500 })));
     await expect(apiKeysService.getApiKeys()).rejects.toThrow("Failed to fetch API keys");
   });
 
