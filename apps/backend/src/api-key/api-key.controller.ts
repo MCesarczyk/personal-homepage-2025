@@ -58,7 +58,7 @@ export class ApiKeyController {
     };
   }
 
-  @Get('list')
+  @Get()
   @ApiOperation({ summary: 'Get user API keys' })
   @ApiResponse({
     status: 200,
