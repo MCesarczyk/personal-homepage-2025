@@ -11,9 +11,15 @@ export default async function Index() {
 
   const skillResponse = await fetch(`${baseUrl}/api/skill`, { next: { revalidate: 60 } });
   const skillsData = await skillResponse.json();
+  if (skillsData.message !== "Skill data") {
+    console.error(skillsData.message);
+  }
 
   const technologyResponse = await fetch(`${baseUrl}/api/technology`, { next: { revalidate: 60 } });
   const technologiesData = await technologyResponse.json();
+  if (technologiesData.message !== "Technology data") {
+    console.error(technologiesData.message);
+  }
 
   const projectResponse = await fetch(`${baseUrl}/api/project`, { next: { revalidate: 60 } });
   const projectsData = await projectResponse.json();
@@ -84,6 +90,8 @@ export default async function Index() {
         {...{ footerThumbnails }}
       />
       <pre>{JSON.stringify(projectsData, null, 2)}</pre>
+      <pre>{JSON.stringify(technologiesData, null, 2)}</pre>
+      <pre>{JSON.stringify(skillsData, null, 2)}</pre>
     </div>
   );
 }
