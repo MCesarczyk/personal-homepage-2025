@@ -4,7 +4,7 @@ import { idSchema, dateSchema, urlSchema } from "../../../shared/validation/comm
 
 export const projectImageSchema = z.object({
   id: idSchema,
-  url: z.string().url("Invalid image URL"),
+  url: z.url("Invalid image URL"),
   fileName: z.string().min(1, "File name is required"),
   isCover: z.boolean().default(false),
 });
