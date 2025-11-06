@@ -24,28 +24,38 @@ export default async function Index() {
         description={AUTHOR_DESCRIPTION}
         Portrait={<Image src={portrait} priority alt="portrait" height={384} />}
       />
-      <Section
-        title={"Technologies"}
-        elements={technologiesData.data.map((tech: { content: string }) => tech.content)}
-      />
-      <Section
-        title={"My skills"}
-        elements={skillsData.data
-          .filter((skill: { state: string }) => skill.state === "COMPLETED")
-          .map((skill: { content: string }) => skill.content)}
-      />
-      <Section
-        title={"Things I'm learning right now"}
-        elements={skillsData.data
-          .filter((skill: { state: string }) => skill.state === "RUNNING")
-          .map((skill: { content: string }) => skill.content)}
-      />
-      <Section
-        title={"My next goals"}
-        elements={skillsData.data
-          .filter((skill: { state: string }) => skill.state === "PLANNED")
-          .map((skill: { content: string }) => skill.content)}
-      />
+      {technologiesData.success ? (
+        <Section
+          title={"Technologies"}
+          elements={technologiesData.data.map((tech: { content: string }) => tech.content)}
+        />
+      ) : (
+        <h3 className="text-xl text-center my-8">No technologies to display at the moment.</h3>
+      )}
+      {skillsData.success ? (
+        <>
+          <Section
+            title={"My skills"}
+            elements={skillsData.data
+              .filter((skill: { state: string }) => skill.state === "COMPLETED")
+              .map((skill: { content: string }) => skill.content)}
+          />
+          <Section
+            title={"Things I'm learning right now"}
+            elements={skillsData.data
+              .filter((skill: { state: string }) => skill.state === "RUNNING")
+              .map((skill: { content: string }) => skill.content)}
+          />
+          <Section
+            title={"My next goals"}
+            elements={skillsData.data
+              .filter((skill: { state: string }) => skill.state === "PLANNED")
+              .map((skill: { content: string }) => skill.content)}
+          />
+        </>
+      ) : (
+        <h3 className="text-xl text-center my-8">No skills to display at the moment.</h3>
+      )}
       {projectsData.success ? (
         <Gallery
           title={"Portfolio"}
@@ -74,7 +84,7 @@ export default async function Index() {
           )}
         />
       ) : (
-        <h3 className="text-xl text-center py-8">No projects to display at the moment.</h3>
+        <h3 className="text-xl text-center my-8">No projects to display at the moment.</h3>
       )}
       <Footer
         address={ADDRESS}
