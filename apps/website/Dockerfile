@@ -14,7 +14,9 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
-RUN --mount=type=secret,id=api_key env=API_KEY
+RUN --mount=type=secret,id=api_key \
+  export API_KEY=$(cat /run/secrets/api_key) && \
+  echo "Using API_KEY=$API_KEY during this build step"
 
 # ENV NEXT_TELEMETRY_DISABLED=1
 ENV NEXT_PRIVATE_STANDALONE=true
