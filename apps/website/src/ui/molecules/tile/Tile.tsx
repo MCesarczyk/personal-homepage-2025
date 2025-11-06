@@ -4,7 +4,7 @@ import Image, { type StaticImageData } from "next/image";
 import { imageLoader } from "./loader";
 
 interface TileImage {
-  id: number;
+  id: string;
   alt: string;
   url: StaticImageData | string;
 }
@@ -34,7 +34,7 @@ export const Tile = ({ title, images, description, links }: TileProps) => (
           key={image.id}
           className="w-full h-5/6 rounded object-contain"
           loader={imageLoader}
-          placeholder="blur"
+          placeholder="empty"
           src={image.url}
           alt={image.alt}
         />

@@ -28,7 +28,7 @@ _Tile.args = {
   title: "Title",
   images: [
     {
-      id: 1,
+      id: "1",
       url: sample,
       alt: "Placeholder image",
     },

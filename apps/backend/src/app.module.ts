@@ -1,24 +1,11 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { AuthModule } from './auth/auth.module';
-import { UserModule } from './user/user.module';
-import { SkillModule } from './skill/skill.module';
-import { ProjectModule } from './project/project.module';
-import { ProjectImageModule } from './project-image/project-image.module';
-import { HealthCheckModule } from './health-check/health-check.module';
-import { TechnologyModule } from './technology/technology.module';
+import { JwtProtectedModule } from './docs/jwt-protected.module';
+import { ApiKeyProtectedModule } from './docs/api-key-protected.module';
 
 @Module({
-  imports: [
-    HealthCheckModule,
-    AuthModule,
-    UserModule,
-    TechnologyModule,
-    SkillModule,
-    ProjectModule,
-    ProjectImageModule,
-  ],
+  imports: [JwtProtectedModule, ApiKeyProtectedModule],
   controllers: [AppController],
   providers: [AppService],
 })

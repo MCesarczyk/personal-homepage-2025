@@ -1,0 +1,51 @@
+# ADR: Swagger Documentation Structure – Separate Docs vs. Single Merged Doc
+
+- **Status**: accepted
+- **Date**: 2025-11-02
+
+## Context
+
+The application supports two authentication schemes (JWT and API key) for its endpoints. There is a need to document these endpoints clearly for internal and external consumers. The team evaluated whether to have a **single unified Swagger documentation** combining all endpoints or **separate Swagger docs** for each auth type, maintained and exposed independently.
+
+## Decision
+
+The chosen solution is to implement **two separate Swagger documentation endpoints**:
+
+- One Swagger UI instance documenting JWT-secured endpoints.
+- Another Swagger UI instance documenting API key or public endpoints.
+
+This separation allows clearer authorization expectations per doc, easier management, and better user experience for consumers focusing on their relevant APIs.
+
+## Options Considered
+
+1. **Single merged Swagger doc**
+   - Pros:
+     - One central source of truth.
+     - Easier to maintain a single spec.
+     - Simpler for users to browse all endpoints in one UI.
+   - Cons:
+     - Confusing mix of authentication schemes.
+     - Harder to secure Swagger UI selectively per auth type.
+     - Users might see irrelevant or inaccessible endpoints.
+
+2. **Separate Swagger docs (Chosen)**
+   - Pros:
+     - Clear documentation tailored to auth type.
+     - Easier to restrict doc access per user role or key.
+     - Better aligns with modular backend structure.
+   - Cons:
+     - Requires maintaining two specs.
+     - Slightly more infrastructure effort.
+
+## Consequences
+
+- Improved clarity in API documentation.
+- Better security control over documentation exposure.
+- Enables focused developer experience for different client types.
+- Requires disciplined sync in doc updates and tooling.
+
+## References (if any)
+
+- OpenAPI specification recommendations for security schemes and segmentation
+- NestJS Swagger module documentation
+- Industry best practices from API documentation standards

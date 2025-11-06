@@ -40,6 +40,9 @@ importers:
       utils-agnostic:
         specifier: ^1.0.0
         version: 1.0.0
+      zod:
+        specifier: ^4.1.12
+        version: 4.1.12
     devDependencies:
       "@storybook/addon-essentials":
         specifier: ^8.0.4
@@ -55,7 +58,7 @@ importers:
         version: 8.6.14(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(storybook@8.6.14(prettier@3.6.2))
       "@storybook/nextjs":
         specifier: ^8.0.4
-        version: 8.6.14(esbuild@0.25.5)(next@14.1.0(@babel/core@7.27.7)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(storybook@8.6.14(prettier@3.6.2))(type-fest@2.19.0)(typescript@5.8.3)(webpack-hot-middleware@2.26.1)(webpack@5.99.9(esbuild@0.25.5))
+        version: 8.6.14(esbuild@0.25.5)(next@14.1.0(@babel/core@7.27.7)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(storybook@8.6.14(prettier@3.6.2))(type-fest@4.41.0)(typescript@5.8.3)(webpack-hot-middleware@2.26.1)(webpack@5.99.9(esbuild@0.25.5))
       "@storybook/react":
         specifier: ^8.0.4
         version: 8.6.14(@storybook/test@8.6.14(storybook@8.6.14(prettier@3.6.2)))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(storybook@8.6.14(prettier@3.6.2))(typescript@5.8.3)
@@ -5553,6 +5556,11 @@ packages:
       { integrity: sha512-RAH822pAdBgcNMAfWnCBU3CFZcfZ/i1eZjwFU/dsLKumyuuP3niueg2UAukXYF0E2AAoc82ZSSf9J0WQBinzHA== }
     engines: { node: ">=12.20" }
 
+  type-fest@4.41.0:
+    resolution:
+      { integrity: sha512-TeTSQ6H5YHvpqVwBRcnLDCBnDOHWYu7IvGbHT6N8AOymcr9PJGjc1GTtiWZTYg0NCgYwvnYWEkVChQAr9bjfwA== }
+    engines: { node: ">=16" }
+
   typed-array-buffer@1.0.3:
     resolution:
       { integrity: sha512-nAYYwfY3qnzX30IkA6AQZjVbtK6duGontcQm1WSG1MD94YLqK0515GNApXkoxKOWMusVssAHWLh9SeaoefYFGw== }
@@ -5794,6 +5802,10 @@ packages:
     resolution:
       { integrity: sha512-AyeEbWOu/TAXdxlV9wmGcR0+yh2j3vYPGOECcIj2S7MkrLyC7ne+oye2BKTItt0ii2PHk4cDy+95+LshzbXnGg== }
     engines: { node: ">=12.20" }
+
+  zod@4.1.12:
+    resolution:
+      { integrity: sha512-JInaHOamG8pt5+Ey8kGmdcAcg3OL9reK8ltczgHTAwNhMys/6ThXHityHxVV2p3fkw/c+MAvBHFVYHFZDmjMCQ== }
 
 snapshots:
   "@adobe/css-tools@4.4.3": {}
@@ -7023,7 +7035,7 @@ snapshots:
   "@pkgjs/parseargs@0.11.0":
     optional: true
 
-  "@pmmmwh/react-refresh-webpack-plugin@0.5.17(react-refresh@0.14.2)(type-fest@2.19.0)(webpack-hot-middleware@2.26.1)(webpack@5.99.9(esbuild@0.25.5))":
+  "@pmmmwh/react-refresh-webpack-plugin@0.5.17(react-refresh@0.14.2)(type-fest@4.41.0)(webpack-hot-middleware@2.26.1)(webpack@5.99.9(esbuild@0.25.5))":
     dependencies:
       ansi-html: 0.0.9
       core-js-pure: 3.43.0
@@ -7035,7 +7047,7 @@ snapshots:
       source-map: 0.7.4
       webpack: 5.99.9(esbuild@0.25.5)
     optionalDependencies:
-      type-fest: 2.19.0
+      type-fest: 4.41.0
       webpack-hot-middleware: 2.26.1
 
   "@rtsao/scc@1.1.0": {}
@@ -7238,7 +7250,7 @@ snapshots:
     dependencies:
       storybook: 8.6.14(prettier@3.6.2)
 
-  "@storybook/nextjs@8.6.14(esbuild@0.25.5)(next@14.1.0(@babel/core@7.27.7)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(storybook@8.6.14(prettier@3.6.2))(type-fest@2.19.0)(typescript@5.8.3)(webpack-hot-middleware@2.26.1)(webpack@5.99.9(esbuild@0.25.5))":
+  "@storybook/nextjs@8.6.14(esbuild@0.25.5)(next@14.1.0(@babel/core@7.27.7)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(storybook@8.6.14(prettier@3.6.2))(type-fest@4.41.0)(typescript@5.8.3)(webpack-hot-middleware@2.26.1)(webpack@5.99.9(esbuild@0.25.5))":
     dependencies:
       "@babel/core": 7.27.7
       "@babel/plugin-syntax-bigint": 7.8.3(@babel/core@7.27.7)
@@ -7253,7 +7265,7 @@ snapshots:
       "@babel/preset-react": 7.27.1(@babel/core@7.27.7)
       "@babel/preset-typescript": 7.27.1(@babel/core@7.27.7)
       "@babel/runtime": 7.27.6
-      "@pmmmwh/react-refresh-webpack-plugin": 0.5.17(react-refresh@0.14.2)(type-fest@2.19.0)(webpack-hot-middleware@2.26.1)(webpack@5.99.9(esbuild@0.25.5))
+      "@pmmmwh/react-refresh-webpack-plugin": 0.5.17(react-refresh@0.14.2)(type-fest@4.41.0)(webpack-hot-middleware@2.26.1)(webpack@5.99.9(esbuild@0.25.5))
       "@storybook/builder-webpack5": 8.6.14(esbuild@0.25.5)(storybook@8.6.14(prettier@3.6.2))(typescript@5.8.3)
       "@storybook/preset-react-webpack": 8.6.14(@storybook/test@8.6.14(storybook@8.6.14(prettier@3.6.2)))(esbuild@0.25.5)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(storybook@8.6.14(prettier@3.6.2))(typescript@5.8.3)
       "@storybook/react": 8.6.14(@storybook/test@8.6.14(storybook@8.6.14(prettier@3.6.2)))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(storybook@8.6.14(prettier@3.6.2))(typescript@5.8.3)
@@ -11005,6 +11017,9 @@ snapshots:
 
   type-fest@2.19.0: {}
 
+  type-fest@4.41.0:
+    optional: true
+
   typed-array-buffer@1.0.3:
     dependencies:
       call-bound: 1.0.4
@@ -11258,3 +11273,5 @@ snapshots:
   yocto-queue@0.1.0: {}
 
   yocto-queue@1.2.1: {}
+
+  zod@4.1.12: {}

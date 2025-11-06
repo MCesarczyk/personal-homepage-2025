@@ -15,10 +15,10 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 
+import { SignedRequest } from '../auth/types';
 import { ProjectService } from './project.service';
 import { CreateProjectDto } from './dto/create-project.dto';
 import { UpdateProjectDto } from './dto/update-project.dto';
-import { SignedRequest } from '../auth/types';
 import { ProjectDataDto } from './dto/project-data.dto';
 
 @ApiBearerAuth()

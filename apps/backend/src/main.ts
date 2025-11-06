@@ -1,10 +1,10 @@
 import { NestFactory } from '@nestjs/core';
-import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { ValidationPipe } from '@nestjs/common';
 import * as cookieParser from 'cookie-parser';
 import { NextFunction, Request, Response } from 'express';
 
 import { AppModule } from './app.module';
+import { setupSwaggerDocs } from './docs/setup-swagger-docs';
 
 const port = process.env.BACKEND_PORT || 5000;
 const publicUrl = process.env.PUBLIC_URL || 'http://localhost:5000';
@@ -39,18 +39,7 @@ async function bootstrap() {
 
   app.useGlobalPipes(new ValidationPipe({ transform: true }));
 
-  const swaggerOptions = new DocumentBuilder()
-    .setTitle('Personal Homepage API')
-    .setDescription(
-      `Backend for Personal Homepage website. Available here: ${process.env.PUBLIC_URL}.`,
-    )
-    .setVersion('1.0')
-    .addServer(`${process.env.PUBLIC_URL}`)
-    .addBearerAuth()
-    .build();
-
-  const document = SwaggerModule.createDocument(app, swaggerOptions);
-  SwaggerModule.setup('docs', app, document);
+  setupSwaggerDocs(app);
 
   await app.listen(port, '0.0.0.0', () => {
     console.log(`API listening on port ${port} 🚀🚀🚀`);

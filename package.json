@@ -36,10 +36,7 @@
       "path": "./node_modules/cz-conventional-changelog"
     }
   },
-  "dependencies": {
-    "@prisma/client": "^6.18.0",
-    "prisma": "^6.18.0"
-  },
+  "dependencies": {},
   "volta": {
     "node": "22.21.0"
   }

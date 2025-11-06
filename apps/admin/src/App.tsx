@@ -1,4 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+
 import { AuthProvider } from "./features/auth/context/AuthContext";
 import { ProtectedRoute } from "./features/auth/components/ProtectedRoute";
 import { LoginPage } from "./features/auth/pages/LoginPage";
@@ -8,6 +9,7 @@ import { DashboardPage } from "./features/dashboard/DashboardPage";
 import { TechnologiesPage } from "./features/technologies/TechnologiesPage";
 import { SkillsPage } from "./features/skills/SkillsPage";
 import { ProjectsPage } from "./features/projects/ProjectsPage";
+import { ApiKeyManagementPage } from "./features/api-keys/ApiKeyManagementPage";
 
 function App() {
   return (
@@ -28,6 +30,7 @@ function App() {
             <Route path="technologies" element={<TechnologiesPage />} />
             <Route path="skills" element={<SkillsPage />} />
             <Route path="projects" element={<ProjectsPage />} />
+            <Route path="api-keys" element={<ApiKeyManagementPage />} />
           </Route>
         </Routes>
       </Router>
