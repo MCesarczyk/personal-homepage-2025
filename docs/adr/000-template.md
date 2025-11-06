@@ -22,5 +22,3 @@ Outline the impact, follow-ups, and any future considerations.
 ## References (if any)
 
 Links or citations supporting the decision.
-
-and create first document filled with informations about choosing landing page connecting method to api. I've decided to use API Key Auth. Document should be in Markdown.
