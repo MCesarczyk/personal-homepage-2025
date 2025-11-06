@@ -4,7 +4,7 @@ import Image, { type StaticImageData } from "next/image";
 import { imageLoader } from "./loader";
 
 interface TileImage {
-  id: number;
+  id: string;
   alt: string;
   url: StaticImageData | string;
 }

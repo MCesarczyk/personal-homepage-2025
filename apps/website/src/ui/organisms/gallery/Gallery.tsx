@@ -40,13 +40,13 @@ export const Gallery = ({ title, subtitle, status, repos }: GalleryProps) => {
                 {
                   id: 1,
                   prefix: "demo",
-                  label: repo.codeLink.replace("https://", "") || "n/a",
+                  label: repo.codeLink?.replace("https://", "") || "n/a",
                   url: repo.codeLink || "n/a",
                 },
                 {
                   id: 2,
                   prefix: "code",
-                  label: repo.demoLink.replace("https://", "") || "n/a",
+                  label: repo.demoLink?.replace("https://", "") || "n/a",
                   url: repo.demoLink || "n/a",
                 },
               ]}

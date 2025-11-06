@@ -46,32 +46,36 @@ export default async function Index() {
           .filter((skill: { state: string }) => skill.state === "PLANNED")
           .map((skill: { content: string }) => skill.content)}
       />
-      <Gallery
-        title={"Portfolio"}
-        subtitle={"My recent projects"}
-        status={"success"}
-        repos={projectsData.data.map(
-          (project: {
-            id: string;
-            title: string;
-            description: string;
-            codeUrl: string;
-            demoUrl: string;
-            images: { url: string; fileName: string }[];
-          }) => ({
-            id: project.id,
-            name: project.title,
-            description: project.description,
-            codeLink: project.codeUrl,
-            demoLink: project.demoUrl,
-            images: project.images.map((img: { url: string; fileName: string }) => ({
-              id: img.url,
-              url: img.url,
-              alt: img.fileName,
-            })),
-          }),
-        )}
-      />
+      {projectsData.success ? (
+        <Gallery
+          title={"Portfolio"}
+          subtitle={"My recent projects"}
+          status={"success"}
+          repos={projectsData.data.map(
+            (project: {
+              id: string;
+              title: string;
+              description: string;
+              codeUrl?: string;
+              demoUrl?: string;
+              images: { url: string; fileName: string }[];
+            }) => ({
+              id: project.id,
+              name: project.title,
+              description: project.description,
+              codeLink: project.codeUrl,
+              demoLink: project.demoUrl,
+              images: project.images.map((img: { url: string; fileName: string }) => ({
+                id: img.url,
+                url: img.url,
+                alt: img.fileName,
+              })),
+            }),
+          )}
+        />
+      ) : (
+        <h3 className="text-xl text-center py-8">No projects to display at the moment.</h3>
+      )}
       <Footer
         address={ADDRESS}
         cvFileLocation="/CV-EN.pdf"
