@@ -4,7 +4,13 @@ import { validateData } from "@/lib/validation/utils";
 
 export const technologyService = {
   getTechnologies: async () => {
-    const technologiesData = await fetchFromAPI(`/user-public/technology`, { revalidate: 60 });
+    let technologiesData = null;
+    try {
+      technologiesData = await fetchFromAPI(`/user-public/technology`, { revalidate: 60 });
+    } catch (error) {
+      console.warn("Failed to fetch during build:", error);
+      technologiesData = { fallback: true };
+    }
 
     const validatedResponse = validateData(userTechnologiesListSchema, technologiesData);
 

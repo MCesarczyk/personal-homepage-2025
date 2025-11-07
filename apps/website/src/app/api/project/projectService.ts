@@ -4,7 +4,13 @@ import { validateData } from "@/lib/validation/utils";
 
 export const projectService = {
   getProjects: async () => {
-    const projectsData = await fetchFromAPI(`/project-public`, { revalidate: 60 });
+    let projectsData = null;
+    try {
+      projectsData = await fetchFromAPI(`/project-public`, { revalidate: 60 });
+    } catch (error) {
+      console.warn("Failed to fetch during build:", error);
+      projectsData = { fallback: true };
+    }
 
     const validatedResponse = validateData(projectsListSchema, projectsData);
 

@@ -4,7 +4,13 @@ import { validateData } from "@/lib/validation/utils";
 
 export const skillService = {
   getSkills: async () => {
-    const skillsData = await fetchFromAPI(`/skill-public`, { revalidate: 60 });
+    let skillsData = null;
+    try {
+      skillsData = await fetchFromAPI(`/skill-public`, { revalidate: 60 });
+    } catch (error) {
+      console.warn("Failed to fetch during build:", error);
+      skillsData = { fallback: true };
+    }
 
     const validatedResponse = validateData(skillsListSchema, skillsData);
 
