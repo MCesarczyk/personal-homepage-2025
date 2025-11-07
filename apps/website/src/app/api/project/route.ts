@@ -2,6 +2,8 @@ import { NextResponse } from "next/server";
 
 import { fetchFromAPI } from "@/lib/api-client";
 
+export const dynamic = "force-dynamic";
+
 export async function GET() {
   const projectResponse = await fetchFromAPI("/project-public", {
     revalidate: 60,
