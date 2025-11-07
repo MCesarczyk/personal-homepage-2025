@@ -95,10 +95,6 @@ services:
     depends_on:
       - db
 
-secrets:
-  api_key:
-    file: ./.secrets/api_key
-
 volumes:
   ph-db-data:
   ph-pgadmin-data:
