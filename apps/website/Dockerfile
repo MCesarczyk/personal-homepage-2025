@@ -14,16 +14,14 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
-RUN --mount=type=secret,id=api_key \
-  export API_KEY=$(cat /run/secrets/api_key) && \
-  echo "Using API_KEY=$API_KEY during this build step"
-
 # ENV NEXT_TELEMETRY_DISABLED=1
 ENV NEXT_PRIVATE_STANDALONE=true
 # https://nextjs.org/docs/messages/sharp-missing-in-production
 ENV NEXT_SHARP_PATH=./node_modules/sharp
 
-RUN npm install -g pnpm && pnpm run build
+RUN --mount=type=secret,id=database_url \
+  API_KEY=$(cat /run/secrets/api_key) \
+  npm install -g pnpm && pnpm run build
 
 FROM base AS runner
 WORKDIR /app
@@ -45,4 +43,5 @@ EXPOSE 4200
 ENV PORT=4200
 
 ENV HOSTNAME="0.0.0.0"
+ENTRYPOINT ["./entrypoint.sh"]
 CMD ["node", "server.js"]

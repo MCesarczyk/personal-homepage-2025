@@ -3,6 +3,8 @@ services:
     build:
       context: ./apps/website
       dockerfile: ./Dockerfile
+      secrets:
+        - api_key
     container_name: personal-homepage-website
     restart: always
     environment:
@@ -13,6 +15,8 @@ services:
       - NEXT_PUBLIC_API_PREFIX=/api/v1
     env_file:
       - .env
+    secrets:
+      - api_key
     ports:
       - 3200:4200
     expose:
@@ -94,6 +98,10 @@ services:
       - ph-pgadmin-data:/var/lib/pgadmin
     depends_on:
       - db
+
+secrets:
+  api_key:
+    file: ./.secrets/api_key
 
 volumes:
   ph-db-data:
