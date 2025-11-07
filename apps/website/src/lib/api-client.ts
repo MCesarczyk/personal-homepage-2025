@@ -5,8 +5,8 @@ type FetchOptions = {
 };
 
 export async function fetchFromAPI<T>(endpoint: string, options: FetchOptions = {}): Promise<T> {
-  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-  const apiPrefix = process.env.NEXT_PUBLIC_API_PREFIX;
+  const apiUrl = process.env.API_URL;
+  const apiPrefix = process.env.API_PREFIX;
   const apiKey = process.env.API_KEY;
 
   if (!apiKey) {

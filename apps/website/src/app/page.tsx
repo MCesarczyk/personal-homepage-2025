@@ -1,6 +1,4 @@
-import dynamicImport from "next/dynamic";
-
-export const dynamic = "force-dynamic";
+import dynamic from "next/dynamic";
 
 import Image from "next/image";
 import { Header, Section, Footer, footerThumbnails, Gallery } from "@/ui";
@@ -10,7 +8,7 @@ import { skillService } from "@/app/api/skill/skillService";
 import { technologyService } from "@/app/api/technology/technologyService";
 import { projectService } from "@/app/api/project/projectService";
 
-const Logger = dynamicImport(() => import("./AppVersionLogger"), { ssr: false });
+const Logger = dynamic(() => import("./AppVersionLogger"), { ssr: false });
 
 export default async function Index() {
   const { skillsData } = await skillService.getSkills();

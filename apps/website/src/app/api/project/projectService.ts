@@ -1,16 +1,18 @@
 import { projectsListSchema } from "@/app/api/project/projectSchemas";
+import { fetchFromAPI } from "@/lib/api-client";
 import { validateData } from "@/lib/validation/utils";
-import { baseUrl } from "@/shared/constants";
 
 export const projectService = {
   getProjects: async () => {
-    const projectResponse = await fetch(`${baseUrl}/api/project`, { next: { revalidate: 60 } });
-    const projectsData = await projectResponse.json();
-    if (projectsData.message !== "Project data") {
-      console.error(projectsData.message);
+    let projectsData = null;
+    try {
+      projectsData = await fetchFromAPI(`/project-public`, { revalidate: 60 });
+    } catch (error) {
+      console.warn("Failed to fetch during build:", error);
+      projectsData = { fallback: true };
     }
 
-    const validatedResponse = validateData(projectsListSchema, projectsData.data);
+    const validatedResponse = validateData(projectsListSchema, projectsData);
 
     if (!validatedResponse.success) {
       console.error("Project data validation failed:", validatedResponse.errors);
