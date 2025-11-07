@@ -14,14 +14,14 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
+ARG API_KEY
+
+ENV API_KEY=$API_KEY
+
 # ENV NEXT_TELEMETRY_DISABLED=1
 ENV NEXT_PRIVATE_STANDALONE=true
 # https://nextjs.org/docs/messages/sharp-missing-in-production
 ENV NEXT_SHARP_PATH=./node_modules/sharp
-
-RUN --mount=type=secret,id=api_key \
-  API_KEY=$(cat /run/secrets/api_key) \
-  npm install -g pnpm && pnpm run build
 
 FROM base AS runner
 WORKDIR /app
