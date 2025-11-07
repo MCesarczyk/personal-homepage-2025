@@ -19,7 +19,7 @@ ENV NEXT_PRIVATE_STANDALONE=true
 # https://nextjs.org/docs/messages/sharp-missing-in-production
 ENV NEXT_SHARP_PATH=./node_modules/sharp
 
-RUN --mount=type=secret,id=database_url \
+RUN --mount=type=secret,id=api_key \
   API_KEY=$(cat /run/secrets/api_key) \
   npm install -g pnpm && pnpm run build
 
@@ -43,5 +43,4 @@ EXPOSE 4200
 ENV PORT=4200
 
 ENV HOSTNAME="0.0.0.0"
-ENTRYPOINT ["./entrypoint.sh"]
 CMD ["node", "server.js"]
