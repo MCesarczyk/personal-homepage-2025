@@ -8,7 +8,6 @@ services:
     environment:
       - NODE_ENV=production
       - API_PREFIX=/api/v1
-      - NEXT_PUBLIC_API_PREFIX=/api/v1
     env_file:
       - .env.prod
     ports:
