@@ -18,10 +18,13 @@ ARG API_KEY
 
 ENV API_KEY=$API_KEY
 
-# ENV NEXT_TELEMETRY_DISABLED=1
 ENV NEXT_PRIVATE_STANDALONE=true
 # https://nextjs.org/docs/messages/sharp-missing-in-production
 ENV NEXT_SHARP_PATH=./node_modules/sharp
+ENV NEXT_TELEMETRY_DISABLED=1
+
+RUN npm install -g pnpm;
+RUN pnpm build
 
 FROM base AS runner
 WORKDIR /app
